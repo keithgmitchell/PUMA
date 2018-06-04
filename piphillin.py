@@ -73,7 +73,7 @@ def split_otu(averaged_file, splits):
         else:
             end = position + split_size
 
-        print position, end, length, split, averaged_cleaned + str(split) + ".csv"
+        print (position, end, length, split, averaged_cleaned + str(split) + ".csv")
         # selected_rows = [row for idx, row in enumerate(averaged_csv) if idx in (position, end - 1)]
         for location, row in zip(range(0, length), averaged_csv):
             if location in range(position, end):

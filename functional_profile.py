@@ -6,10 +6,13 @@
 #   Functions Contained: extract_info, clean_brite_file, extract_hierarchy, construct_output, list_hierarchy
 ################################################################################################################
 
+
 import csv
 import requests
 import sys
 import argparse
+
+
 
 def extract_info(request):
 
