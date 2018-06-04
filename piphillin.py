@@ -14,7 +14,7 @@ def get_seqs(sequences_file, sequence_output, seq_key):
             output_file.write(str(rec.seq) + '\n')
 
 
-def round_asv(input_file, output_file, count):
+def refactor_asv(input_file, output_file, count):
     merged = open(input_file, 'r')
     rounded = open(output_file, 'w')
 
@@ -85,13 +85,27 @@ def split_otu(averaged_file, splits):
     return file_list
 
 
+def handle_files(input, output, iterations, all_seqs, seq_out):
+    seq_list = refactor_asv(input, output, iterations)
+    get_seqs(all_seqs, seq_out, seq_list)
+
+    size_sequence = os.path.getsize(seq_out)
+    piphillin_limit = 10000000
+    if float(size_sequence / piphillin_limit) >= 1:
+        number_of_splits = int(math.ceil(size_sequence / piphillin_limit))
+        split_files = split_otu(output, number_of_splits)
+
+        for file, split in zip(split_files, range(1, number_of_splits + 1)):
+            key = get_seq_descriptions(file)
+            get_seqs(all_seqs, seq_out.replace(".fasta", "") + str(split) + ".fasta", key)
+
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Normalizes a merged ASV table for number of files merged.')
 
-    parser.add_argument('-input', help='This is the directory to produce the raw sequences to', required=True)
-    parser.add_argument('-output', help='This is the true file to be evaluated.', required=True)
+    parser.add_argument('-input', help='This is the merged rarefaction .txt file', required=True)
+    parser.add_argument('-output', help='This is the path to the output .txt file.', required=True)
     parser.add_argument('-iter', help='Number of .biom files created and merged.', required=True)
     parser.add_argument('-all_seqs', help='All the ASV sequences in one file.', required=True)
     parser.add_argument('-seq_output', help='Piphillin output sequences file', required=True)
@@ -104,17 +118,8 @@ if __name__ == "__main__":
     all_seqs = args['all_seqs']
     seq_out = args['seq_output']
 
-    seq_list = round_asv(input, output, iterations)
-    get_seqs(all_seqs, seq_out, seq_list)
+    handle_files(input, output, iterations, all_seqs, seq_out)
 
-    size_sequence = os.path.getsize(seq_out)
-    piphillin_limit = 10000000
-    if float(size_sequence/piphillin_limit) >= 1:
-        number_of_splits = int(math.ceil(size_sequence/piphillin_limit))
-        split_files = split_otu(output, number_of_splits)
 
-        for file, split in zip(split_files, range(1, number_of_splits + 1)):
-            key = get_seq_descriptions(file)
-            get_seqs(all_seqs, seq_out.replace(".fasta", "") + str(split) + ".fasta", key)
 
 

@@ -1,4 +1,8 @@
-# mimg_109BL
+# PUMA
+## Pipeline for Undergraduate Microbiome Analysis
+
+### Requirements (on the QIIME2 VM)
++ Biopython-1.71
 
 ## functional_profile.py
 
