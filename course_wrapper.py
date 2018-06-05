@@ -178,4 +178,31 @@ class Anacapa(General):
         self.create_output_directory(self.type)
         self.course_wrapper()
 
+class MrDNA(General):
+
+    def handle_arguments(self, file_dictionary):
+
+        self.otu_table = file_dictionary["otutable"]
+        self.fwd_seq = file_dictionary["fwdseq"]
+
+    def convert_otu_to_anacapa(self):
+        os.system("mkdir temp")
+        os.system("python convert_mrdna_to_anacapa_format.py -i %s -o temp/anacapa_format_otu_table.txt" % self.otu_table)
+        return "temp/anacapa_format_otu_table.txt"
+
+
+    def __init__(self, dictionary):
+
+        General.__init__(self, dictionary)
+
+        self.handle_arguments(dictionary)
+        self.standard_otu = self.convert_otu_to_anacapa()
+        self.standard_sequences = self.fwd_seq
+
+        self.type = "MrDNA"
+        os.system("mkdir output")
+        self.create_output_directory(self.type)
+        self.course_wrapper()
+
+
 

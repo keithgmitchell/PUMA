@@ -99,6 +99,66 @@ class PUMA(Frame):
         print (self.anacapa_dict)
         new_anacapa = course_wrapper.Anacapa(self.anacapa_dict)
 
+#############################################################################################################
+#MR DNA
+
+    def initiate_mrdna(self):
+        self.mrdna_window = Toplevel()
+        self.mrdna_window.title("MR DNA File Input")
+        self.initiate_mrdna_labels()
+        self.initiate_mrdna_fields()
+        self.display_mrdna_fields()
+
+    def initiate_mrdna_labels(self):
+
+        self.description = Label(self.mrdna_window, text="This will be the description of the fields for the user.")
+
+        self.otutable_l = Label(self.mrdna_window, text="OTU/ASV Table (fasta.otus.fa.OTU.txt file:")
+        self.forwardseqs_l = Label(self.mrdna_window, text="OTU/ASV Sequences (.fasta format):")
+        self.rarefactiondepth_l = Label(self.mrdna_window, text="Rarefaction Depth:")
+        self.rarefactioniter_l = Label(self.mrdna_window, text="Rarefaction Iterations:")
+	
+    def initiate_mrdna_fields(self):
+        self.mrdna_dict = self.get_new_file_dict()
+
+        #TODO pass file types accepted
+        self.otutable = Button(self.mrdna_window, text="OTU/ASV Table",
+                               command=(lambda: self.load_file("otutable", self.mrdna_dict)), width=20)
+
+        self.forwardseqs = Button(self.mrdna_window, text="OTU/ASV Sequences",
+                                  command=(lambda: self.load_file("fwdseq", self.mrdna_dict)), width=20)
+
+
+        self.rarefactiondepth = Entry(self.mrdna_window)
+        self.rarefactioniter = Entry(self.mrdna_window)
+
+        self.validate_submit = Button(self.mrdna_window, text="SUBMIT", command=(lambda: self.run_mrdna_fields()))
+
+    def display_mrdna_fields(self):
+
+        self.description.grid(row=0, column=0, columnspan=2, sticky=W)
+
+        self.otutable_l.grid(row=1, column=0, sticky=W)
+        self.otutable.grid(row=1, column=1)
+
+        self.forwardseqs_l.grid(row=2, column=0, sticky=W)
+        self.forwardseqs.grid(row=2, column=1)
+
+        self.rarefactiondepth_l.grid(row=3, column=0, sticky=W)
+        self.rarefactiondepth.grid(row=3, column=1)
+
+        self.rarefactioniter_l.grid(row=4, column=0, sticky=W)
+        self.rarefactioniter.grid(row=4, column=1)
+
+        self.validate_submit.grid(row=5, column=1)
+
+    def run_mrdna_fields(self):
+        #TODO validate fields
+        #TODO change box colors and display dictionary?
+        self.mrdna_dict["rarefactiondepth"] = self.rarefactiondepth.get()
+        self.mrdna_dict["rarefactioniter"] = self.rarefactioniter.get()
+        print (self.mrdna_dict)
+        new_anacapa = course_wrapper.MrDNA(self.mrdna_dict)
 
 
 ##########################################################################################
@@ -114,7 +174,7 @@ class PUMA(Frame):
 
         #TODO edit the other views
         self.main_choice_qiime = Button(self, text="QIIME2", width=20)
-        self.main_choice_mrdna = Button(self, text="Mr. DNA", width=20)
+        self.main_choice_mrdna = Button(self, text="Mr. DNA", command=(lambda: self.initiate_mrdna()), width=20)
 
     def display_main_fields(self):
 
