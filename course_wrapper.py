@@ -21,9 +21,6 @@ class General():
         os.system("head -1 %s" % input)
         os.system("sed - i -e 's/16S_seq_number\t/#OTU ID\t/g' %s" % input)
 
-        # TODO figure out why i need to do this
-        os.system("^C")
-
         print (" ")
         print("Create .biom: done cleaning header")
         os.system("head -1 %s" % input)
