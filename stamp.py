@@ -2,15 +2,15 @@ import csv
 import argparse
 
 
-def unclassified(fix_list):
-    for x in range(0, 6):
+def unclassified(fix_list, classification_levels):
+    for x in range(0, classification_levels):
         if fix_list[x] == '' or fix_list[x] == 'NA' or fix_list[x] is None or fix_list[x] == " ":
-            for y in range(x, 6):
+            for y in range(x, classification_levels):
                 fix_list[y] = 'unclassified'
     return fix_list
 
 
-def reformat(rarefied, output, otu_dict):
+def reformat(rarefied, output, otu_dict, classification_count):
     csvin = open(rarefied, 'r')
     tsvout = open(output, 'w')
     csvin = csv.reader(csvin, delimiter='\t')
@@ -27,7 +27,7 @@ def reformat(rarefied, output, otu_dict):
         row.pop(0)
         while len(tax_list) < 6:
             tax_list.append(" ")
-        new_tax_list = unclassified(tax_list)
+        new_tax_list = unclassified(tax_list, classification_count)
         tax_list_key = ",".join(new_tax_list)
         if tax_list_key in condense_dict.keys():
             condense_dict[tax_list_key] = [float(x) + float(y) for x, y in zip(row, condense_dict[tax_list_key])]

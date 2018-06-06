@@ -97,18 +97,31 @@ class General():
         # TODO remove the rarefied files
 
     def run_piphillin(self):
-        export_dir = self.output_directory + "piphillin/"
+        self.piphillin_out = self.output_directory + "piphillin/"
         print("Run Piphillin: mkdir")
-        os.system("mkdir %s" % export_dir)
-        piphillin_text_out = "%s/piphillinotu.csv" % export_dir
-        piphillin_seq_out = "%s/piphillinseqs.fasta" %export_dir
+        os.system("mkdir %s" % self.piphillin_out)
+        #TODO make an integer table for piphillin and this one is ok for stamp
+        self.piphillin_dec  = "%s/piphillinotu.csv" % self.piphillin_out
+        piphillin_seq_out = "%s/piphillinseqs.fasta" % self.piphillin_out
 
         print("Run Piphillin: handling files")
-        piphillin.handle_files(self.merged_text, piphillin_text_out,
+        piphillin.handle_files(self.merged_text, self.piphillin_dec,
                                self.rarefactioniter, self.standard_sequences, piphillin_seq_out)
 
-    def run_stamp(self):
-        return 0
+    def run_stamp(self, type):
+        print("Run Stamp: mkdir")
+        otu_key = stamp.get_key(self.standard_otu)
+        self.stamp_out = self.output_directory + "stamp/"
+        os.system("mkdir %s" % self.stamp_out)
+        self.stamp_taxa  = "%s/stamp_otu.tsv" % self.stamp_out
+
+        if type == "anacapa":
+            self.taxa_levels = 6
+        elif type == "MrDNA":
+            self.taxa_levels = 7
+
+        print("Run Piphillin: reformatting")
+        stamp.reformat(self.piphillin_dec, self.stamp_taxa, otu_key, self.taxa_levels)
 
     def msa(self):
         print("MSA: import the sequences file as qza")
@@ -127,11 +140,11 @@ class General():
         # TODO find the proper argument for MSA qiime2 or just use fasttree cli
         print("Phylogeny.")
 
-    def course_wrapper(self):
+    def course_wrapper(self, type):
         self.standard_biom = self.create_biom(self.standard_otu)
         self.rarefy_and_merge(self.standard_biom)
         self.run_piphillin()
-        self.run_stamp()
+        self.run_stamp(type)
         self.msa()
         self.phylogeny()
 
@@ -173,7 +186,7 @@ class Anacapa(General):
 
         self.type = "anacapa"
         self.create_output_directory(self.type)
-        self.course_wrapper()
+        self.course_wrapper(self.type)
 
 class MrDNA(General):
 
@@ -199,7 +212,7 @@ class MrDNA(General):
         self.type = "MrDNA"
         os.system("mkdir output")
         self.create_output_directory(self.type)
-        self.course_wrapper()
+        self.course_wrapper(self.type)
 
 
 
