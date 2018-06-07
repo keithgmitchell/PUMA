@@ -120,6 +120,8 @@ class General():
             self.taxa_levels = 6
         elif type == "MrDNA":
             self.taxa_levels = 7
+        elif type == "QIIME2":
+            self.taxa_levels = 7
 
         print("Run Piphillin: reformatting")
         stamp.reformat(self.piphillin_dec, self.stamp_taxa, otu_key, self.taxa_levels)
@@ -211,6 +213,33 @@ class MrDNA(General):
         self.standard_sequences = self.fwd_seq
 
         self.type = "MrDNA"
+        os.system("mkdir output")
+        self.create_output_directory(self.type)
+        self.course_wrapper(self.type)
+
+class QIIME2(General):
+
+    def handle_arguments(self, file_dictionary):
+
+        self.otu_table = file_dictionary["otutable"]
+        self.fwd_seq = file_dictionary["fwdseq"]
+        self.taxonomy = file_dictionary["taxonomy"]
+
+    def convert_otu_to_anacapa(self):
+        os.system("mkdir temp")
+        os.system("python convert_qiime2_to_anacapa_format.py -inputOTU %s -inputTaxonomy %s -o temp/anacapa_format_otu_table.txt" % (self.otu_table, self.taxonomy))
+        return "temp/anacapa_format_otu_table.txt"
+
+
+    def __init__(self, dictionary):
+
+        General.__init__(self, dictionary)
+
+        self.handle_arguments(dictionary)
+        self.standard_otu = self.convert_otu_to_anacapa()
+        self.standard_sequences = self.fwd_seq
+
+        self.type = "QIIME2"
         os.system("mkdir output")
         self.create_output_directory(self.type)
         self.course_wrapper(self.type)

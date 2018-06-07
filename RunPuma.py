@@ -8,13 +8,13 @@ import course_wrapper
 class PUMA(Frame):
     def get_new_file_dict(self):
         files_dictionary = {"otutable": '', "fwdseq": '', "reverseseq": '', "mergeseq": '',
-                            "allseqs": '', "rarefactiondepth": 0, "rarefactioniter": 0}
+                            "allseqs": '', "taxonomy": '', "rarefactiondepth": 0, "rarefactioniter": 0}
 
         return files_dictionary
 
     def load_file(self, string, dictionary):
         fname = filedialog.askopenfilename(filetypes=(("Text file.", "*.txt"),
-                                           ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta")))
+                                           ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("Biom table","*.biom")))
         if fname:
             try:
                 dictionary[string] = fname
@@ -160,6 +160,72 @@ class PUMA(Frame):
         print (self.mrdna_dict)
         new_anacapa = course_wrapper.MrDNA(self.mrdna_dict)
 
+#############################################################################################################
+#QIIME2
+
+    def initiate_qiime2(self):
+        self.qiime2_window = Toplevel()
+        self.qiime2_window.title("QIIME2 File Input")
+        self.initiate_qiime2_labels()
+        self.initiate_qiime2_fields()
+        self.display_qiime2_fields()
+
+    def initiate_qiime2_labels(self):
+
+        self.description = Label(self.qiime2_window, text="This will be the description of the fields for the user.")
+
+        self.otutable_l = Label(self.qiime2_window, text="OTU/ASV Table from FeatureTable[Frequency] (table.biom)")
+        self.taxonomy_l = Label(self.qiime2_window, text="Taxonomy TSV from FeatureData[Taxonomy] (taxonomy.tsv)")
+        self.forwardseqs_l = Label(self.qiime2_window, text="OTU/ASV Sequences (.fasta format):")
+        self.rarefactiondepth_l = Label(self.qiime2_window, text="Rarefaction Depth:")
+        self.rarefactioniter_l = Label(self.qiime2_window, text="Rarefaction Iterations:")
+	
+    def initiate_qiime2_fields(self):
+        self.qiime2_dict = self.get_new_file_dict()
+
+        #TODO pass file types accepted
+        self.otutable = Button(self.qiime2_window, text="OTU/ASV Table",
+                               command=(lambda: self.load_file("otutable", self.qiime2_dict)), width=20)
+        self.taxonomy = Button(self.qiime2_window, text="Taxonomy TSV",
+                               command=(lambda: self.load_file("taxonomy", self.qiime2_dict)), width=20)
+        self.forwardseqs = Button(self.qiime2_window, text="OTU/ASV Sequences",
+                                  command=(lambda: self.load_file("fwdseq", self.qiime2_dict)), width=20)
+
+
+        self.rarefactiondepth = Entry(self.qiime2_window)
+        self.rarefactioniter = Entry(self.qiime2_window)
+
+        self.validate_submit = Button(self.qiime2_window, text="SUBMIT", command=(lambda: self.run_qiime2_fields()))
+
+    def display_qiime2_fields(self):
+
+        self.description.grid(row=0, column=0, columnspan=2, sticky=W)
+
+        self.otutable_l.grid(row=1, column=0, sticky=W)
+        self.otutable.grid(row=1, column=1)
+
+        self.taxonomy_l.grid(row=2, column=0, sticky=W)
+        self.taxonomy.grid(row=2, column=1)
+
+        self.forwardseqs_l.grid(row=3, column=0, sticky=W)
+        self.forwardseqs.grid(row=3, column=1)
+
+        self.rarefactiondepth_l.grid(row=4, column=0, sticky=W)
+        self.rarefactiondepth.grid(row=4, column=1)
+
+        self.rarefactioniter_l.grid(row=5, column=0, sticky=W)
+        self.rarefactioniter.grid(row=5, column=1)
+
+        self.validate_submit.grid(row=6, column=1)
+
+    def run_qiime2_fields(self):
+        #TODO validate fields
+        #TODO change box colors and display dictionary?
+        self.qiime2_dict["rarefactiondepth"] = self.rarefactiondepth.get()
+        self.qiime2_dict["rarefactioniter"] = self.rarefactioniter.get()
+        print (self.qiime2_dict)
+        new_qiime2 = course_wrapper.QIIME2(self.qiime2_dict)
+
 
 ##########################################################################################
 #MAIN
@@ -173,7 +239,7 @@ class PUMA(Frame):
         self.main_choice_anacapa = Button(self, text="Anacapa", command=(lambda: self.initiate_ancapa()), width=20)
 
         #TODO edit the other views
-        self.main_choice_qiime = Button(self, text="QIIME2", width=20)
+        self.main_choice_qiime = Button(self, text="QIIME2", command=(lambda: self.initiate_qiime2()), width=20)
         self.main_choice_mrdna = Button(self, text="Mr. DNA", command=(lambda: self.initiate_mrdna()), width=20)
 
     def display_main_fields(self):

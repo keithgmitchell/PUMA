@@ -1,7 +1,7 @@
 import csv
 import argparse
 
-
+##TODO: ADD HANDLING OF 6 VS 7 TAXONOMIC LEVELS
 def unclassified(fix_list, classification_levels):
     for x in range(0, classification_levels):
         if fix_list[x] == '' or fix_list[x] == 'NA' or fix_list[x] is None or fix_list[x] == " ":
@@ -44,7 +44,7 @@ def get_key(input):
         header = next(input_csv)
         find_tax = 0
         for item in header:
-            if item == 'sum taxonomy':
+            if item == 'sum taxonomy' or item == 'sum.taxonomy':
                 break
             find_tax += 1
 
