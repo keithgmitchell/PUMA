@@ -227,7 +227,9 @@ class QIIME2(General):
 
     def convert_otu_to_anacapa(self):
         os.system("mkdir temp")
-        os.system("python convert_qiime2_to_anacapa_format.py -inputOTU %s -inputTaxonomy %s -o temp/anacapa_format_otu_table.txt" % (self.otu_table, self.taxonomy))
+        os.system("qiime tools export %s --output-dir temp/otu_table" % self.otu_table)
+        os.system("qiime tools export %s --output-dir temp/taxonomy" % self.taxonomy)
+        os.system("python convert_qiime2_to_anacapa_format.py -inputOTU %s -inputTaxonomy %s -o temp/anacapa_format_otu_table.txt" % ("temp/otu_table/feature-table.biom", "temp/taxonomy/taxonomy.tsv"))
         return "temp/anacapa_format_otu_table.txt"
 
 

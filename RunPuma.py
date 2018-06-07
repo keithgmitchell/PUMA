@@ -16,7 +16,7 @@ class PUMA(Frame):
     #TODO pass the file types that can be opened as an argument here
     def load_file(self, string, dictionary):
         fname = filedialog.askopenfilename(filetypes=(("Text file.", "*.txt"),
-                                           ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("Biom table","*.biom")))
+                                           ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("QIIME Artifact","*.qza")))
         if fname:
             try:
                 dictionary[string] = fname
@@ -189,12 +189,12 @@ class PUMA(Frame):
         self.qiime2_dict = self.get_new_file_dict()
 
         #TODO pass file types accepted
-        self.otutable = Button(self.qiime2_window, text="OTU/ASV Table",
-                               command=(lambda: self.load_file("otutable", self.qiime2_dict)), width=20)
-        self.taxonomy = Button(self.qiime2_window, text="Taxonomy TSV",
-                               command=(lambda: self.load_file("taxonomy", self.qiime2_dict)), width=20)
+        self.otutable = Button(self.qiime2_window, text="FeatureTable[Frequency] Artifact",
+                               command=(lambda: self.load_file("otutable", self.qiime2_dict)), width=30)
+        self.taxonomy = Button(self.qiime2_window, text="FeatureData[Taxonomy] Artifact",
+                               command=(lambda: self.load_file("taxonomy", self.qiime2_dict)), width=30)
         self.forwardseqs = Button(self.qiime2_window, text="OTU/ASV Sequences",
-                                  command=(lambda: self.load_file("fwdseq", self.qiime2_dict)), width=20)
+                                  command=(lambda: self.load_file("fwdseq", self.qiime2_dict)), width=30)
 
 
         self.rarefactiondepth = Entry(self.qiime2_window)
