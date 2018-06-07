@@ -1,8 +1,9 @@
 from tkinter import filedialog
 from tkinter import *
+import tkinter.ttk as ttk
 from tkinter.messagebox import showerror
 import course_wrapper
-
+import time
 
 
 class PUMA(Frame):
@@ -12,6 +13,7 @@ class PUMA(Frame):
 
         return files_dictionary
 
+    #TODO pass the file types that can be opened as an argument here
     def load_file(self, string, dictionary):
         fname = filedialog.askopenfilename(filetypes=(("Text file.", "*.txt"),
                                            ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta")))
@@ -35,7 +37,8 @@ class PUMA(Frame):
 
     def initiate_anacapa_labels(self):
 
-        self.description = Label(self.anacapa_window, text="This will be the description of the fields for the user.")
+        self.description = Label(self.anacapa_window, wraplength=500,
+                                 text="The anacapa pipeline will produce the following files of interest:")
 
         self.otutable_l = Label(self.anacapa_window, text="OTU/ASV Table (raw taxonomy .tsv file:")
         self.forwardseqs_l = Label(self.anacapa_window, text="OTU/ASV Forward Sequences (.fasta format):")
@@ -102,6 +105,7 @@ class PUMA(Frame):
 #############################################################################################################
 #MR DNA
 
+
     def initiate_mrdna(self):
         self.mrdna_window = Toplevel()
         self.mrdna_window.title("MR DNA File Input")
@@ -160,6 +164,77 @@ class PUMA(Frame):
         print (self.mrdna_dict)
         new_anacapa = course_wrapper.MrDNA(self.mrdna_dict)
 
+#########################################################################################
+#PIPHILLIN
+
+    def get_file_set_dict(self, set_count):
+        dict = {}
+        for i in range(set_count):
+            dict[i] = " "
+        return dict
+
+    #TODO
+    def run_piphillin(self):
+        pass
+
+    def initiate_piphillin_fields(self, set_count):
+        new_dict = {}
+        for label in self.piphillin_window.grid_slaves():
+            if int(label.grid_info()["row"]) in range(1, self.max_file_sets):
+                label.grid_forget()
+        for i in range(1, set_count+1):
+            name = "otutable_" + str(i)
+            new_dict[name] = Button(self.piphillin_window, text="KO Gene Table",
+                                  command=(lambda: self.load_file(i, self.piphillin_dict)), width=20)
+            name = "otutable_" + str(i) + "_l"
+            new_dict[name] = Label(self.piphillin_window, text="Enter file #%s:" % i)
+
+        for i in range(1, set_count+1):
+            name = "otutable_" + str(i) + "_l"
+            new_dict[name].grid(row=i, column=0, sticky=W)
+            name = "otutable_" + str(i)
+            new_dict[name].grid(row=i, column=1, stick=W)
+
+        self.end_label = Label(self.piphillin_window, text="Enter as many files as the number you entered at the top of the screen")
+        self.submit_piphillin = Button(self.piphillin_window, text="SUBMIT",
+               command=(lambda: self.run_piphillin()), width=20)
+
+        self.end_label.grid(row=i+1, column=0, columnspan=2)
+        self.submit_piphillin.grid(row=i+1, column=3)
+
+
+
+    def update_rows(self):
+
+        self.number_1 = int(self.number_entry.get())
+        self.piphillin_dict = self.get_file_set_dict(int(self.number_entry.get()))
+
+        try:
+            if self.number_2 is None:
+                pass
+        except:
+            self.number_2 = None
+
+        if self.number_1 != self.number_2:
+            self.initiate_piphillin_fields(self.number_1)
+            self.number_1 = self.number_2
+
+
+    def initiate_piphillin(self):
+        self.max_file_sets = 20
+
+        self.piphillin_window = Toplevel()
+        self.piphillin_window.title("Piphillin File Set Input")
+
+        self.number_label = Label(self.piphillin_window, text="Enter file set #:")
+        self.number_entry = Entry(self.piphillin_window)
+        self.update_button = Button(self.piphillin_window, text="Update",
+                                  command=(lambda: self.update_rows()), width=20)
+
+        self.number_label.grid(row=0, column=0)
+        self.number_entry.grid(row=0, column=1)
+        self.update_button.grid(row=0, column=2)
+
 
 ##########################################################################################
 #MAIN
@@ -169,12 +244,26 @@ class PUMA(Frame):
         choices = ["Mr. DNA", "Anacapa", "QIIME2"]
         self.dropVar=StringVar()
         self.dropVar.set("Mr. DNA")
-        self.main_label = Label(self, text="Main Instructions Here and links??")
+        self.main_label = Label(self, wraplength=500,
+                                text="Below you will see options to connect various pipelines "
+                                           "(ANACAPA, QIIME2, and MR. DNA) into this pipeline. Piphillin requires the use of a web browser for functional inference; "
+                                           "therefore the files in the output folder in 'piphillin' will have to ran seperate. "
+                                           "Once they have been ran you can see the input for those to retrieve the functional hierarchy below. "
+                                           "If you would like any further pipelines supported please notify us using the github issues link: https://github.com/keithgmitchell/PUMA/issues ")
         self.main_choice_anacapa = Button(self, text="Anacapa", command=(lambda: self.initiate_ancapa()), width=20)
 
         #TODO edit the other views
+
         self.main_choice_qiime = Button(self, text="QIIME2", width=20)
         self.main_choice_mrdna = Button(self, text="Mr. DNA", command=(lambda: self.initiate_mrdna()), width=20)
+
+        self.space = Label(self, text = " ")
+        self.main_label2 = Label(self, wraplength=500,
+                                 text="Below you will see additional options in order to produce Funtional Hierarchy after running Piphillin or "
+                                      "Make OTU Networks for Cytoscape which will require your metadata to be verified using the provided steps.")
+
+        self.main_choice_functional = Button(self, text="Functional Hierarchy", command=(lambda: self.initiate_piphillin()), width=20)
+        self.main_choice_cytoscape = Button(self, text="Cytoscape", command=None, width=20)
 
     def display_main_fields(self):
 
@@ -183,25 +272,36 @@ class PUMA(Frame):
         self.main_choice_qiime.grid(row=1, column=1, sticky=W)
         self.main_choice_mrdna.grid(row=1, column=2, sticky=W)
 
+        self.space.grid(row=2)
+        self.space.grid(row=3)
+        self.main_label2.grid(row=4, column =0, columnspan=3, sticky=W)
+        self.main_choice_functional.grid(row=5, column=0, columnspan=1, sticky=W)
+        self.main_choice_cytoscape.grid(row=5, column=1, columnspan=1, sticky=W)
 
-##########################################################################################
+
+    def change_theme(self, theme):
+
+        self.s.theme_use(theme)
+        print(self.s.theme_use())
+
+    ##########################################################################################
+
 
 
     def __init__(self):
+        # s=ttk.Style()
+        # s.theme_use('alt')
+        # s.theme_use()
+        self.s = ttk.Style()
         Frame.__init__(self)
+        self.change_theme('clam')
         self.master.title("PUMA - Pipeline for Undergraduate Microbiome Analysis")
         self.master.rowconfigure(10, weight=1)
         self.master.columnconfigure(5, weight=1)
         self.grid(sticky=W+E+N+S)
-
        
         self.initiate_main_fields()
         self.display_main_fields()
-        #TODO refresh this page once other self.anacapa_windowdow starts to run.
-        #TODO better understand inheritance in python
-
-
-
 
 
 
