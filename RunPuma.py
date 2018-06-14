@@ -13,13 +13,14 @@ class PUMA(Frame):
 
         return files_dictionary
 
-    #TODO pass the file types that can be opened as an argument here
-    def load_file(self, string, dictionary):
-        fname = filedialog.askopenfilename(filetypes=(("Text file.", "*.txt"),
-                                           ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("QIIME Artifact","*.qza")))
+    def load_file(self, string, dictionary, label, allowed_filetype_indices):
+        all_filetypes = (("Text file.", "*.txt"), ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("QIIME2 Artifact","*.qza"), ("All files", "*.*"))
+        allowed_filetypes = tuple(all_filetypes[i] for i in allowed_filetype_indices)
+        fname = filedialog.askopenfilename(filetypes=allowed_filetypes)
         if fname:
             try:
                 dictionary[string] = fname
+                label.configure(fg="green")
             except:                     # <- naked except is a bad idea
                 showerror("Open Source File", "Failed to read file\n'%s'" % fname)
             return
@@ -52,16 +53,16 @@ class PUMA(Frame):
 
         #TODO pass file types accepted
         self.otutable = Button(self.anacapa_window, text="OTU/ASV Table",
-                               command=(lambda: self.load_file("otutable", self.anacapa_dict)), width=20)
+                               command=(lambda: self.load_file("otutable", self.anacapa_dict, self.otutable, [0, 1, 4])), width=20)
 
         self.forwardseqs = Button(self.anacapa_window, text="OTU/ASV Sequences",
-                                  command=(lambda: self.load_file("fwdseq", self.anacapa_dict)), width=20)
+                                  command=(lambda: self.load_file("fwdseq", self.anacapa_dict, self.forwardseqs, [2, 4])), width=20)
 
         self.mergeseqs = Button(self.anacapa_window, text="OTU/ASV Sequences",
-                                  command=(lambda: self.load_file("mergeseq", self.anacapa_dict)), width=20)
+                                  command=(lambda: self.load_file("mergeseq", self.anacapa_dict, self.mergeseqs, [2,4])), width=20)
 
         self.reverseseqs = Button(self.anacapa_window, text="OTU/ASV Sequences",
-                                 command=(lambda: self.load_file("reverseseq", self.anacapa_dict)), width=20)
+                                 command=(lambda: self.load_file("reverseseq", self.anacapa_dict, self.reverseseqs, [2,4])), width=20)
 
         self.rarefactiondepth = Entry(self.anacapa_window)
         self.rarefactioniter = Entry(self.anacapa_window)
@@ -127,10 +128,10 @@ class PUMA(Frame):
 
         #TODO pass file types accepted
         self.otutable = Button(self.mrdna_window, text="OTU/ASV Table",
-                               command=(lambda: self.load_file("otutable", self.mrdna_dict)), width=20)
+                               command=(lambda: self.load_file("otutable", self.mrdna_dict, self.otutable, [0,1,4])), width=20)
 
         self.forwardseqs = Button(self.mrdna_window, text="OTU/ASV Sequences",
-                                  command=(lambda: self.load_file("fwdseq", self.mrdna_dict)), width=20)
+                                  command=(lambda: self.load_file("fwdseq", self.mrdna_dict, self.forwardseqs,[2,4])), width=20)
 
 
         self.rarefactiondepth = Entry(self.mrdna_window)
@@ -190,11 +191,11 @@ class PUMA(Frame):
 
         #TODO pass file types accepted
         self.otutable = Button(self.qiime2_window, text="FeatureTable[Frequency] Artifact",
-                               command=(lambda: self.load_file("otutable", self.qiime2_dict)), width=30)
+                               command=(lambda: self.load_file("otutable", self.qiime2_dict, self.otutable,[3,4])), width=30)
         self.taxonomy = Button(self.qiime2_window, text="FeatureData[Taxonomy] Artifact",
-                               command=(lambda: self.load_file("taxonomy", self.qiime2_dict)), width=30)
+                               command=(lambda: self.load_file("taxonomy", self.qiime2_dict, self.taxonomy,[3,4])), width=30)
         self.forwardseqs = Button(self.qiime2_window, text="OTU/ASV Sequences",
-                                  command=(lambda: self.load_file("fwdseq", self.qiime2_dict)), width=30)
+                                  command=(lambda: self.load_file("fwdseq", self.qiime2_dict, self.forwardseqs,[2,4])), width=30)
 
 
         self.rarefactiondepth = Entry(self.qiime2_window)
