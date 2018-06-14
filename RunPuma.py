@@ -253,7 +253,7 @@ class PUMA(Frame):
         for i in range(1, set_count+1):
             name = "otutable_" + str(i)
             new_dict[name] = Button(self.piphillin_window, text="KO Gene Table",
-                                  command=(lambda: self.load_file(i, self.piphillin_dict)), width=20)
+                                  command=(lambda: self.load_file(i, self.piphillin_dict, new_dict[name], [0, 4])), width=20)
             name = "otutable_" + str(i) + "_l"
             new_dict[name] = Label(self.piphillin_window, text="Enter file #%s:" % i)
 
