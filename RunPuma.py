@@ -312,11 +312,16 @@ class PUMA(Frame):
         self.dropVar=StringVar()
         self.dropVar.set("Mr. DNA")
         self.main_label = Label(self, wraplength=500,
-                                text="Below you will see options to connect various pipelines "
-                                           "(ANACAPA, QIIME2, and MR. DNA) into this pipeline. Piphillin requires the use of a web browser for functional inference; "
-                                           "therefore the files in the output folder in 'piphillin' will have to ran seperate. "
-                                           "Once they have been ran you can see the input for those to retrieve the functional hierarchy below. "
-                                           "If you would like any further pipelines supported please notify us using the github issues link: https://github.com/keithgmitchell/PUMA/issues ")
+                                text="Below you will see options to connect various pipelines: \n "
+                                            "ANACAPA \n "
+                                            "QIIME2 \n"
+                                            "MR. DNA \n"
+                                            "\n"
+                                            "Piphillin requires the use of a web browser for functional inference; \n"
+                                            "therefore the files in the output folder in 'piphillin' will have to ran seperate. \n"
+                                            "Once they have been ran you can see the input for those to retrieve the functional hierarchy below. \n"
+                                            "If you would like any further pipelines supported please notify us using the github issues link: \n"
+                                            "\t https://github.com/keithgmitchell/PUMA/issues ")
         self.main_choice_anacapa = Button(self, text="Anacapa", command=(lambda: self.initiate_ancapa()), width=20)
 
         #TODO edit the other views
