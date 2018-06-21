@@ -11,6 +11,8 @@ import csv
 import requests
 import sys
 import argparse
+import datetime
+import os
 
 
 
@@ -251,6 +253,34 @@ def construct_output(input, output, path_ko, tree_data, input_detailed):
 
 
 
+def merge_files(list):
+    output_name = "temp/piphillin_script_merge.txt"
+    line_dict = {}
+    header = []
+    with open(output_name, 'w') as merged_file:
+        output = csv.writer(merged_file, delimiter='\t')
+        x = 0
+        for file in list:
+            with open(file) as infile:
+                infile = csv.reader(infile, delimiter='\t')
+                if x==0:
+                    header = infile[0]
+                else: 
+                    if header != infile[0]:
+                        print ("Inconsistent formatting for the piphillin headers..")
+                        
+                for line in infile[1:len(infile)]:
+                    if line[0] in line_dict.keys():
+                        line_dict[line[0]] = [x + y for x, y in zip(line[1:len(line)], line_dict[line[0]])]
+                    else:
+                        line_dict[line[0]] = line[1:len(line)]
+            x += 1
+        
+        output.write(header)
+        for key in line_dict.keys():
+            output.write(key + line_dict[key])
+        
+    return output_name
 
 if __name__ == '__main__':
 
@@ -275,13 +305,21 @@ if __name__ == '__main__':
     brite_htext = requests.get('http://www.genome.jp/kegg-bin/download_htext?htext=ko00001&format=htext&filedir=')
     tree_data = extract_hierarchy(brite_htext)
 
+    input_list = input.split(',')
+    if len(input_list)>1:
+        input = merge_files(input_list)
+
     if output is not None and output != '':
         output_hier = '%s_pathway_hierarchy_table.txt' %(output)
         output_des = '%s_genedes.txt' % (output)
 
     else:
-        output_hier = '%s_pathway_hierarchy_table.txt' %(input.strip('.txt'))
-        output_des = '%s_genedes_.txt' % (input.strip('.txt'))
+        input_temp = input.split('/')[-1]
+        time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
+        os.system("mkdir output/%s_functional_profile" % (time))
+        output_str = "output/%s_functional_profile" % (time)
+        output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
+        output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
 
     with open(input, 'r') as tsvin, open(output_hier,'w', newline='') as hierarchy_out, \
             open(output_des, 'w', newline='') as detailed_out:
@@ -290,6 +328,7 @@ if __name__ == '__main__':
         input_detailed = csv.writer(detailed_out, delimiter='\t')
 
         # make adjustments here based on the type of file needed from the in put file header row
+        print ("Constructing output for the functional profile.")
         construct_output(input, output, path_ko[0], tree_data, input_detailed)
 
 

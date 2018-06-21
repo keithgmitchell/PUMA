@@ -4,6 +4,18 @@
 ### Requirements (on the QIIME2 VM)
 + Biopython-1.71
 
+## TODO
+
++ Ctrl C out of the sed command
++ Find phylogeny parameter commands for QIIME2
++ Test piphillin script in STAMP
++ Test piphillin scenario with merge files
++ Decide how to incorporate Metadata 
++ Cytoscape script
++ Run testing in computer lab
++ file validation
++ double check logic everywhere to be sure we handle no rarefaction option fine
+
 ## functional_profile.py
 
 **For usage from files from Piphillin to create functional hierarchy and append gene descriptions to IDs.**

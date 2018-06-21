@@ -4,6 +4,9 @@ import tkinter.ttk as ttk
 from tkinter.messagebox import showerror
 import course_wrapper
 import time
+import install
+import os
+
 
 
 class PUMA(Frame):
@@ -233,17 +236,27 @@ class PUMA(Frame):
         new_qiime2 = course_wrapper.QIIME2(self.qiime2_dict)
 
 
+# ########################################################################################
+# FUNCTIONAL PROFILE
+# TODO
     def get_file_set_dict(self, set_count):
         dict = {}
-        for i in range(set_count):
+        for i in range(1,set_count):
             dict[i] = " "
         return dict
 
-#########################################################################################
-# PIPHILLIN
-    #TODO
-    def run_piphillin(self):
-        pass
+    def run_piphillin(self, dict):
+        print (dict)
+        print ("Running Functional Profile")
+        str = ""
+        for item in dict.values():
+            if str == "":
+                str = str + item
+            else:
+                str = str + "," + item
+
+        print (str)
+        os.system("python functional_profile.py -i %s" % str)
 
     def initiate_piphillin_fields(self, set_count):
         new_dict = {}
@@ -265,7 +278,7 @@ class PUMA(Frame):
 
         self.end_label = Label(self.piphillin_window, text="Enter as many files as the number you entered at the top of the screen")
         self.submit_piphillin = Button(self.piphillin_window, text="SUBMIT",
-               command=(lambda: self.run_piphillin()), width=20)
+               command=(lambda: self.run_piphillin(self.piphillin_dict)), width=20)
 
         self.end_label.grid(row=i+1, column=0, columnspan=2)
         self.submit_piphillin.grid(row=i+1, column=3)
@@ -378,5 +391,7 @@ class PUMA(Frame):
 
 
 if __name__ == "__main__":
+    install.check_dependencies()
+    install.make_directories()
     PUMA().mainloop()
 

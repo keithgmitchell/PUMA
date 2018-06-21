@@ -110,7 +110,7 @@ class General():
                                self.rarefactioniter, self.standard_sequences, piphillin_seq_out)
 
     def run_stamp(self, type):
-        print("Run Stamp: mkdir")
+        print("Run STAMP: mkdir")
         otu_key = stamp.get_key(self.standard_otu)
         self.stamp_out = self.output_directory + "stamp/"
         os.system("mkdir %s" % self.stamp_out)
@@ -123,7 +123,7 @@ class General():
         elif type == "QIIME2":
             self.taxa_levels = 7
 
-        print("Run Piphillin: reformatting")
+        print("Run STAMP: reformatting")
         stamp.reformat(self.piphillin_dec, self.stamp_taxa, otu_key, self.taxa_levels)
 
     def msa(self):
@@ -137,7 +137,7 @@ class General():
                             --source-format DNAFASTAFormat \
                             --output-path %s" % (self.standard_sequences, sequences_msa_import))
 
-        #TODO find the proper argument for MSA qiime2 or just use mafft cli
+        ##TODO find the proper argument for MSA qiime2 or just use mafft cli
 
     def phylogeny(self):
         # TODO find the proper argument for MSA qiime2 or just use fasttree cli
@@ -245,6 +245,4 @@ class QIIME2(General):
         os.system("mkdir output")
         self.create_output_directory(self.type)
         self.course_wrapper(self.type)
-
-
 
