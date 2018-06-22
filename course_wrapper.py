@@ -19,7 +19,7 @@ class General():
 
         print("Create .biom: clean header")
         os.system("head -1 %s" % input)
-        os.system("sed - i -e 's/16S_seq_number\t/#OTU ID\t/g' %s" % input)
+        os.system("sed -i -e 's/16S_seq_number\t/#OTU ID\t/g' %s" % input)
 
 
         print (" ")
