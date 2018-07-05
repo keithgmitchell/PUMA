@@ -1,11 +1,15 @@
+import install
+install.check_dependencies()
+install.make_directories()
+
 from tkinter import filedialog
 from tkinter import *
 import tkinter.ttk as ttk
 from tkinter.messagebox import showerror
-import course_wrapper
 import time
-import install
 import os
+import course_wrapper
+
 
 
 
@@ -391,7 +395,5 @@ class PUMA(Frame):
 
 
 if __name__ == "__main__":
-    install.check_dependencies()
-    install.make_directories()
     PUMA().mainloop()
 

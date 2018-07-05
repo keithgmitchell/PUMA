@@ -130,18 +130,25 @@ class General():
         print("MSA: import the sequences file as qza")
         # TODO make this for the filtered sequences
 
-        sequences_msa_import = "%s/temp/sequences_for_msa.qza" % self.dir_path
+        sequences_import = "%s/temp/sequences_for_msa.qza" % self.dir_path
         os.system("qiime tools import \
                             --input-path %s \
                             --type 'FeatureData[Sequence]' \
                             --source-format DNAFASTAFormat \
-                            --output-path %s" % (self.standard_sequences, sequences_msa_import))
+                            --output-path %s" % (self.standard_sequences, sequences_import))
 
-        ##TODO find the proper argument for MSA qiime2 or just use mafft cli
+        self.aligned_sequences = "%s/temp/aligned_sequences.qza" % self.dir_path
+        os.system("qiime alignment mafft \
+                            --i-sequences %s \
+                            --o-alignment %s" % (sequences_import, self.aligned_sequences))
 
     def phylogeny(self):
-        # TODO find the proper argument for MSA qiime2 or just use fasttree cli
         print("Phylogeny.")
+        phylogeny = "%s/temp/phylogeny.qza" % self.dir_path
+        os.system("qiime phylogeny fasttree \
+                            --i-alignment %s \
+                            --o-tree %s" % (self.aligned_sequences, phylogeny))
+
 
     def course_wrapper(self, type):
         self.standard_biom = self.create_biom(self.standard_otu)

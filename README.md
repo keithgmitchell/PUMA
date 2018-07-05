@@ -6,8 +6,6 @@
 
 ## TODO
 
-+ Ctrl C out of the sed command
-+ Find phylogeny parameter commands for QIIME2
 + Test piphillin script in STAMP
 + Test piphillin scenario with merge files
 + Decide how to incorporate Metadata 
