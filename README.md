@@ -1,6 +1,6 @@
 # PUMA (Pipeline for Undergraduate Microbiome Analysis)
 + The Manual provided below will provide setup instructions as well as important tutorials for students/researchers for jumpstarting the analysis process with the various tools shown in the scema below
-![alt text](https://github.com/keithgmitchell/PUMA/examples/Flowchart.png)
++ ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/examples/PUMA_flowchart.png)
 
 ### Version 1.1
 + **Manual Link**: https://app.box.com/file/306629203695
