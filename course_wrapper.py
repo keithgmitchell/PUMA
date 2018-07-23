@@ -102,8 +102,8 @@ class General():
         print("Run Piphillin: mkdir")
         os.system("mkdir %s" % self.piphillin_out)
         #TODO make an integer table for piphillin and this one is ok for stamp
-        self.piphillin_dec  = "%s/%s_piphillinotu.csv" % (self.piphillin_out, self.time)
-        piphillin_seq_out = "%s/%s_piphillinseqs.fasta" % (self.piphillin_out, self.time)
+        self.piphillin_dec  = "%s/piphillinotu.csv" % (self.piphillin_out)
+        piphillin_seq_out = "%s/piphillinseqs.fasta" % (self.piphillin_out)
 
         print("Run Piphillin: handling files")
         piphillin.handle_files(self.merged_text, self.piphillin_dec,
