@@ -28,7 +28,7 @@ class General():
 
 
 
-        output = "temp/standard_otu.biom"
+        output = "temp/%s_standard_otu.biom" % (self.time)
         print("Create biom: make biom")
         os.system("biom convert -i %s -o %s --table-type='OTU table' --to-json" % (input, output))
 
@@ -40,7 +40,7 @@ class General():
 
         print("Rarefy and merge: import.")
 
-        original_artifact = "%s/temp/standard_otu.qza" % self.dir_path
+        original_artifact = "%s/temp/%s_standard_otu.qza" % (self.dir_path, self.time)
         os.system("qiime tools import \
                     --input-path %s \
                     --type 'FeatureTable[Frequency]' \
@@ -54,7 +54,7 @@ class General():
 
         print("Rarefy and merge: rarefactions.")
         for i in range(int(self.rarefactioniter)):
-            output = "%s/temp/rarefaction%s.qza" % (self.dir_path, i)
+            output = "%s/temp/%s_rarefaction%s.qza" % (self.dir_path, self.time, i)
             rarefaction_list.append(output)
             rarefaction_str = rarefaction_str + " --i-tables %s" % output
             os.system("qiime feature-table rarefy \
@@ -64,10 +64,10 @@ class General():
 
         print(rarefaction_str)
 
-        merged_artifact = "%s/temp/merged_file.qza" % self.dir_path
+        merged_artifact = "%s/temp/%s_merged_file.qza" % (self.dir_path, self.time)
         export_dir = "%s/temp/" % self.dir_path
-        merged_biom = "%s/temp/feature-table.biom" % self.dir_path
-        merged_text = "%s/temp/merged_file.txt" % self.dir_path
+        merged_biom = "%s/temp/feature-table.biom" % (self.dir_path)
+        merged_text = "%s/temp/%s_merged_file.txt" % (self.dir_path, self.time)
 
         print("Rarefy and merge: merge.")
         os.system("qiime feature-table merge \
@@ -102,8 +102,8 @@ class General():
         print("Run Piphillin: mkdir")
         os.system("mkdir %s" % self.piphillin_out)
         #TODO make an integer table for piphillin and this one is ok for stamp
-        self.piphillin_dec  = "%s/piphillinotu.csv" % self.piphillin_out
-        piphillin_seq_out = "%s/piphillinseqs.fasta" % self.piphillin_out
+        self.piphillin_dec  = "%s/%s_piphillinotu.csv" % (self.piphillin_out, self.time)
+        piphillin_seq_out = "%s/%s_piphillinseqs.fasta" % (self.piphillin_out, self.time)
 
         print("Run Piphillin: handling files")
         piphillin.handle_files(self.merged_text, self.piphillin_dec,
@@ -114,7 +114,7 @@ class General():
         otu_key = stamp.get_key(self.standard_otu)
         self.stamp_out = self.output_directory + "stamp/"
         os.system("mkdir %s" % self.stamp_out)
-        self.stamp_taxa  = "%s/stamp_otu.tsv" % self.stamp_out
+        self.stamp_taxa  = "%s/%s_stamp_otu.tsv" % (self.stamp_out, self.time)
 
         if type == "anacapa":
             self.taxa_levels = 6
@@ -155,8 +155,13 @@ class General():
         self.rarefy_and_merge(self.standard_biom)
         self.run_piphillin()
         self.run_stamp(type)
-        self.msa()
-        self.phylogeny()
+
+        #TODO update these
+        # self.msa()
+        # self.phylogeny()
+        print ("----------------------------------------------------------------------------------------------------")
+        print ("DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.time)
+        print ("----------------------------------------------------------------------------------------------------")
 
 
     def __init__(self, general_dict):

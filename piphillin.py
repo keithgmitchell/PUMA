@@ -10,8 +10,8 @@ def get_seqs(sequences_file, sequence_output, seq_key):
     parsed_sequences = SeqIO.parse(sequences_file, 'fasta')
     for rec in parsed_sequences:
         if rec.description in seq_key:
-            output_file.write('>' + str(rec.description) + '\n')
-            output_file.write(str(rec.seq) + '\n')
+            output_file.write('>' + str(rec.description) + '\r\n')
+            output_file.write(str(rec.seq) + '\r\n')
 
 
 def refactor_asv(input_file, output_file, count):
@@ -29,10 +29,10 @@ def refactor_asv(input_file, output_file, count):
             row_list = [row[0], ]
             found_nonzero = False
             for item in row[1:len(row)]:
-                averaged_nonrounded = int(item)
-                if averaged_nonrounded != 0:
+                averaged_int = int(float(item))
+                if averaged_int != 0:
                     found_nonzero = True
-                row_list.append(averaged_nonrounded)
+                row_list.append(averaged_int)
             if found_nonzero:
                 rounded_csv.writerow(row_list)
                 seq_descriptions.append(row_list[0])
