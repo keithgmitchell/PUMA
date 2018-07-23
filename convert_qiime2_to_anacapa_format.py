@@ -23,9 +23,9 @@ input_otu_file = args['inputOTU']
 input_tax_file = args['inputTaxonomy']
 output_file = args['output']
 
-os.system("biom convert -i %s -o temp_otu_table.tsv --to-tsv" % input_otu_file)
+os.system("biom convert -i %s -o temp/temp_otu_table.tsv --to-tsv" % input_otu_file)
 
-with open('/home/qiime2/Desktop/PUMA-master/temp_otu_table.tsv', 'r') as input_otu_file_reader, open(input_tax_file, 'r') as input_tax_file_reader, open(output_file, 'w') as output_file_writer:
+with open('temp/temp_otu_table.tsv', 'r') as input_otu_file_reader, open(input_tax_file, 'r') as input_tax_file_reader, open(output_file, 'w') as output_file_writer:
 
     input_otu_csv_reader = csv.reader(input_otu_file_reader, delimiter='\t')
     input_tax_csv_reader = csv.reader(input_tax_file_reader, delimiter='\t')
@@ -42,6 +42,6 @@ with open('/home/qiime2/Desktop/PUMA-master/temp_otu_table.tsv', 'r') as input_o
         taxonomy_dict[row[0]]=anacapa_taxonomy_fmt
     for row in input_otu_csv_reader:
         output_csv_writer.writerow(row + [taxonomy_dict[row[0]]])
-os.system("rm temp_otu_table.tsv")
+os.system("rm temp/temp_otu_table.tsv")
 
 
