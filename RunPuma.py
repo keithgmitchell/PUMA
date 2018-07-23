@@ -11,8 +11,6 @@ import os
 import course_wrapper
 
 
-
-
 class PUMA(Frame):
     def get_new_file_dict(self):
         files_dictionary = {"otutable": '', "fwdseq": '', "reverseseq": '', "mergeseq": '',

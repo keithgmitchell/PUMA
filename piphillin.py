@@ -29,7 +29,7 @@ def refactor_asv(input_file, output_file, count):
             row_list = [row[0], ]
             found_nonzero = False
             for item in row[1:len(row)]:
-                averaged_nonrounded = (float(item)/float(count))
+                averaged_nonrounded = int(item)
                 if averaged_nonrounded != 0:
                     found_nonzero = True
                 row_list.append(averaged_nonrounded)

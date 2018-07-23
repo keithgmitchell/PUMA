@@ -8,9 +8,16 @@
 + Added timestamps to all files produced in the pipeline to the output folder
 
 ### Version 1.2 (In progress)
-+ Introduced Command Line Interface Version for systems with QIIME2/Musket
++ Introduced Command Line Interface Version for systems with QIIME2/Musket for automizing GUI process for those 
+interested as well as to provide non Virtual Machine version for convenient Linux systems downloads. 
 + Automated Rarefaction Depth Option
 + Capability to select output files (rather then produce all mentioned)
++ Add full functionality for automating production of MSA/phylogenetic tree.
++ Automation of the cytoscape portion of the pipeline so it is not its own uploading process.
+
+### Future Additions
++ Include more tools such as the iTOL tool and any other requested (please create Issue if you have one in mind)
++ Include more file input types from other sequencing services (please create Issue if you have one in mind)
 
 ## Notes for Developers
 ### TODO
@@ -20,3 +27,4 @@
 + Cytoscape script
 + Run testing in computer lab
 + double check logic everywhere to be sure we handle no rarefaction option fine
++ remove all temp files/clean folder and also have more subdirectories for parallel processing
