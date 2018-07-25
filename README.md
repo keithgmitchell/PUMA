@@ -29,3 +29,5 @@ interested as well as to provide non Virtual Machine version for convenient Linu
 + double check logic everywhere to be sure we handle no rarefaction option fine
 + remove all temp files/clean folder and also have more subdirectories for parallel processing
 + accept the tar file for the piphillin part
++ add rarefaction_depth/iter_ to the file names
++ no rarefaction option

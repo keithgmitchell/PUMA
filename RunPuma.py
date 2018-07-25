@@ -18,8 +18,12 @@ class PUMA(Frame):
 
         return files_dictionary
 
+    def get_metadata_dict(self):
+        metadata_dict = {"metadata": ''}
+        return metadata_dict
+
     def load_file(self, string, dictionary, label, allowed_filetype_indices):
-        all_filetypes = (("Text file.", "*.txt"), ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("QIIME2 Artifact","*.qza"), ("All files", "*.*"))
+        all_filetypes = (("Text file.", "*.txt"), ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("QIIME2 Artifact","*.qza"), ("All files", "*.*"), ("Comma seperated values", "*.csv"))
         allowed_filetypes = tuple(all_filetypes[i] for i in allowed_filetype_indices)
         fname = filedialog.askopenfilename(filetypes=allowed_filetypes)
         if fname:
@@ -194,7 +198,6 @@ class PUMA(Frame):
     def initiate_qiime2_fields(self):
         self.qiime2_dict = self.get_new_file_dict()
 
-        #TODO pass file types accepted
         self.otutable = Button(self.qiime2_window, text="FeatureTable[Frequency] Artifact",
                                command=(lambda: self.load_file("otutable", self.qiime2_dict, self.otutable,[3,4])), width=30)
         self.taxonomy = Button(self.qiime2_window, text="FeatureData[Taxonomy] Artifact",
@@ -319,14 +322,22 @@ class PUMA(Frame):
         self.update_button.grid(row=0, column=2)
 
 
+
 ##########################################################################################
 #MAIN
 
     def initiate_main_fields(self):
 
         choices = ["Mr. DNA", "Anacapa", "QIIME2"]
+
         self.dropVar=StringVar()
         self.dropVar.set("Mr. DNA")
+
+        self.metadata_dict = self.get_metadata_dict()
+        self.main_label0 = Label(self, wraplength=500,
+                                 text="The first step of the PUMA is to upload your metadata, be sure that the sample names correspond with your ASV/OTU table!")
+
+        self.metadata = Button(self, text="Metadata", command=(lambda: self.load_file("metadata", self.metadata_dict, self.metadata, [0,1,5])), width=20)
         self.main_label = Label(self, wraplength=500,
                                 text="Below you will see options to connect various pipelines: \n "
                                             "ANACAPA \n "
@@ -338,6 +349,8 @@ class PUMA(Frame):
                                             "Once they have been ran you can see the input for those to retrieve the functional hierarchy below. \n"
                                             "If you would like any further pipelines supported please notify us using the github issues link: \n"
                                             "\t https://github.com/keithgmitchell/PUMA/issues ")
+
+
         self.main_choice_anacapa = Button(self, text="Anacapa", command=(lambda: self.initiate_ancapa()), width=20)
 
         #TODO edit the other views
@@ -350,26 +363,25 @@ class PUMA(Frame):
                                       "Make OTU Networks for Cytoscape which will require your metadata to be verified using the provided steps.")
 
         self.main_choice_functional = Button(self, text="Functional Hierarchy", command=(lambda: self.initiate_piphillin()), width=20)
-        self.main_choice_cytoscape = Button(self, text="Cytoscape", command=None, width=20)
+        # self.main_choice_cytoscape = Button(self, text="Cytoscape", command=None, width=20)
 
     def display_main_fields(self):
+        self.main_label0.grid(row=0, column=0, columnspan=3, sticky=W)
+        self.metadata.grid(row=1, column=1)
+        self.main_label.grid(row=2, column=0, columnspan=3, sticky=W)
+        self.main_choice_anacapa.grid(row=3, column=0, sticky=W)
+        self.main_choice_qiime.grid(row=3, column=1, sticky=W)
+        self.main_choice_mrdna.grid(row=3, column=2, sticky=W)
 
-        self.main_label.grid(row=0, column=0, columnspan=3, sticky=W)
-        self.main_choice_anacapa.grid(row=1, column=0, sticky=W)
-        self.main_choice_qiime.grid(row=1, column=1, sticky=W)
-        self.main_choice_mrdna.grid(row=1, column=2, sticky=W)
-
-        self.space.grid(row=2)
-        self.space.grid(row=3)
-        self.main_label2.grid(row=4, column =0, columnspan=3, sticky=W)
-        self.main_choice_functional.grid(row=5, column=0, columnspan=1, sticky=W)
-        self.main_choice_cytoscape.grid(row=5, column=1, columnspan=1, sticky=W)
+        self.space.grid(row=4)
+        self.space.grid(row=5)
+        self.main_label2.grid(row=6, column =0, columnspan=3, sticky=W)
+        self.main_choice_functional.grid(row=7, column=1, columnspan=1, sticky=W)
+        # self.main_choice_cytoscape.grid(row=7, column=1, columnspan=1, sticky=W)
 
 
     def change_theme(self, theme):
-
         self.s.theme_use(theme)
-        print(self.s.theme_use())
 
     ##########################################################################################
 
