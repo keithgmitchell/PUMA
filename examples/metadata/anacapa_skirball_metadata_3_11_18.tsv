@@ -1,0 +1,17 @@
+Sample ID	Team Name	Section	Sample Location	Plant Scientific Name	Plant Common Name	Date of collection	Time of collection	Elevation	Type of Biom	Burn status	Longitude	Latitude	pH  Litmus Strip	pH meter CALeDNA	Amount of Leaf Litter	Soil Temperature (Celsius)	Moisture content (%)	Nitrogen content	Potassium content	Phosphate content	Water Content
+S1	LIT	1B	Ski[rba}ll			1/17/2018	1:00		Chaparral 	Burned	34.0948	-118.4729	6.75	6.5	Low	28	5.78%	Low	High	Low	Dry +
+S2	FIF	1B	Skirball	Pennisetum setaceum Fountaingrass	1/17/2018	1:00	344.4	Chaparral 	Unburned	34.09222222	-118.4727778	6.75	6.5	Medium	32	8.35%	Low	High	Low	Dry +	
+S3	FIF	1B	Skirball	Pennisetum setaceum	Fountaingrass	1/17/2018	12:26	347.5	Chaparral 	Burned	34.094444	-118.4736111	6.5	6.5	Medium	32	9.35%	Low	High	Medium	Normal
+S4	SIT	1B	Skirball	Malosma laurina	Laurel sumac	1/17/2018	1:00	353.6	Chaparral 	Unburned	34.09805556	-118.4727778	5.5	6.75	Low	24	9.71%	Low	Medium	Medium	Dry +
+S5	GoB	1A	Botanical Garden	Sida fallax	Yellow ilima	1/16/2018	13:30	112.8	Garden	Unburned	34.06499	-118.44158	6.5	7	High	17	19.50%	Low	Low	Medium	Dry
+S6	TDD	1A	Botanical Garden	Arctostaphylos 	Manzanita	1/16/2018	14:22	115	Garden	Unburned	34.06611111	-118.44055559999998	6.5	6.5	Medium	21	60.87%	Low	Low	Low	Dry +
+S7	BBB	1B	Skirball	Malosma laurina	Laurel sumac	1/17/2018	11:45	372	Chaparral 	Unburned	34.0987	-118.47	5.2	7		23	5.60%	Low	Low	Medium	Dry +
+S8	AL-Gs	1A	Skirball			1/17/2018	11:45	350	Chaparral 	Burned	34.09751	-118.47224	6.5	6.75	Low	24	0.09%	Medium	Low	Low	Dry +
+S9	SIT	1B	Skirball	Malosma laurina	Laurel sumac	1/17/2018	1:00	353.6	Chaparral 	Burned			5.5	7	High	33	7.50%	Low	Medium	Low	Dry +
+S10	FC	1A	Skirball	Eriogonum fasciculatum	California Buckwheat (Healthy)	1/17/2018	13:40	341.4	Chaparral 	Unburned	34.097770000000004	-118.47262	5.5	7	Low	28	5.57%			Medium	Dry +
+S11	LIT	1B	Skirball			1/17/2018	1:00		Chaparral 	Burned	34.0948	-118.4729	6.5	7	High	26	11.00%	Medium	High	Medium	Dry +
+S12	AL-Gs	1A	Botanical Garden  Sida fallax	Yellow ilima 	1/16/2018	14:18	107	Garden	Unburned	34.0662	-118.4907	6.0	7.0	High	19	0.20%	Low	Low	Low	Dry	
+S13	TDD/FC	1A	Skirball	Eriogonum fasciculatum	California Buckwheat (Burned)	1/17/2018	13:00	341.4	Chaparral 	Burned 	34.09818	-118.47308999999998	6.0	7	Low	27	11.03%			High	Dry +
+S14	BBB	1B	Skirball	Malosma laurina	Laurel sumac	1/17/2018	11:45	381	Chaparral 	Burned	34.09	-118.47337	6.2	7		22	14%	Medium	High	High	Dry +
+S15	BBB	1B	Skirball	Malosma laurina	Laurel sumac	1/17/2018	11:45	381	Chaparral 	Burned	34.09	-118.47337	6.2	7		22	14%	Medium	High	High	Dry +
+S16	BBB	1B	Skirball	Malosma laurina	Laurel sumac	1/17/2018	11:45	381	Chaparral 	Burned	34.09	-118.47337	6.2	7		22	14%	Medium	High	High	Dry +

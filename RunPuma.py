@@ -110,7 +110,7 @@ class PUMA(Frame):
         self.anacapa_dict["rarefactiondepth"] = self.rarefactiondepth.get()
         self.anacapa_dict["rarefactioniter"] = self.rarefactioniter.get()
         print (self.anacapa_dict)
-        new_anacapa = course_wrapper.Anacapa(self.anacapa_dict)
+        new_anacapa = course_wrapper.Anacapa(self.anacapa_dict, self.metadata_dict)
 
 #############################################################################################################
 #MR DNA
@@ -172,7 +172,7 @@ class PUMA(Frame):
         self.mrdna_dict["rarefactiondepth"] = self.rarefactiondepth.get()
         self.mrdna_dict["rarefactioniter"] = self.rarefactioniter.get()
         print (self.mrdna_dict)
-        new_anacapa = course_wrapper.MrDNA(self.mrdna_dict)
+        new_anacapa = course_wrapper.MrDNA(self.mrdna_dict, self.metadata_dict)
 
 #############################################################################################################
 #QIIME2
@@ -238,7 +238,7 @@ class PUMA(Frame):
         self.qiime2_dict["rarefactiondepth"] = self.rarefactiondepth.get()
         self.qiime2_dict["rarefactioniter"] = self.rarefactioniter.get()
         print (self.qiime2_dict)
-        new_qiime2 = course_wrapper.QIIME2(self.qiime2_dict)
+        new_qiime2 = course_wrapper.QIIME2(self.qiime2_dict, self.metadata_dict)
 
 
 # ########################################################################################

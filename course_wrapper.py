@@ -2,6 +2,8 @@ import datetime
 import os
 import piphillin
 import stamp
+import sys
+import metadata_verification
 
 
 class General():
@@ -14,6 +16,13 @@ class General():
         os.system("mkdir output/%s_%s_storage" % (self.time, type))
         directory = "%s/output/%s_%s_storage/" % (self.dir_path, self.time, type)
         self.output_directory = directory
+
+    def verify_metadata(self, metadata, standard_otu):
+        self.metadata_validation = metadata_verification.verify_metadata(self. standard_otu, self.metadata, self.time)
+        if self.metadata_validation != True:
+            sys.exit("%s" % self.metadata_validation)
+        else:
+            pass
 
     def create_biom(self, input):
 
@@ -151,6 +160,7 @@ class General():
 
 
     def course_wrapper(self, type):
+        self.verify_metadata(self.standard_otu, self.metadata)
         self.standard_biom = self.create_biom(self.standard_otu)
         self.rarefy_and_merge(self.standard_biom)
         self.run_piphillin()
@@ -164,7 +174,8 @@ class General():
         print ("----------------------------------------------------------------------------------------------------")
 
 
-    def __init__(self, general_dict):
+    def __init__(self, general_dict, metadata_dict):
+        self.metadata = metadata_dict['metadata']
         self.rarefactioniter = general_dict["rarefactioniter"]
         self.rarefactiondepth = general_dict["rarefactiondepth"]
         self.dir_path = os.getcwd()
@@ -174,6 +185,10 @@ class General():
         self.standard_sequences = " "
 
 
+
+#######################################################################################################
+# ANACAPA WRAPPER
+#######################################################################################################
 
 class Anacapa(General):
 
@@ -191,9 +206,9 @@ class Anacapa(General):
         return "temp/standard_sequences.fasta"
 
 
-    def __init__(self, dictionary):
+    def __init__(self, dictionary, metadata_dict):
 
-        General.__init__(self, dictionary)
+        General.__init__(self, dictionary, metadata_dict)
 
         self.handle_arguments(dictionary)
         self.standard_otu = self.otu_table
@@ -202,6 +217,11 @@ class Anacapa(General):
         self.type = "anacapa"
         self.create_output_directory(self.type)
         self.course_wrapper(self.type)
+
+
+#######################################################################################################
+# MrDNA WRAPPER
+#######################################################################################################
 
 class MrDNA(General):
 
@@ -216,9 +236,9 @@ class MrDNA(General):
         return "temp/anacapa_format_otu_table.txt"
 
 
-    def __init__(self, dictionary):
+    def __init__(self, dictionary, metadata_dict):
 
-        General.__init__(self, dictionary)
+        General.__init__(self, dictionary, metadata_dict)
 
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
@@ -228,6 +248,11 @@ class MrDNA(General):
         os.system("mkdir output")
         self.create_output_directory(self.type)
         self.course_wrapper(self.type)
+
+
+#######################################################################################################
+# QIIME2 WRAPPER
+#######################################################################################################
 
 class QIIME2(General):
 
@@ -245,9 +270,9 @@ class QIIME2(General):
         return "temp/anacapa_format_otu_table.txt"
 
 
-    def __init__(self, dictionary):
+    def __init__(self, dictionary, metadata_dict):
 
-        General.__init__(self, dictionary)
+        General.__init__(self, dictionary, metadata_dict)
 
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
