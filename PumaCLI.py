@@ -15,6 +15,8 @@ def run_wrapper(files, metadata_dict, type):
 
 if __name__ == "__main__":
 
+    #TODO add chris email and name here
+    
     parser = argparse.ArgumentParser(description='Implementation by Keith Mitchell (keithgmitchell@g.ucla.edu) \n'
                                                  '> This is the CLI for the PUMA tool, the set of variables required will \n'
                                                  '  follow the example (in the "examples" folder) files for the \n'
