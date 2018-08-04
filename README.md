@@ -1,5 +1,5 @@
 # PUMA (Pipeline for Undergraduate Microbiome Analysis)
-+ The Manual provided below will provide setup instructions as well as important tutorials for students/researchers for jumpstarting the analysis process with the various tools shown in the scema below
++ The Manual provided below will provide setup instructions as well as important tutorials for students/researchers for jumpstarting the analysis process with the various tools shown in the schema below.
 
 ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_flowchart.PNG)
 
@@ -13,21 +13,29 @@ interested as well as to provide non Virtual Machine version for convenient Linu
 + Automated Rarefaction Depth Option
 + Capability to select output files (rather then produce all mentioned)
 + Add full functionality for automating production of MSA/phylogenetic tree.
-+ Automation of the cytoscape portion of the pipeline so it is not its own uploading process.
++ Cytoscape script
+
 
 ### Future Additions
 + Include more tools such as the iTOL tool and any other requested (please create Issue if you have one in mind)
 + Include more file input types from other sequencing services (please create Issue if you have one in mind)
 
+
+
 ## Notes for Developers
 ### TODO
+
+TESTING
 + Test piphillin script in STAMP
 + Test piphillin scenario with merge files
-+ Decide how to incorporate Metadata 
-+ Cytoscape script
-+ Run testing in computer lab
-+ double check logic everywhere to be sure we handle no rarefaction option fine
++ test cli on hoffman and dependencies
++ double check with caledna and mrdna for standard format
+
+FEATURES
++ no rarefaction option
 + remove all temp files/clean folder and also have more subdirectories for parallel processing
 + accept the tar file for the piphillin part
 + add rarefaction_depth/iter_ to the file names
-+ no rarefaction option
++ add zymo and change everything to caledna, remove ranacapa/talk to guarav???
++ make functional file for ranacapa
++ make default submission option for those from other platforms
