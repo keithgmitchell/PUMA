@@ -15,6 +15,7 @@ def get_seqs(sequences_file, sequence_output, seq_key):
 
 
 def refactor_asv(input_file, output_file, count):
+    os.system("head -10 %s" % input_file)
     merged = open(input_file, 'r')
     rounded = open(output_file, 'w')
 

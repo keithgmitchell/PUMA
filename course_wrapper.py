@@ -20,7 +20,7 @@ class bcolors:
 class General():
 
     def clean_temp(self):
-        return 0
+        os.system('rm temp/*')
 
     def create_output_directory(self, type):
         self.time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
@@ -33,6 +33,7 @@ class General():
         if self.metadata_validation != True:
             sys.exit(bcolors.FAIL + self.metadata_validation + bcolors.ENDC)
         else:
+            print (bcolors.OKGREEN + "Metadata Successfully Verified." + bcolors.ENDC)
             pass
 
     def create_biom(self, input):
@@ -41,11 +42,8 @@ class General():
         os.system("head -1 %s" % input)
         os.system("sed -i -e 's/16S_seq_number\t/#OTU ID\t/g' %s" % input)
 
-
-        print (" ")
         print("Create .biom: done cleaning header")
         os.system("head -1 %s" % input)
-
 
 
         output = "temp/%s_standard_otu.biom" % (self.time)
@@ -53,6 +51,10 @@ class General():
         os.system("biom convert -i %s -o %s --table-type='OTU table' --to-json" % (input, output))
 
         print("Create biom: done making .biom file")
+        self.extra_biomtext = "%s/temp/%s_extra_file.txt" % (self.dir_path, self.time)
+
+        print ("Create extra non-biom: in case user does not want rarefaction performed.")
+        os.system("biom convert -i %s -o %s --to-tsv" % (output, self.extra_biomtext))
 
         return output
 
@@ -147,20 +149,29 @@ class General():
         stamp.reformat(self.piphillin_dec, self.stamp_taxa, otu_key, self.taxa_levels)
 
     def msa(self):
+        # TODO take user path to executable mafft?
+
+
+        self.multiple_sequence_alignment = "%s/temp/%s_msa" % (self.dir_path, self.time)
+        os.system('mafft %s > %s' % (self.standard_sequences, self.multiple_sequence_alignment))
+
+
+        # TODO this next part
         print("MSA: import the sequences file as qza")
-        # TODO make this for the filtered sequences
 
-        sequences_import = "%s/temp/sequences_for_msa.qza" % self.dir_path
-        os.system("qiime tools import \
-                            --input-path %s \
-                            --type 'FeatureData[Sequence]' \
-                            --source-format DNAFASTAFormat \
-                            --output-path %s" % (self.standard_sequences, sequences_import))
-
-        self.aligned_sequences = "%s/temp/aligned_sequences.qza" % self.dir_path
-        os.system("qiime alignment mafft \
-                            --i-sequences %s \
-                            --o-alignment %s" % (sequences_import, self.aligned_sequences))
+        #
+        #
+        # sequences_import = "%s/temp/sequences_for_msa.qza" % self.dir_path
+        # os.system("qiime tools import \
+        #                     --input-path %s \
+        #                     --type 'FeatureData[Sequence]' \
+        #                     --source-format DNAFASTAFormat \
+        #                     --output-path %s" % (self.standard_sequences, sequences_import))
+        #
+        # self.aligned_sequences = "%s/temp/aligned_sequences.qza" % self.dir_path
+        # os.system("qiime alignment mafft \
+        #                     --i-sequences %s \
+        #                     --o-alignment %s" % (sequences_import, self.aligned_sequences))
 
     def phylogeny(self):
         print("Phylogeny.")
@@ -171,18 +182,36 @@ class General():
 
 
     def course_wrapper(self, type):
+        """
+        :param type: string from standard list of services
+        :return: none: tells user that files have been ran :)
+        """
         self.verify_metadata(self.standard_otu, self.metadata)
         self.standard_biom = self.create_biom(self.standard_otu)
-        self.rarefy_and_merge(self.standard_biom)
+
+        #Check if user wants rarefaction
+        if self.rarefactiondepth is not None and self.rarefactiondepth != '' and int(self.rarefactiondepth) !=0 and \
+                self.rarefactioniter is not None and self.rarefactioniter != '' and int(self.rarefactioniter) !=0:
+
+            print (bcolors.OKBLUE + "Course Wrapper: Running Rarefaction and Merge" + bcolors.ENDC)
+            self.rarefy_and_merge(self.standard_biom)
+        else:
+            print (bcolors.WARNING + "Course Wrapper: Skipping Rarefaction and Merge" + bcolors.ENDC)
+            self.merged_text = self.extra_biomtext
+
         self.run_piphillin()
         self.run_stamp(type)
 
-        #TODO update these
-        # self.msa()
+        #TODO take arguments to see if user wants these
+        print(bcolors.WARNING + "MSA: Running multiple sequence alignment using 'mafft'" + bcolors.ENDC)
+        self.msa()
         # self.phylogeny()
+
+        #self.clean_temp()
         print ("----------------------------------------------------------------------------------------------------")
-        print ("DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.time)
+        print (bcolors.OKGREEN + "DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.time + bcolors.ENDC)
         print ("----------------------------------------------------------------------------------------------------")
+        sys.exit()
 
 
     def __init__(self, general_dict, metadata_dict):
@@ -213,20 +242,21 @@ class Anacapa(General):
 
     def get_all_seqs(self):
         #TODO add reverse compliment script
-        os.system("cat %s %s %s > %s" %(self.fwd_seq, self.reverse_seq, self.merge_seq, "temp/standard_sequences.fasta"))
-        return "temp/standard_sequences.fasta"
+        os.system("cat %s %s %s > %s" %(self.fwd_seq, self.reverse_seq, self.merge_seq, "temp/%s_standard_sequences.fasta" % self.time))
+        return "temp/%s_standard_sequences.fasta" % self.time
 
 
     def __init__(self, dictionary, metadata_dict):
 
         General.__init__(self, dictionary, metadata_dict)
+        self.type = "anacapa"
+        self.create_output_directory(self.type)
 
         self.handle_arguments(dictionary)
         self.standard_otu = self.otu_table
         self.standard_sequences = self.get_all_seqs()
 
-        self.type = "anacapa"
-        self.create_output_directory(self.type)
+
         self.course_wrapper(self.type)
 
 
@@ -250,14 +280,14 @@ class MrDNA(General):
     def __init__(self, dictionary, metadata_dict):
 
         General.__init__(self, dictionary, metadata_dict)
+        self.type = "MrDNA"
+        self.create_output_directory(self.type)
 
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
         self.standard_sequences = self.fwd_seq
 
-        self.type = "MrDNA"
-        os.system("mkdir output")
-        self.create_output_directory(self.type)
+
         self.course_wrapper(self.type)
 
 
@@ -284,13 +314,13 @@ class QIIME2(General):
     def __init__(self, dictionary, metadata_dict):
 
         General.__init__(self, dictionary, metadata_dict)
+        self.type = "QIIME2"
+        self.create_output_directory(self.type)
 
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
         self.standard_sequences = self.fwd_seq
 
-        self.type = "QIIME2"
-        os.system("mkdir output")
-        self.create_output_directory(self.type)
+
         self.course_wrapper(self.type)
 

@@ -27,6 +27,8 @@ def reformat(rarefied, output, otu_dict, classification_count):
     for row in csvin:
         tax_list = otu_dict[row[0]].split(';')
         row.pop(0)
+
+        #TODO should this be classification count
         while len(tax_list) < 6:
             tax_list.append(" ")
         new_tax_list = unclassified(tax_list, classification_count)

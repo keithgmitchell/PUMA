@@ -3,9 +3,19 @@
 
 ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_flowchart.PNG)
 
-### Version 1.1
+###How to install/dependencies:
++ QIIME2
++ MAFFT (multiple sequence aligner)
++ Python 3.5 +
+    + biopython
+    + argparse
+    + csv
+
+###How to run:
+
+### Version 1.1 (current)
 + **Manual Link**: https://app.box.com/file/306629203695
-+ Added timestamps to all files produced in the pipeline to the output folder
++  How to run:
 
 ### Version 1.2 (In progress)
 + Introduced Command Line Interface Version for systems with QIIME2/Musket for automizing GUI process for those 
@@ -14,6 +24,7 @@ interested as well as to provide non Virtual Machine version for convenient Linu
 + Capability to select output files (rather then produce all mentioned)
 + Add full functionality for automating production of MSA/phylogenetic tree.
 + Cytoscape script
++ CLI for scripts seperately 
 
 
 ### Future Additions
@@ -32,10 +43,8 @@ TESTING
 + double check with caledna and mrdna for standard format
 
 FEATURES
-+ no rarefaction option
-+ remove all temp files/clean folder and also have more subdirectories for parallel processing
-+ accept the tar file for the piphillin part
-+ add rarefaction_depth/iter_ to the file names
++ parallel processing
++ automate rarefaction option
++ add rarefaction_depth/iter_ to the file names?
 + add zymo and change everything to caledna, remove ranacapa/talk to guarav???
 + make functional file for ranacapa
-+ make default submission option for those from other platforms

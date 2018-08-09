@@ -40,7 +40,7 @@ def verify_metadata(standard_otu, metadata, time):
             if line[0].replace(' ', '').isalnum():
                 pass
             else:
-                error_string = "PROCESSING METADATA DID NOT WORK: Check your metadata it seems the value %s is alphanumeric." % line[0]
+                error_string = "PROCESSING METADATA DID NOT WORK: Check your metadata it seems the value %s is not alphanumeric." % line[0]
                 return error_string
             metadata_samplenames.append(line[0])
 
@@ -48,7 +48,7 @@ def verify_metadata(standard_otu, metadata, time):
             if column.replace(' ', '').isalnum():
                 pass
             else:
-                error_string = "PROCESSING OTU TABLE DID NOT WORK: Check your otu/asv table it seems the value %s is alphanumeric." % column
+                error_string = "PROCESSING OTU TABLE DID NOT WORK: Check your otu/asv table it seems the value %s is not alphanumeric." % column
                 return error_string
             otu_samplenames.append(column)
 
