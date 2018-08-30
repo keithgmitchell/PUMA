@@ -17,9 +17,14 @@ with open(input_file, 'r') as input_file_reader, open(output_file, 'w') as outpu
 	output_csv_writer = csv.writer(output_file_writer, delimiter='\t')
 	csv_header = next(input_csv_reader)
 
-	output_csv_writer.writerow(['16S_seq_number'] + csv_header[7:len(csv_header)-1] + ['sum.taxonomy'])
+	while not csv_header[-1]:
+		csv_header.pop()
+
+	output_csv_writer.writerow(['16S_seq_number'] + csv_header[7:] + ['sum.taxonomy'])
 
 	for row in input_csv_reader:
-		output_csv_writer.writerow([row[0]] + row[7:len(row)-1] + ["".join(re.findall('[kpcofgs]__([^;]+;?)', row[1])[0:7])[:-1]])
+		while not row[-1]:
+			row.pop()
+		output_csv_writer.writerow([row[0]] + row[7:] + ["".join(re.findall('[kpcofgs]__([^;]+;?)', row[1])[0:7])[:-1]])
 
 
