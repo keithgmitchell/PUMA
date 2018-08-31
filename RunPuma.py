@@ -243,7 +243,6 @@ class PUMA(Frame):
 
 # ########################################################################################
 # FUNCTIONAL PROFILE
-# TODO
     def get_file_set_dict(self, set_count):
         dict = {}
         for i in range(1,set_count):
@@ -270,7 +269,7 @@ class PUMA(Frame):
                 label.grid_forget()
         for i in range(1, set_count+1):
             name = "otutable_" + str(i)
-            new_dict[name] = Button(self.piphillin_window, text="KO Gene Table",
+            new_dict[name] = Button(self.piphillin_window, text=".tar file from Piphillin",
                                   command=(lambda: self.load_file(i, self.piphillin_dict, new_dict[name], [0, 4])), width=20)
             name = "otutable_" + str(i) + "_l"
             new_dict[name] = Label(self.piphillin_window, text="Enter file #%s:" % i)
@@ -362,7 +361,7 @@ class PUMA(Frame):
                                  text="Below you will see additional options in order to produce Funtional Hierarchy after running Piphillin or "
                                       "Make OTU Networks for Cytoscape which will require your metadata to be verified using the provided steps.")
 
-        self.main_choice_functional = Button(self, text="Functional Hierarchy", command=(lambda: self.initiate_piphillin()), width=20)
+        self.main_choice_functional = Button(self, text="Functional Profile", command=(lambda: self.initiate_piphillin()), width=20)
         # self.main_choice_cytoscape = Button(self, text="Cytoscape", command=None, width=20)
 
     def display_main_fields(self):

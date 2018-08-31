@@ -43,6 +43,7 @@ TESTING
 + double check with caledna and mrdna for standard format
 
 FEATURES
++ log comments in a file
 + parallel processing
 + automate rarefaction option
 + add rarefaction_depth/iter_ to the file names?

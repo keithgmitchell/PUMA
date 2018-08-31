@@ -4,6 +4,7 @@ import piphillin
 import stamp
 import sys
 import metadata_verification
+import cytoscape
 
 
 class bcolors:
@@ -199,12 +200,17 @@ class General():
             print (bcolors.WARNING + "Course Wrapper: Skipping Rarefaction and Merge" + bcolors.ENDC)
             self.merged_text = self.extra_biomtext
 
+        print(bcolors.WARNING + "Cytoscape: running cytoscape script." + bcolors.ENDC)
+        self.cytoscape = cytoscape.handle_files(self.standard_otu, self.metadata, "temp/cytoscape.tsv")
+
         self.run_piphillin()
         self.run_stamp(type)
 
+
         #TODO take arguments to see if user wants these
         print(bcolors.WARNING + "MSA: Running multiple sequence alignment using 'mafft'" + bcolors.ENDC)
-        self.msa()
+
+        # self.msa()
         # self.phylogeny()
 
         #self.clean_temp()
