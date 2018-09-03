@@ -1,6 +1,5 @@
 import csv
 
-
 def metadata_to_dict(metdata):
     """
     :param metdata: file path
@@ -17,22 +16,28 @@ def metadata_to_dict(metdata):
     return sample_dict, header[1:len(header)]
 
 
+# def handle_files(standard_otu, metadata, outdir, time_id, type):
 def handle_files(standard_otu, metadata, outfile):
     """
     :param standard_otu: file path
     :param metadata: file path
     :return: file path to real_edge_table
     """
-    metadata_breakdown = metadata_to_dict(metadata)
+    # type = 'genes'
+    # type = 'functional_hierarchy'
+    type = 'community'
 
+    metadata_breakdown = metadata_to_dict(metadata)
     header_row = ['from', 'to', 'eweight'] + metadata_breakdown[1]
 
-    #TODO make this the rarefied file
-    with open(standard_otu) as otu_file, open(outfile, 'w') as cyto_out:
-        otu_read = csv.reader(otu_file, delimiter='\t')
-        cyto_write = csv.writer(cyto_out, delimiter='\t')
-        cyto_write.writerow(header_row)
-        otu_header = otu_read.__next__()
-        for line in otu_read:
-            for object, pos in zip(line[1:len(line)], otu_header[1:len(otu_header)-1]):
-                cyto_write.writerow([pos, line[len(otu_header)-1], object] + [i for i in metadata_breakdown[0][pos]])
+    #TODO groupby before writing then add different levels
+    for start, level in zip([5], ['species']):
+        with open(standard_otu) as otu_file, open(outfile, 'w') as cyto_out:
+            otu_read = csv.reader(otu_file, delimiter='\t')
+            cyto_write = csv.writer(cyto_out, delimiter='\t')
+            cyto_write.writerow(header_row)
+            otu_header = otu_read.__next__()
+            for line in otu_read:
+                for weight, sample_id in zip(line[start+1:len(line)], otu_header[start+1:len(otu_header)]):
+                    if float(weight) > 0:
+                        cyto_write.writerow([','.join(str(i) for i in line[0:start+1])] + [line[0], weight] + [i for i in metadata_breakdown[0][sample_id]])

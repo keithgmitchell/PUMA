@@ -1,7 +1,7 @@
 import install
 # install.check_dependencies()
 install.make_directories()
-
+from course_wrapper import bcolors
 import argparse
 import sys
 import course_wrapper
@@ -19,7 +19,8 @@ def run_wrapper(files, metadata_dict, type):
 
 if __name__ == "__main__":
 
-    #TODO add chris email and name here
+
+
     parser = argparse.ArgumentParser(description='Implementation by Keith Mitchell (keithgmitchell@g.ucla.edu)'
                                                  '  This is the CLI for the PUMA tool, the set of variables required will'
                                                  '  follow the example (in the "examples" folder) files for the'
@@ -38,35 +39,54 @@ if __name__ == "__main__":
     parser.add_argument('-rarefactioniter', help='Some services have a seperate taxonomy file.', required=False)
     parser.add_argument('-rarefactiondepth', help='If this is not provided we will automatically calculate a good '
                                                   'depth and report it back to you.', required=False)
+
+    parser.add_argument('-unique_id', help='If you would like to specify any other identifier in the naming of output '
+                                           'files please place that here.', required=False)
+
+    parser.add_argument('-msa_phylo', help='Include this argument if you want to run MSA using muscle and Phylogenetic'
+                                           ' Tree using FastTree.', required=False)
+
+    parser.add_argument('-outdir', help='If you would like to specify where the output goes other then the output '
+                                        'diretory in this folder.', required=False)
+
     args = vars(parser.parse_args())
 
 
-    files_dictionary = {"otutable": '', "fwdseq": '', "reverseseq": '', "mergeseq": '',
-                        "allseqs": '', "taxonomy": '', "rarefactiondepth": 0, "rarefactioniter": 0}
+    files_dictionary = {"otutable": '', "fwdseq": '', "reverseseq": '', "mergeseq": '', "unique_id":'',
+                        "allseqs": '', "taxonomy": '', "rarefactiondepth": 0, "rarefactioniter": 0,
+                        "msa_phylo": False, "outdir": '' }
+
+
     metadata_dict = {"metadata": ''}
 
     #STANDARD
     files_dictionary["otutable"] = args['otutable']
     metadata_dict["metadata"] = args['metadata']
-
     files_dictionary["rarefactioniter"] = args['rarefactioniter']
     files_dictionary["rarefactiondepth"] = args['rarefactiondepth']
+    files_dictionary["unique_id"] = args["unique_id"]
+    files_dictionary["msa_phylo"] = args["msa_phylo"]
+    files_dictionary["outdir"] = args["outdir"]
+
 
 
     #UNIQUE TO ANACAPA
-
     if args['type'] == 'anacapa':
-        files_dictionary["fwdseq"] = args['fwdseq']
-        files_dictionary["mergeseq"] = args['mergeseq']
-        files_dictionary["reverseseq"] = args['reverseseq']
+        if args["fwdseq"] is not None and args["mergeseq"] is not None and args["reverseseq"] is not None:
 
-    #TODO is this true for mrdna/qiime2
-    #TODO if not provided throw error.
-    #TODO automate rarefaction option
-    #TODO msa option
+            files_dictionary["fwdseq"] = args['fwdseq']
+            files_dictionary["mergeseq"] = args['mergeseq']
+            files_dictionary["reverseseq"] = args['reverseseq']
+
+        else:
+            print("----------------------------------------------------------------------------------------------------")
+            print(bcolors.FAIL + "ANACAPA: Must have fwdseq, mergedseq, and reverseq files provided." + bcolors.ENDC)
+            print("----------------------------------------------------------------------------------------------------")
+            sys.exit()
+
+    #TODO @chris does this look ok?
     else:
         files_dictionary["seqs"] = args['seqs']
         files_dictionary["taxonomy"] = args['taxonomy']
 
-    print (files_dictionary)
     run_wrapper(files_dictionary, metadata_dict, args['type'])

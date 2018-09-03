@@ -6,9 +6,9 @@ def check_csv_tsv(file):
     if ".csv" in file:
         return ','
 
-def clean_metadata_values(file, time):
-    with open(file) as infile, open("temp/%s_verified_metadata.tsv" % time, 'w') as outfile:
-        metadata_fix_values = csv.writer(outfile, delimiter='\t')
+def clean_metadata_values(file, time, outfile):
+    with open(file) as infile, open(outfile % time, 'w') as out:
+        metadata_fix_values = csv.writer(out, delimiter='\t')
         metadata_read_values = csv.reader(infile, delimiter='\t')
         # close the files
         items_to_strip = ['[',']', "'", '"', '(', ')', '{', '}']
@@ -21,7 +21,7 @@ def clean_metadata_values(file, time):
             metadata_fix_values.writerow(new_line)
 
 
-def verify_metadata(standard_otu, metadata, time):
+def verify_metadata(standard_otu, metadata, time, outfile):
     metadata_type = check_csv_tsv(metadata)
     otu_type = check_csv_tsv(standard_otu)
     with open(standard_otu) as otu_file, open(metadata, "r+") as metadata_in:
@@ -58,7 +58,7 @@ def verify_metadata(standard_otu, metadata, time):
         #check if differences between the two sample name sets
         if len(set(otu_samplenames) - set(metadata_samplenames)) == 0:
             #clean values
-            clean_metadata_values(metadata, time)
+            clean_metadata_values(metadata, time, outfile)
             return True
 
         else:

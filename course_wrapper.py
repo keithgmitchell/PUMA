@@ -18,24 +18,56 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 
+def log_file(outdir):
+    pass
+
 class General():
+
 
     def clean_temp(self):
         os.system('rm temp/*')
 
-    def create_output_directory(self, type):
-        self.time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
-        os.system("mkdir output/%s_%s_storage" % (self.time, type))
-        directory = "%s/output/%s_%s_storage/" % (self.dir_path, self.time, type)
+    def create_output_directory(self, type, unique_string, outdir):
+        if unique_string is not None:
+            self.time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M") + "_" + unique_string
+        else:
+            self.time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
+
+        if outdir is None or outdir == "":
+            os.system("mkdir output/%s_%s_storage" % (self.time, type))
+            directory = "%s/output/%s_%s_storage/" % (self.dir_path, self.time, type)
+
+        else:
+            #TODO I still need to fix this and change the output command elsewhere
+            outdir = outdir.rstrip('/')
+            os.system("mkdir %s/%s_%s_storage" % (outdir, self.time, type))
+            directory = "%s/%s_%s_storage/" % (self.dir_path, self.time, type)
+
         self.output_directory = directory
 
+    def start_log(self):
+        log_path = self.output_directory + 'log.txt'
+
+        print('Starting a log file at %s' % log_path)
+        self.old_stdout = sys.stdout
+        self.log_file = open(log_path, "w")
+        sys.stdout = self.log_file
+
+    def end_log(self):
+        sys.stdout = self.old_stdout
+        self.log_file.close()
+
     def verify_metadata(self, metadata, standard_otu):
+        self.metadata_fileout = self.output_directory + "verified_metadata.tsv"
         self.metadata_validation = metadata_verification.verify_metadata(self. standard_otu, self.metadata, self.time)
+
         if self.metadata_validation != True:
             sys.exit(bcolors.FAIL + self.metadata_validation + bcolors.ENDC)
         else:
             print (bcolors.OKGREEN + "Metadata Successfully Verified." + bcolors.ENDC)
             pass
+
+
 
     def create_biom(self, input):
 
@@ -124,6 +156,7 @@ class General():
         self.piphillin_out = self.output_directory + "piphillin/"
         print("Run Piphillin: mkdir")
         os.system("mkdir %s" % self.piphillin_out)
+
         #TODO make an integer table for piphillin and this one is ok for stamp
         self.piphillin_dec  = "%s/piphillinotu.csv" % (self.piphillin_out)
         piphillin_seq_out = "%s/piphillinseqs.fasta" % (self.piphillin_out)
@@ -135,9 +168,9 @@ class General():
     def run_stamp(self, type):
         print("Run STAMP: mkdir")
         otu_key = stamp.get_key(self.standard_otu)
-        self.stamp_out = self.output_directory + "stamp/"
-        os.system("mkdir %s" % self.stamp_out)
-        self.stamp_taxa  = "%s/%s_stamp_otu.tsv" % (self.stamp_out, self.time)
+        self.stamp_directory = self.output_directory + "stamp/"
+        os.system("mkdir %s" % self.stamp_directory)
+        self.stamp_taxa  = "%s/%s_stamp_otu.tsv" % (self.stamp_directory, self.time)
 
         if type == "anacapa":
             self.taxa_levels = 6
@@ -150,36 +183,12 @@ class General():
         stamp.reformat(self.piphillin_dec, self.stamp_taxa, otu_key, self.taxa_levels)
 
     def msa(self):
-        # TODO take user path to executable mafft?
-
-
         self.multiple_sequence_alignment = "%s/temp/%s_msa" % (self.dir_path, self.time)
         os.system('mafft %s > %s' % (self.standard_sequences, self.multiple_sequence_alignment))
 
-
-        # TODO this next part
-        print("MSA: import the sequences file as qza")
-
-        #
-        #
-        # sequences_import = "%s/temp/sequences_for_msa.qza" % self.dir_path
-        # os.system("qiime tools import \
-        #                     --input-path %s \
-        #                     --type 'FeatureData[Sequence]' \
-        #                     --source-format DNAFASTAFormat \
-        #                     --output-path %s" % (self.standard_sequences, sequences_import))
-        #
-        # self.aligned_sequences = "%s/temp/aligned_sequences.qza" % self.dir_path
-        # os.system("qiime alignment mafft \
-        #                     --i-sequences %s \
-        #                     --o-alignment %s" % (sequences_import, self.aligned_sequences))
-
     def phylogeny(self):
-        print("Phylogeny.")
-        phylogeny = "%s/temp/phylogeny.qza" % self.dir_path
-        os.system("qiime phylogeny fasttree \
-                            --i-alignment %s \
-                            --o-tree %s" % (self.aligned_sequences, phylogeny))
+        self.phylogenetic_tree = "%s/temp/%s_phylotree" % (self.dir_path, self.time)
+        os.system('fasttree -nt %s > %s -fastest' % (self.multiple_sequence_alignment, self.multiple_sequence_alignment))
 
 
     def course_wrapper(self, type):
@@ -187,44 +196,68 @@ class General():
         :param type: string from standard list of services
         :return: none: tells user that files have been ran :)
         """
+
         self.verify_metadata(self.standard_otu, self.metadata)
         self.standard_biom = self.create_biom(self.standard_otu)
 
-        #Check if user wants rarefaction
+        # RAREFY AND MERGE (if applicable)
         if self.rarefactiondepth is not None and self.rarefactiondepth != '' and int(self.rarefactiondepth) !=0 and \
                 self.rarefactioniter is not None and self.rarefactioniter != '' and int(self.rarefactioniter) !=0:
 
-            print (bcolors.OKBLUE + "Course Wrapper: Running Rarefaction and Merge" + bcolors.ENDC)
+            print (bcolors.WARNING + "Course Wrapper: Running Rarefaction and Merge" + bcolors.ENDC)
             self.rarefy_and_merge(self.standard_biom)
         else:
             print (bcolors.WARNING + "Course Wrapper: Skipping Rarefaction and Merge" + bcolors.ENDC)
             self.merged_text = self.extra_biomtext
 
-        print(bcolors.WARNING + "Cytoscape: running cytoscape script." + bcolors.ENDC)
-        self.cytoscape = cytoscape.handle_files(self.standard_otu, self.metadata, "temp/cytoscape.tsv")
-
+        # PIPHILLIN
+        print(bcolors.HEADER + "Piphillin: Producing formatted file sets for Piphillin @Secondgenome (only upload those with a number)." + bcolors.ENDC)
         self.run_piphillin()
+
+        # STAMP/EXCEL
+        print(bcolors.HEADER + "STAMP/Excel: running script to make files for STAMP/Excel." + bcolors.ENDC)
         self.run_stamp(type)
 
+        # CYTOSCAPE
 
-        #TODO take arguments to see if user wants these
-        print(bcolors.WARNING + "MSA: Running multiple sequence alignment using 'mafft'" + bcolors.ENDC)
+        self.cytoscape_directory = self.output_directory + "cytoscape/"
+        print("Cytoscape: making directory.")
+        os.system("mkdir %s" % self.cytoscape_directory)
 
-        # self.msa()
-        # self.phylogeny()
+        print(bcolors.WARNING + "Cytoscape: running cytoscape script." + bcolors.ENDC)
+        outfile = self.cytoscape_directory + self.time + '_species_cytoscape.tsv'
+        self.cytoscape = cytoscape.handle_files(self.stamp_taxa, self.metadata, outfile)
 
-        #self.clean_temp()
-        print ("----------------------------------------------------------------------------------------------------")
-        print (bcolors.OKGREEN + "DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.time + bcolors.ENDC)
-        print ("----------------------------------------------------------------------------------------------------")
+        # MSA/PHYLO
+        if self.run_msa_phylo != False:
+            print(bcolors.WARNING + "MSA: Running multiple sequence alignment using 'mafft'" + bcolors.ENDC)
+            self.msa()
+
+            print(bcolors.WARNING + "Phylogenetic Tree: Running phylogenetic tree construction." + bcolors.ENDC)
+            self.phylogeny()
+
+        # CLEAN TEMP
+        # self.clean_temp()
+
+        print("----------------------------------------------------------------------------------------------------")
+        print(bcolors.OKGREEN + "DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.time + bcolors.ENDC)
+        print("----------------------------------------------------------------------------------------------------")
+        self.end_log()
         sys.exit()
 
 
     def __init__(self, general_dict, metadata_dict):
+        self.dir_path = os.getcwd()
+        self.create_output_directory(self.type, general_dict["unique_id"], general_dict["outdir"])
+        self.start_log()
+
+        print (general_dict)
+        print (metadata_dict)
+
         self.metadata = metadata_dict['metadata']
         self.rarefactioniter = general_dict["rarefactioniter"]
         self.rarefactiondepth = general_dict["rarefactiondepth"]
-        self.dir_path = os.getcwd()
+        self.run_msa_phylo = general_dict["msa_phylo"]
 
         #TODO set this object for each tool
         self.standard_otu = " "
@@ -254,15 +287,13 @@ class Anacapa(General):
 
     def __init__(self, dictionary, metadata_dict):
 
-        General.__init__(self, dictionary, metadata_dict)
         self.type = "anacapa"
-        self.create_output_directory(self.type)
-
+        General.__init__(self, dictionary, metadata_dict)
         self.handle_arguments(dictionary)
         self.standard_otu = self.otu_table
         self.standard_sequences = self.get_all_seqs()
 
-
+        # Run the Standard functions
         self.course_wrapper(self.type)
 
 
@@ -284,16 +315,14 @@ class MrDNA(General):
 
 
     def __init__(self, dictionary, metadata_dict):
-
-        General.__init__(self, dictionary, metadata_dict)
         self.type = "MrDNA"
-        self.create_output_directory(self.type)
+        General.__init__(self, dictionary, metadata_dict)
 
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
         self.standard_sequences = self.fwd_seq
 
-
+        # Run the Standard functions
         self.course_wrapper(self.type)
 
 
@@ -318,15 +347,13 @@ class QIIME2(General):
 
 
     def __init__(self, dictionary, metadata_dict):
-
-        General.__init__(self, dictionary, metadata_dict)
         self.type = "QIIME2"
-        self.create_output_directory(self.type)
+        General.__init__(self, dictionary, metadata_dict)
 
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
         self.standard_sequences = self.fwd_seq
 
-
+        # Run the Standard functions
         self.course_wrapper(self.type)
 

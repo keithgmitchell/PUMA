@@ -13,6 +13,13 @@
 
 ###How to run:
 
++ `python PumaCLI.py -otutable examples/anacapa_skirball_S18/16S_ASV_raw_taxonomy_70.tsv 
+-fwdseq examples/anacapa_skirball_S18/nochim_forward16S.fasta 
+-mergeseq examples/anacapa_skirball_S18/nochim_merged16S.fasta 
+-reverseseq examples/anacapa_skirball_S18/nochim_reverse16S.fasta 
+-rarefactioniter 3 -rarefactiondepth 3500 -metadata examples/metadata/anacapa_skirball_metadata_3_11_18.tsv 
+-type anacapa -unique_id demo -msa_phylo True`
+
 ### Version 1.1 (current)
 + **Manual Link**: https://app.box.com/file/306629203695
 +  How to run:
@@ -35,6 +42,12 @@ interested as well as to provide non Virtual Machine version for convenient Linu
 
 ## Notes for Developers
 ### TODO
+NOW
++ Ranacapa output folder
++ verified metadata in output directory
++ test on the cluster
++ upload .yml file?
++ iPath formatted file??
 
 TESTING
 + Test piphillin script in STAMP
@@ -43,9 +56,7 @@ TESTING
 + double check with caledna and mrdna for standard format
 
 FEATURES
-+ log comments in a file
-+ parallel processing
 + automate rarefaction option
 + add rarefaction_depth/iter_ to the file names?
 + add zymo and change everything to caledna, remove ranacapa/talk to guarav???
-+ make functional file for ranacapa
++ make functional file for ranacapa?

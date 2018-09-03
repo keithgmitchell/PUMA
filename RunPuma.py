@@ -14,7 +14,10 @@ import course_wrapper
 class PUMA(Frame):
     def get_new_file_dict(self):
         files_dictionary = {"otutable": '', "fwdseq": '', "reverseseq": '', "mergeseq": '',
-                            "allseqs": '', "taxonomy": '', "rarefactiondepth": 0, "rarefactioniter": 0}
+                            "allseqs": '', "taxonomy": '', "rarefactiondepth": 0, "rarefactioniter": 0,
+                            "msa_phylo": False }
+
+
 
         return files_dictionary
 
