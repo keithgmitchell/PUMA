@@ -84,9 +84,11 @@ if __name__ == "__main__":
             print("----------------------------------------------------------------------------------------------------")
             sys.exit()
 
-    #TODO @chris does this look ok?
-    else:
-        files_dictionary["seqs"] = args['seqs']
+    elif args['type'] == 'MrDNA':
+        files_dictionary["fwdseq"] = args['seqs']
+    elif args['type'] == 'qiime2':
+        files_dictionary["fwdseq"] = args['seqs']
         files_dictionary["taxonomy"] = args['taxonomy']
+
 
     run_wrapper(files_dictionary, metadata_dict, args['type'])
