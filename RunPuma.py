@@ -336,21 +336,20 @@ class PUMA(Frame):
         self.dropVar.set("Mr. DNA")
 
         self.metadata_dict = self.get_metadata_dict()
-        self.main_label0 = Label(self, wraplength=500,
-                                 text="The first step of the PUMA is to upload your metadata, be sure that the sample names correspond with your ASV/OTU table!")
+        self.main_label0 = Label(self, wraplength=700,
+                                 text="The first step of the PUMA is to upload your metadata, be sure that the sample names correspond with your ASV/OTU table.")
 
         self.metadata = Button(self, text="Metadata", command=(lambda: self.load_file("metadata", self.metadata_dict, self.metadata, [0,1,5])), width=20)
-        self.main_label = Label(self, wraplength=500,
-                                text="Below you will see options to connect various pipelines: \n "
+        self.main_label = Label(self, wraplength=700,
+                                text="Below you will see options to connect various taxonomic ID platforms: \n "
                                             "ANACAPA \n "
                                             "QIIME2 \n"
                                             "MR. DNA \n"
                                             "\n"
                                             "Piphillin requires the use of a web browser for functional inference; \n"
                                             "therefore the files in the output folder in 'piphillin' will have to ran seperate. \n"
-                                            "Once they have been ran you can see the input for those to retrieve the functional hierarchy below. \n"
-                                            "If you would like any further pipelines supported please notify us using the github issues link: \n"
-                                            "\t https://github.com/keithgmitchell/PUMA/issues ")
+                                            "Once they have been ran you can see the input for those to retrieve the functional hierarchy below and annotated gene for the pathway and gene functional levels respectively. \n"
+                                            )
 
 
         self.main_choice_anacapa = Button(self, text="Anacapa", command=(lambda: self.initiate_ancapa()), width=20)
@@ -360,27 +359,54 @@ class PUMA(Frame):
         self.main_choice_mrdna = Button(self, text="Mr. DNA", command=(lambda: self.initiate_mrdna()), width=20)
 
         self.space = Label(self, text = " ")
-        self.main_label2 = Label(self, wraplength=500,
-                                 text="Below you will see additional options in order to produce Funtional Hierarchy after running Piphillin or "
-                                      "Make OTU Networks for Cytoscape which will require your metadata to be verified using the provided steps.")
+        self.main_label2 = Label(self, wraplength=700,
+                                 text="Below you will see additional options in order to produce Funtional Hierarchy after running Piphillin.")
 
         self.main_choice_functional = Button(self, text="Functional Profile", command=(lambda: self.initiate_piphillin()), width=20)
-        # self.main_choice_cytoscape = Button(self, text="Cytoscape", command=None, width=20)
 
+        self.main_label3 = Label(self, wraplength=700,
+                                 text="If you would like any further pipelines supported or encounter any errors please notify us using the github issues link: \n"
+                                        "https://github.com/keithgmitchell/PUMA/issues ")
     def display_main_fields(self):
-        self.main_label0.grid(row=0, column=0, columnspan=3, sticky=W)
+
+        self.main_label0.grid(row=0, column=0, columnspan=3, sticky=N)
+        self.main_label0.configure(background='white')
+        self.main_label0.config(font=("System", 15))
+
         self.metadata.grid(row=1, column=1)
-        self.main_label.grid(row=2, column=0, columnspan=3, sticky=W)
-        self.main_choice_anacapa.grid(row=3, column=0, sticky=W)
-        self.main_choice_qiime.grid(row=3, column=1, sticky=W)
-        self.main_choice_mrdna.grid(row=3, column=2, sticky=W)
+        self.metadata.configure(background='#2ECC71')
+        self.metadata.config(font=("System", 15))
+
+        self.main_label.grid(row=2, column=0, columnspan=3, sticky=N)
+        self.main_label.configure(background='white')
+        self.main_label.config(font=("System", 15))
+
+        self.main_choice_anacapa.grid(row=3, column=0, sticky=N)
+        self.main_choice_anacapa.config(font=("System", 15))
+        self.main_choice_anacapa.configure(background='#85C1E9')
+
+        self.main_choice_qiime.grid(row=3, column=1, sticky=N)
+        self.main_choice_qiime.config(font=("System", 15))
+        self.main_choice_qiime.configure(background='#85C1E9')
+
+        self.main_choice_mrdna.grid(row=3, column=2, sticky=N)
+        self.main_choice_mrdna.config(font=("System", 15))
+        self.main_choice_mrdna.configure(background='#85C1E9')
 
         self.space.grid(row=4)
-        self.space.grid(row=5)
-        self.main_label2.grid(row=6, column =0, columnspan=3, sticky=W)
-        self.main_choice_functional.grid(row=7, column=1, columnspan=1, sticky=W)
-        # self.main_choice_cytoscape.grid(row=7, column=1, columnspan=1, sticky=W)
+        self.space.configure(background='white')
 
+        self.main_label2.grid(row=6, column =0, columnspan=3, sticky=N)
+        self.main_label2.configure(background='white')
+        self.main_label2.config(font=("System", 15))
+
+        self.main_choice_functional.grid(row=7, column=1, columnspan=1, sticky=N)
+        self.main_choice_functional.configure(background='#F7DC6F')
+        self.main_choice_functional.config(font=("System", 17))
+
+        self.main_label3.grid(row=8, column =0, columnspan=3, sticky=N)
+        self.main_label3.configure(background='gray')
+        self.main_label3.config(font=("System", 11))
 
     def change_theme(self, theme):
         self.s.theme_use(theme)
@@ -395,7 +421,8 @@ class PUMA(Frame):
         # s.theme_use()
         self.s = ttk.Style()
         Frame.__init__(self)
-        self.change_theme('clam')
+        self.configure(background='white')
+
         self.master.title("PUMA - Pipeline for Undergraduate Microbiome Analysis")
         self.master.rowconfigure(10, weight=1)
         self.master.columnconfigure(5, weight=1)

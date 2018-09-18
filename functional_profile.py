@@ -13,8 +13,7 @@ import sys
 import argparse
 import datetime
 import os
-
-
+import cytoscape
 
 def extract_info(request):
 
@@ -288,11 +287,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Input and Output file name options for t')
     parser.add_argument('-i', help='This is the file from Piphillin (tar file). If there is more then one input then arguments should be comma seperated.',
                         required=True)
-    parser.add_argument('-o', help='This is the prefix for what you wish the output files to have. For example: 109BL-W18_90cutoff',
+    parser.add_argument('-o', help='This is the prefix for what you wish the output files to have. For example: UCLA_109BL-W18_90cutoff',
+                        required=True)
+    parser.add_argument('-dir', help='This is the directory you want the output files to go to.',
                         required=False)
+    parser.add_argument('-metadata', help='This should be the verified metadata from the first portion of running the community profile.',
+                        required=True)
     args = vars(parser.parse_args())
     input = args['i']
     output = args['o']
+    directory = args['dir']
+    metadata = args['metadata']
 
     # request data linking genes to pathways, can be seen by entering the link into a browser too
     k = requests.get('http://rest.kegg.jp/link/pathway/ko')
@@ -326,7 +331,6 @@ if __name__ == '__main__':
         input = merge_files(full_path_list)
 
 
-
     if output is None or output == '':
         output_hier = '%s_pathway_hierarchy_table.txt' %(output)
         output_des = '%s_genedes.txt' % (output)
@@ -338,6 +342,9 @@ if __name__ == '__main__':
         output_str = "output/%s_functional_profile" % (time)
         output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
         output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
+        os.system('mv %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
+        cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
+        cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
 
     with open(input, 'r') as tsvin, open(output_hier,'w', newline='') as hierarchy_out, \
             open(output_des, 'w', newline='') as detailed_out:

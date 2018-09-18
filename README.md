@@ -1,9 +1,20 @@
 # PUMA (Pipeline for Undergraduate Microbiome Analysis)
-+ The Manual provided below will provide setup instructions as well as important tutorials for students/researchers for jumpstarting the analysis process with the various tools shown in the schema below.
 
 ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_flowchart.PNG)
 
+
+## Version 1.1 (current)
++ The Manual provided below will provide setup instructions as well as important tutorials for 
+students/researchers for jumpstarting the analysis process with the various tools shown in the 
+schema above.
++ **Manual Link**: https://app.box.com/file/306629203695
+
 ###How to install/dependencies:
+
++ Using virtual machine:
++ Using conda
+
+
 + QIIME2
 + MAFFT (multiple sequence aligner)
 + Python 3.5 +
@@ -20,11 +31,10 @@
 -rarefactioniter 3 -rarefactiondepth 3500 -metadata examples/metadata/anacapa_skirball_metadata_3_11_18.tsv 
 -type anacapa -unique_id demo -msa_phylo True`
 
-### Version 1.1 (current)
-+ **Manual Link**: https://app.box.com/file/306629203695
+
 +  How to run:
 
-### Version 1.2 (In progress)
+## Version 1.2 (In progress)
 + Introduced Command Line Interface Version for systems with QIIME2/Musket for automizing GUI process for those 
 interested as well as to provide non Virtual Machine version for convenient Linux systems downloads. 
 + Automated Rarefaction Depth Option
@@ -39,13 +49,14 @@ interested as well as to provide non Virtual Machine version for convenient Linu
 + Include more file input types from other sequencing services (please create Issue if you have one in mind)
 
 
-
 ## Notes for Developers
 ### TODO
 NOW
++ clean up gui
++ upload standard otu and seqs
 + Ranacapa output folder
-+ verified metadata in output directory
-+ test on the cluster
++ verified metadata in output directory(double check)
++ test on the aws
 + upload .yml file?
 + iPath formatted file??
 
@@ -56,7 +67,6 @@ TESTING
 + double check with caledna and mrdna for standard format
 
 FEATURES
-+ automate rarefaction option
 + add rarefaction_depth/iter_ to the file names?
 + add zymo and change everything to caledna, remove ranacapa/talk to guarav???
 + make functional file for ranacapa?

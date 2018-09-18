@@ -21,8 +21,7 @@ if __name__ == "__main__":
 
 
 
-    parser = argparse.ArgumentParser(description='Implementation by Keith Mitchell (keithgmitchell@g.ucla.edu)'
-                                                 '  This is the CLI for the PUMA tool, the set of variables required will'
+    parser = argparse.ArgumentParser(description='  This is the CLI for the PUMA tool, the set of variables required will'
                                                  '  follow the example (in the "examples" folder) files for the'
                                                  '  corresponding services folders.'
                                                  '  All of the following arguments are file paths, except -type.')
@@ -69,8 +68,6 @@ if __name__ == "__main__":
     files_dictionary["outdir"] = args["outdir"]
 
 
-
-    #UNIQUE TO ANACAPA
     if args['type'] == 'anacapa':
         if args["fwdseq"] is not None and args["mergeseq"] is not None and args["reverseseq"] is not None:
 

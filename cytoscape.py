@@ -17,7 +17,7 @@ def metadata_to_dict(metdata):
 
 
 # def handle_files(standard_otu, metadata, outdir, time_id, type):
-def handle_files(standard_otu, metadata, outfile):
+def handle_files(standard_otu, metadata, outfile, end_pos):
     """
     :param standard_otu: file path
     :param metadata: file path
@@ -31,7 +31,7 @@ def handle_files(standard_otu, metadata, outfile):
     header_row = ['from', 'to', 'eweight'] + metadata_breakdown[1]
 
     #TODO groupby before writing then add different levels
-    for start, level in zip([5], ['species']):
+    for start, level in zip([end_pos], ['species']):
         with open(standard_otu) as otu_file, open(outfile, 'w') as cyto_out:
             otu_read = csv.reader(otu_file, delimiter='\t')
             cyto_write = csv.writer(cyto_out, delimiter='\t')

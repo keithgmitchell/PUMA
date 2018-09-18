@@ -59,7 +59,7 @@ class General():
 
     def verify_metadata(self, metadata, standard_otu):
         self.metadata_fileout = self.output_directory + "verified_metadata.tsv"
-        self.metadata_validation = metadata_verification.verify_metadata(self. standard_otu, self.metadata, self.time)
+        self.metadata_validation = metadata_verification.verify_metadata(self.standard_otu, self.metadata, self.metadata_fileout)
 
         if self.metadata_validation != True:
             sys.exit(bcolors.FAIL + self.metadata_validation + bcolors.ENDC)
@@ -168,9 +168,9 @@ class General():
     def run_stamp(self, type):
         print("Run STAMP: mkdir")
         otu_key = stamp.get_key(self.standard_otu)
-        self.stamp_directory = self.output_directory + "stamp/"
+        self.stamp_directory = self.output_directory + "stamp_excel/"
         os.system("mkdir %s" % self.stamp_directory)
-        self.stamp_taxa  = "%s/%s_stamp_otu.tsv" % (self.stamp_directory, self.time)
+        self.stamp_taxa  = "%s/%s_stamp_excel_otu.tsv" % (self.stamp_directory, self.time)
 
         if type == "anacapa":
             self.taxa_levels = 6
@@ -188,7 +188,7 @@ class General():
 
     def phylogeny(self):
         self.phylogenetic_tree = "%s/temp/%s_phylotree" % (self.dir_path, self.time)
-        os.system('fasttree -nt %s > %s -fastest' % (self.multiple_sequence_alignment, self.multiple_sequence_alignment))
+        os.system('fasttree -fastest -nt %s > %s ' % (self.multiple_sequence_alignment, self.multiple_sequence_alignment))
 
 
     def course_wrapper(self, type):
@@ -219,17 +219,17 @@ class General():
         self.run_stamp(type)
 
         # CYTOSCAPE
-
         self.cytoscape_directory = self.output_directory + "cytoscape/"
         print("Cytoscape: making directory.")
         os.system("mkdir %s" % self.cytoscape_directory)
 
         print(bcolors.WARNING + "Cytoscape: running cytoscape script." + bcolors.ENDC)
         outfile = self.cytoscape_directory + self.time + '_species_cytoscape.tsv'
-        self.cytoscape = cytoscape.handle_files(self.stamp_taxa, self.metadata, outfile)
+        #TODO check to make sure 5 is always accurate? or should be self.taxa_levels
+        self.cytoscape = cytoscape.handle_files(self.stamp_taxa, self.metadata, outfile, 5)
 
         # MSA/PHYLO
-        if self.run_msa_phylo != False:
+        if self.run_msa_phylo != False and self.run_msa_phylo != '' and self.run_msa_phylo is not None:
             print(bcolors.WARNING + "MSA: Running multiple sequence alignment using 'mafft'" + bcolors.ENDC)
             self.msa()
 
@@ -242,14 +242,15 @@ class General():
         print("----------------------------------------------------------------------------------------------------")
         print(bcolors.OKGREEN + "DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.time + bcolors.ENDC)
         print("----------------------------------------------------------------------------------------------------")
-        self.end_log()
+
+        # self.end_log()
         sys.exit()
 
 
     def __init__(self, general_dict, metadata_dict):
         self.dir_path = os.getcwd()
         self.create_output_directory(self.type, general_dict["unique_id"], general_dict["outdir"])
-        self.start_log()
+        # self.start_log()
 
         print (general_dict)
         print (metadata_dict)
