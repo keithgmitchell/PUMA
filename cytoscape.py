@@ -40,4 +40,4 @@ def handle_files(standard_otu, metadata, outfile, end_pos):
             for line in otu_read:
                 for weight, sample_id in zip(line[start+1:len(line)], otu_header[start+1:len(otu_header)]):
                     if float(weight) > 0:
-                        cyto_write.writerow([','.join(str(i) for i in line[0:start+1])] + [line[0], weight] + [i for i in metadata_breakdown[0][sample_id]])
+                        cyto_write.writerow([sample_id] + [','.join(str(i) for i in line[0:start+1])] + [weight] + [i for i in metadata_breakdown[0][sample_id]])

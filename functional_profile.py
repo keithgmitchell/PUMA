@@ -299,13 +299,17 @@ if __name__ == '__main__':
     directory = args['dir']
     metadata = args['metadata']
 
+    print ("Arguments")
     # request data linking genes to pathways, can be seen by entering the link into a browser too
     k = requests.get('http://rest.kegg.jp/link/pathway/ko')
+    print ("Arguments")
     path_ko = extract_info(k)
     dict_list = {}
 
+    print ("Hierarchy")
     # hierarchy level information extracted from the download link
     brite_htext = requests.get('http://www.genome.jp/kegg-bin/download_htext?htext=ko00001&format=htext&filedir=')
+    print ("Hierarchy")
     tree_data = extract_hierarchy(brite_htext)
 
 
@@ -315,7 +319,7 @@ if __name__ == '__main__':
     full_path_list = []
     for object in input_list:
         print (object)
-        os.system('tar -C %s -xvf %s' %('temp' ,object))
+        # os.system('tar -C %s -xvf %s' %('temp' ,object))
         object = object.replace('.tar', '')
         print (object)
 
@@ -342,9 +346,8 @@ if __name__ == '__main__':
         output_str = "output/%s_functional_profile" % (time)
         output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
         output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
-        os.system('mv %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
-        cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
-        cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
+        os.system('cp %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
+
 
     with open(input, 'r') as tsvin, open(output_hier,'w', newline='') as hierarchy_out, \
             open(output_des, 'w', newline='') as detailed_out:
@@ -356,6 +359,8 @@ if __name__ == '__main__':
         print ("Functional Profile: Constructing output for the functional profile.")
         construct_output(input, output, path_ko[0], tree_data, input_detailed)
 
+    cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
+    cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
 
 
 
