@@ -249,10 +249,10 @@ class General():
 
     def __init__(self, general_dict, metadata_dict):
         self.dir_path = os.getcwd()
+        print (general_dict)
         self.create_output_directory(self.type, general_dict["unique_id"], general_dict["outdir"])
         # self.start_log()
 
-        print (general_dict)
         print (metadata_dict)
 
         self.metadata = metadata_dict['metadata']
@@ -346,14 +346,20 @@ class QIIME2(General):
         os.system("python convert_qiime2_to_anacapa_format.py -inputOTU %s -inputTaxonomy %s -o temp/anacapa_format_otu_table.txt" % ("temp/otu_table/feature-table.biom", "temp/taxonomy/taxonomy.tsv"))
         return "temp/anacapa_format_otu_table.txt"
 
+    def export_qza_sequences(self):
+        os.system("qiime tools export %s --output-dir temp/sequences" % self.fwd_seq)
+        return "temp/sequences/dna-sequences.fasta"
 
     def __init__(self, dictionary, metadata_dict):
         self.type = "QIIME2"
         General.__init__(self, dictionary, metadata_dict)
-
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
-        self.standard_sequences = self.fwd_seq
+        if not ".qza" in self.fwd_seq:
+            self.standard_sequences = self.fwd_seq
+        else:
+            self.standard_sequences = self.export_qza_sequences()
+
 
         # Run the Standard functions
         self.course_wrapper(self.type)
