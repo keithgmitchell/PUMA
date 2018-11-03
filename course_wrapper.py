@@ -226,7 +226,7 @@ class General():
         print(bcolors.WARNING + "Cytoscape: running cytoscape script." + bcolors.ENDC)
         outfile = self.cytoscape_directory + self.time + '_species_cytoscape.tsv'
         #TODO check to make sure 5 is always accurate? or should be self.taxa_levels
-        self.cytoscape = cytoscape.handle_files(self.stamp_taxa, self.metadata, outfile, 5)
+        self.cytoscape = cytoscape.handle_files(self.stamp_taxa, self.metadata, outfile, self.taxa_levels-1)
 
         # MSA/PHYLO
         if self.run_msa_phylo != False and self.run_msa_phylo != '' and self.run_msa_phylo is not None:

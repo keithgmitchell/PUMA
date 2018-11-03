@@ -5,6 +5,7 @@ def check_csv_tsv(file):
         return '\t'
     if ".csv" in file:
         return ','
+    return '\t'
 
 def clean_metadata_values(file, outfile):
     with open(file) as infile, open(outfile, 'w') as out:

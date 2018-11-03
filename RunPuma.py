@@ -2,6 +2,7 @@ import install
 install.check_dependencies()
 install.make_directories()
 
+from tkinter.font import Font
 from tkinter import filedialog
 from tkinter import *
 import tkinter.ttk as ttk
@@ -9,6 +10,7 @@ from tkinter.messagebox import showerror
 import time
 import os
 import course_wrapper
+
 
 
 class PUMA(Frame):
@@ -337,7 +339,9 @@ class PUMA(Frame):
 
         self.metadata_dict = self.get_metadata_dict()
         self.main_label0 = Label(self, wraplength=700,
-                                 text="The first step of the PUMA is to upload your metadata, be sure that the sample names correspond with your ASV/OTU table.")
+                                 text="The first step of the PUMA is to upload your metadata, "
+                                      "be sure that the sample names correspond with your ASV/OTU "
+                                      "table.",  font=("Helvetica", 16))
 
         self.metadata = Button(self, text="Metadata", command=(lambda: self.load_file("metadata", self.metadata_dict, self.metadata, [0,1,5])), width=20)
         self.main_label = Label(self, wraplength=700,
@@ -371,7 +375,7 @@ class PUMA(Frame):
 
         self.main_label0.grid(row=0, column=0, columnspan=3, sticky=N)
         self.main_label0.configure(background='white')
-        self.main_label0.config(font=("System", 15))
+        self.main_label0.configure(font=("Times New Roman", 15))
 
         self.metadata.grid(row=1, column=1)
         self.metadata.configure(background='#2ECC71')
@@ -422,6 +426,8 @@ class PUMA(Frame):
         self.s = ttk.Style()
         Frame.__init__(self)
         self.configure(background='white')
+        self.myFont = Font(family="Times New Roman", size=12)
+        # self.text.configure(font=self.myFont)
 
         self.master.title("PUMA - Pipeline for Undergraduate Microbiome Analysis")
         self.master.rowconfigure(10, weight=1)
