@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     elif args['type'] == 'MrDNA':
         files_dictionary["fwdseq"] = args['seqs']
-    elif args['type'] == 'qiime2':
+    elif args['type'] == 'QIIME2':
         files_dictionary["fwdseq"] = args['seqs']
         files_dictionary["taxonomy"] = args['taxonomy']
 
