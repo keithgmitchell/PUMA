@@ -30,19 +30,22 @@ unique string to enable automation and parallel processing.
         -rarefactioniter 3 -rarefactiondepth 3500 -metadata examples/metadata/anacapa_skirball_metadata_3_11_18.tsv 
         -type anacapa -unique_id demo -msa_phylo True`
 
-+ Running MrDNA examle data:
++ Running MrDNA example data:
 
         `python PumaCLI.py -type MrDNA -metadata examples/metadata/mrdna_F15_mock_metadata.tsv 
         -otutable examples/mrdna_F15/112415KR515F-pr.fasta.otus.fa.OTU.txt 
         -seqs examples/mrdna_F15/sequences.fasta`
         
-+ Running the QIIME2 example data:  
++ Running the Functional Profile following input of file sets to piphillin ():  
 
         `python functional_profile.py 
         -i examples/piphillin/Keith_20180723210057.tar,examples/piphillin/Keith_20180723214258.tar 
         -o UCLA -metadata examples/metadata/anacapa_skirball_metadata_3_11_18.tsv`      
 
-+ Or use the GUI:
++ Or use the GUI (keep terminal open to ):
+        `python RunPuma.py`
+![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
+
 
 
 
@@ -52,6 +55,7 @@ interested as well as to provide non Virtual Machine version for convenient Linu
 + Automated Rarefaction Depth Option
 + Capability to select output files (rather then produce all mentioned)
 + Add full functionality for automating production of MSA/phylogenetic tree.
++ Better error log
 
 ## Future Additions
 + Include more tools such as the iTOL tool and any other requested (please create Issue if you have one in mind)
