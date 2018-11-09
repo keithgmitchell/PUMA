@@ -8,14 +8,15 @@
 students/researchers for jumpstarting the analysis process with the various tools shown in the 
 schema above.
 
-##How to install:
+## How to install:
 
-+ Follow the protocol for PUMA Environment Setup Instructions using a VM at the following
-**manual Link**: https://app.box.com/file/306629203695
-+ The VM will also double as an environment to run the QIIME2 program:)
+1. Follow the steps (steps 1-6 but optional steps are nice to have as well) here https://docs.qiime2.org/2018.11/install/virtual/virtualbox/
+2. The VM will also double as an environment to run the QIIME2 program.
+3. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
+4. For the CLI and the GUI run `python PumaCLI.py --help` and `python RunPuma.py` respectively.
 
 
-##How to run:
+## How to run:
 Results from running the PUMA scripts will produce output in the directory ‘output/’, 
 or a specified output directory, with a prefix for the time the job was completed YEAR_MONTH_DAY_HOUR_MINUTE 
 as well as a descriptive suffix such as ‘functional_profile’, ‘anacapa’, ‘MrDNA’, or ‘QIIME 2’ such as that 
