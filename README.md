@@ -63,6 +63,7 @@ interested as well as to provide non Virtual Machine version for convenient Linu
 + Bioconda package installation for non-VM based environments.
 
 #### NEAR FUTURE:
++ install dependencies on running the CLI
 + clean up gui
 + upload standard otu and seqs
 + iPath formatted file??
