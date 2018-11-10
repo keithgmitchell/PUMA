@@ -19,6 +19,8 @@ or a specified output directory, with a prefix for the time the job was complete
 as well as a descriptive suffix such as ‘functional_profile’, ‘anacapa’, ‘MrDNA’, or ‘QIIME 2’ such as that 
 shown in the Protocol sections. In addition; the CLI version provides the option for a user to specify an additional 
 unique string to enable automation and parallel processing.
+
+Be sure all sample names in the metadata and in the ASV/OTU table are matching an are only alphanumeric titles.
 + Running Anacapa Data:
 
         `python PumaCLI.py -otutable examples/anacapa_skirball_S18/16S_ASV_raw_taxonomy_70.tsv 
