@@ -23,12 +23,12 @@ unique string to enable automation and parallel processing.
 Be sure all sample names in the metadata and in the ASV/OTU table are matching an are only alphanumeric titles.
 + Running Anacapa Data:
 
-        `python PumaCLI.py -otutable examples/anacapa_skirball_S18/16S_ASV_raw_taxonomy_70.tsv 
+        python PumaCLI.py -otutable examples/anacapa_skirball_S18/16S_ASV_raw_taxonomy_70.tsv 
         -fwdseq examples/anacapa_skirball_S18/nochim_forward16S.fasta 
         -mergeseq examples/anacapa_skirball_S18/nochim_merged16S.fasta 
         -reverseseq examples/anacapa_skirball_S18/nochim_reverse16S.fasta 
         -rarefactioniter 3 -rarefactiondepth 3500 -metadata examples/metadata/anacapa_skirball_metadata_3_11_18.tsv 
-        -type anacapa -unique_id demo -msa_phylo True`
+        -type anacapa -unique_id demo -msa_phylo True
 
 + Running MrDNA example data:
 
