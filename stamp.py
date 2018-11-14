@@ -1,11 +1,30 @@
 import csv
 import argparse
+from collections import defaultdict
 
-def unclassified(fix_list, classification_levels):
+def unclassified(fix_list, classification_levels, parent_dict, repeat_dict):
     for x in range(0, classification_levels):
-        if fix_list[x] == '' or fix_list[x] == 'NA' or fix_list[x] is None or fix_list[x] == " ":
+        thisValue = fix_list[x]
+        if thisValue == '' or thisValue == 'NA' or thisValue is None or thisValue == " " or thisValue == 'unclassified':
             for y in range(x, classification_levels):
                 fix_list[y] = 'unclassified'
+                continue
+        if x == 0 or thisValue == 'unclassified':
+            continue
+        parentValue = fix_list[x-1]
+        if x not in parent_dict:
+            parent_dict[x] = {}
+        if fix_list[x] not in parent_dict[x]:
+            parent_dict[x][thisValue]=parentValue
+        else:
+            if parent_dict[x][thisValue] != parentValue:
+                if thisValue not in repeat_dict:
+                    repeat_dict[thisValue] = thisValue + "__1"
+                    fix_list[x] = thisValue + "__1"
+                else:
+                    value = repeat_dict[thisValue].split("__")[0] + "**" + str(int(repeat_dict[thisValue].split("__")[-1])+1)
+                    repeat_dict[fix_list[x]] = value
+                    fix_list[x] = value
     return fix_list
 
 
@@ -24,6 +43,8 @@ def reformat(rarefied, output, otu_dict, classification_count):
 
     tsvout.writerow(new_header)
     condense_dict = {}
+    parent_dict = defaultdict(dict)
+    repeat_dict = {}
     for row in csvin:
         tax_list = otu_dict[row[0]].split(';')
         row.pop(0)
@@ -31,7 +52,7 @@ def reformat(rarefied, output, otu_dict, classification_count):
         #TODO should this be classification count
         while len(tax_list) < 6:
             tax_list.append(" ")
-        new_tax_list = unclassified(tax_list, classification_count)
+        new_tax_list = unclassified(tax_list, classification_count, parent_dict, repeat_dict)
         tax_list_key = ",".join(new_tax_list)
         if tax_list_key in condense_dict.keys():
             condense_dict[tax_list_key] = [float(x) + float(y) for x, y in zip(row, condense_dict[tax_list_key])]
@@ -76,5 +97,3 @@ if __name__ == "__main__":
     # first we will reformat the file for general stamp usage
     otu_key = get_key(input)
     reformat(rarefied, output, otu_key)
-
-
