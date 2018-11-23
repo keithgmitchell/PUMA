@@ -1,10 +1,11 @@
 import install
-# install.check_dependencies()
+install.check_dependencies()
 install.make_directories()
 from course_wrapper import bcolors
 import argparse
 import sys
 import course_wrapper
+
 
 def run_wrapper(files, metadata_dict, type):
     if type == 'anacapa':
@@ -18,8 +19,6 @@ def run_wrapper(files, metadata_dict, type):
 
 
 if __name__ == "__main__":
-
-
 
     parser = argparse.ArgumentParser(description='  This is the CLI for the PUMA tool, the set of variables required will'
                                                  '  follow the example (in the "examples" folder) files for the'

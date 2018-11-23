@@ -28,8 +28,8 @@ def reformat(rarefied, output, otu_dict, classification_count):
         tax_list = otu_dict[row[0]].split(';')
         row.pop(0)
 
-        #TODO should this be classification count
-        while len(tax_list) < 6:
+        # TODO should this be classification count
+        while len(tax_list) < classification_count:
             tax_list.append(" ")
         new_tax_list = unclassified(tax_list, classification_count)
         tax_list_key = ",".join(new_tax_list)

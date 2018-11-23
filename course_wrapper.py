@@ -21,8 +21,8 @@ class bcolors:
 def log_file(outdir):
     pass
 
-class General():
 
+class General():
 
     def clean_temp(self):
         os.system('rm temp/*')
@@ -67,8 +67,6 @@ class General():
             print (bcolors.OKGREEN + "Metadata Successfully Verified." + bcolors.ENDC)
             pass
 
-
-
     def create_biom(self, input):
 
         print("Create .biom: clean header")
@@ -78,16 +76,23 @@ class General():
         print("Create .biom: done cleaning header")
         os.system("head -1 %s" % input)
 
-
         output = "temp/%s_standard_otu.biom" % (self.time)
         print("Create biom: make biom")
         os.system("biom convert -i %s -o %s --table-type='OTU table' --to-json" % (input, output))
 
         print("Create biom: done making .biom file")
         self.extra_biomtext = "%s/temp/%s_extra_file.txt" % (self.dir_path, self.time)
+        self.extra_qza = "%s/temp/%s_extra_qza.qza" % (self.dir_path, self.time)
 
         print ("Create extra non-biom: in case user does not want rarefaction performed.")
         os.system("biom convert -i %s -o %s --to-tsv" % (output, self.extra_biomtext))
+
+        print ("Create extra qza: in case user does not want rarefaction performed.")
+        os.system("qiime tools import \
+                    --input-path %s \
+                    --type 'FeatureTable[Frequency]' \
+                    --input-format BIOMV100Format \
+                    --output-path %s" % (output, self.extra_qza))
 
         return output
 
@@ -99,10 +104,8 @@ class General():
         os.system("qiime tools import \
                     --input-path %s \
                     --type 'FeatureTable[Frequency]' \
-                    --source-format BIOMV100Format \
+                    --input-format BIOMV100Format \
                     --output-path %s" %(input, original_artifact))
-
-
 
         rarefaction_str = ""
         rarefaction_list = []
@@ -130,13 +133,11 @@ class General():
                     --p-overlap-method sum \
                     --o-merged-table %s" %(rarefaction_str, merged_artifact))
 
-
         print("Rarefy and merge: export.")
         print("Input directory: %s" % merged_artifact)
         print("Output directory: %s" % export_dir)
 
-        os.system("qiime tools export %s --output-dir %s" % (merged_artifact, export_dir))
-
+        os.system("qiime tools export --input-path %s --output-path %s" % (merged_artifact, export_dir))
 
         print("Rarefy and merge: convert to .txt from .biom.")
         os.system("biom convert -i %s -o %s --to-tsv" % (merged_biom, merged_text))
@@ -173,7 +174,7 @@ class General():
         self.stamp_taxa  = "%s/%s_stamp_excel_otu.tsv" % (self.stamp_directory, self.time)
 
         if type == "anacapa":
-            self.taxa_levels = 6
+            self.taxa_levels = 7
         elif type == "MrDNA":
             self.taxa_levels = 7
         elif type == "QIIME2":
@@ -183,13 +184,31 @@ class General():
         stamp.reformat(self.piphillin_dec, self.stamp_taxa, otu_key, self.taxa_levels)
 
     def msa(self):
-        self.multiple_sequence_alignment = "%s/temp/%s_msa" % (self.dir_path, self.time)
+        self.multiple_sequence_alignment = "%s/temp/%s_msa.txt" % (self.dir_path, self.time)
+        self.multiple_sequence_alignment_2 = "%s/temp/%s_msa_2.txt" % (self.dir_path, self.time)
         os.system('mafft %s > %s' % (self.standard_sequences, self.multiple_sequence_alignment))
+        os.system('cat %s > %s' % (self.multiple_sequence_alignment, self.multiple_sequence_alignment_2))
+        self.qiime_msa = "%s%s_qiime_msa.msa" % (self.qiime_out, self.time)
+        os.system('cp %s %s' % (self.multiple_sequence_alignment_2, self.qiime_msa))
 
     def phylogeny(self):
         self.phylogenetic_tree = "%s/temp/%s_phylotree" % (self.dir_path, self.time)
-        os.system('fasttree -fastest -nt %s > %s ' % (self.multiple_sequence_alignment, self.multiple_sequence_alignment))
+        os.system('fasttree -fastest -nt %s > %s ' % (self.multiple_sequence_alignment_2, self.phylogenetic_tree))
+        self.qiime_phylo = "%s%s_qiime_phylo.phy" % (self.qiime_out, self.time)
+        os.system('cp %s %s' % (self.phylogenetic_tree, self.qiime_phylo))
 
+    def qiime_otu(self):
+        # TODO this wont work with no rarefaction option
+        self.qiime_out = self.output_directory + "qiime/"
+        os.system("mkdir %s" % self.qiime_out)
+        qiime_file = '%s/%s_qiime_otu.qza' % (self.qiime_out, self.time)
+        os.system('cp %s %s' % (self.merged_artifact, qiime_file))
+
+    def ranacapa(self):
+        self.ranacapa_out = self.output_directory + "ranacapa/"
+        os.system("mkdir %s" % self.ranacapa_out)
+        ranacapa_file = '%s/%s_ranacapa_otu.txt' % (self.ranacapa_out, self.time)
+        os.system('cp %s %s' % (self.merged_text, ranacapa_file))
 
     def course_wrapper(self, type):
         """
@@ -204,11 +223,20 @@ class General():
         if self.rarefactiondepth is not None and self.rarefactiondepth != '' and int(self.rarefactiondepth) !=0 and \
                 self.rarefactioniter is not None and self.rarefactioniter != '' and int(self.rarefactioniter) !=0:
 
-            print (bcolors.WARNING + "Course Wrapper: Running Rarefaction and Merge" + bcolors.ENDC)
+            print(bcolors.WARNING + "Course Wrapper: Running Rarefaction and Merge" + bcolors.ENDC)
+            self.perform_rarefaction = True
             self.rarefy_and_merge(self.standard_biom)
         else:
-            print (bcolors.WARNING + "Course Wrapper: Skipping Rarefaction and Merge" + bcolors.ENDC)
+            print(bcolors.WARNING + "Course Wrapper: Skipping Rarefaction and Merge" + bcolors.ENDC)
+            self.perform_rarefaction = False
             self.merged_text = self.extra_biomtext
+            self.merged_artifact = self.extra_qza
+
+        # RANACAPA
+        self.ranacapa()
+
+        # QIIME OTU
+        self.qiime_otu()
 
         # PIPHILLIN
         print(bcolors.HEADER + "Piphillin: Producing formatted file sets for Piphillin @Secondgenome (only upload those with a number)." + bcolors.ENDC)
