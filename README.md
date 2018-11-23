@@ -36,13 +36,13 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
         -otutable examples/mrdna_F15/112415KR515F-pr.fasta.otus.fa.OTU.txt \
         -seqs examples/mrdna_F15/sequences.fasta
         
-+ Running the Functional Profile following input of file sets to piphillin ():  
++ Running the Functional Profile following input of file sets from piphillin:  
 
         python functional_profile.py \
         -i examples/piphillin/Keith_20180723210057.tar,examples/piphillin/Keith_20180723214258.tar \
         -o UCLA -metadata examples/metadata/anacapa_skirball_metadata_3_11_18.tsv      
 
-+ Or use the GUI (keep terminal open to ):
++ Or use the GUI (keep terminal open to see system feedback):
         python RunPuma.py
 ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
 
