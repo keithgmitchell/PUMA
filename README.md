@@ -8,6 +8,8 @@ schema above.
 ## How to install:
 
 1. Follow the steps (steps 1-6 but optional steps are nice to have as well) here https://docs.qiime2.org/2018.11/install/virtual/virtualbox/
++ Currently tested with the 2018.8 version of the virtual machine. 
+
 2. The VM will also double as an environment to run the QIIME2 program.
 3. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
 4. For the CLI and the GUI run `python PumaCLI.py --help` and `python RunPuma.py` respectively.
@@ -49,30 +51,22 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
 
 
 
-# Version 1.2 (In progress)
+## Version 1.2 (In progress)
 + Introduced Command Line Interface Version for systems with QIIME2/Musket for automizing GUI process for those 
 interested as well as to provide non Virtual Machine version for convenient Linux systems downloads. 
 + Automated Rarefaction Depth Option
 + Capability to select output files (rather then produce all mentioned)
 + Add full functionality for automating production of MSA/phylogenetic tree.
-+ Better error log
-
-## Future Additions
++ Better error log/system output filing 
 + Include more tools such as the iTOL tool and any other requested (please create Issue if you have one in mind)
 + Include more file input types from other sequencing services (please create Issue if you have one in mind)
 + Bioconda package installation for non-VM based environments.
 
-#### NEAR FUTURE:
+### NEAR FUTURE:
 + install dependencies on running the CLI
 + clean up gui
 + upload standard otu and seqs
-+ iPath formatted file??
 + Test piphillin script in STAMP
-+ Test piphillin scenario with merge files
 + test cli on hoffman and dependencies
 + double check with caledna and mrdna for standard format
-
-#### FEATURES
-+ add rarefaction_depth/iter_ to the file names?
-+ add zymo and change everything to caledna, remove ranacapa/talk to guarav???
-+ make functional file for ranacapa?
++ add rarefaction_depth/iter_ to the file names
