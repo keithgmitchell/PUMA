@@ -8,7 +8,7 @@ schema above.
 ## How to install:
 
 1. Follow the steps (steps 1-6 but optional steps are nice to have as well) here https://docs.qiime2.org/2018.11/install/virtual/virtualbox/
-+ Currently tested with the 2018.8 version of the virtual machine. 
++ Currently tested with the 2018.8 version of the virtual machine. (https://data.qiime2.org/distro/core/2018.8)
 
 2. The VM will also double as an environment to run the QIIME2 program.
 3. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
