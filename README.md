@@ -45,7 +45,7 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
         -o UCLA -metadata examples/metadata/anacapa_skirball_metadata_3_11_18.tsv      
 
 + Or use the GUI (keep terminal open to see system feedback):
-        python RunPuma.py
+        `python RunPuma.py`
 ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
 
 
