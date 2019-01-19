@@ -1,4 +1,4 @@
-# PUMA (Pipeline for Undergraduate Microbiome Analysis)
+# PUMA (Pipeline for Unifying Microbiome Analysis)
 
 # Version 1.1 (current)
 + The Manual provided below will provide setup instructions as well as important tutorials for 
