@@ -27,16 +27,16 @@ def verify_metadata(standard_otu, metadata, outfile):
     otu_type = check_csv_tsv(standard_otu)
     with open(standard_otu) as otu_file, open(metadata, "r+") as metadata_in:
 
-        #read files into convenient data structure (matrix)
+        # read files into convenient data structure (matrix)
         metadata_reader = csv.reader(metadata_in, delimiter=metadata_type)
         otu_reader = csv.reader(otu_file, delimiter=otu_type)
 
-        #check sample names, create lists to compare later
+        # check sample names, create lists to compare later
         metadata_samplenames = []
         first_otu_line = otu_reader.__next__()
         otu_samplenames = []
 
-        #check if sample names are only alphanumeric values
+        # check if sample names are only alphanumeric values
         for line in metadata_reader:
             if line[0].replace(' ', '').isalnum():
                 pass
@@ -53,12 +53,12 @@ def verify_metadata(standard_otu, metadata, outfile):
                 return error_string
             otu_samplenames.append(column)
 
-
-        #TODO be sure the OTU table has the same number of obects in each row
-
-        #check if differences between the two sample name sets
+        # TODO be sure the OTU table has the same number of obects in each row
+        # check if differences between the two sample name sets
+        print (otu_samplenames)
+        print (metadata_samplenames)
         if len(set(otu_samplenames) - set(metadata_samplenames)) == 0:
-            #clean values
+            # clean values
             clean_metadata_values(metadata, outfile)
             return True
 

@@ -263,7 +263,7 @@ def merge_files(list):
             with open(file) as infile:
                 infile = csv.reader(infile, delimiter='\t')
                 list_infile = [line for line in infile]
-                if x==0:
+                if x == 0:
                     header = list_infile[0]
                 else: 
                     if header != list_infile[0]:
@@ -281,11 +281,11 @@ def merge_files(list):
             output.writerow([key] + line_dict[key])
     return output_name
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     # system arguments
     parser = argparse.ArgumentParser(description='Input and Output file name options for t')
-    parser.add_argument('-i', help='This is the file from Piphillin (tar file). If there is more then one input then arguments should be comma seperated.',
+    parser.add_argument('-i', help='This is the file from Piphillin (.zip file). If there is more then one input then arguments should be comma seperated.',
                         required=True)
     parser.add_argument('-o', help='This is the prefix for what you wish the output files to have. For example: UCLA_109BL-W18_90cutoff',
                         required=True)
@@ -299,41 +299,35 @@ if __name__ == '__main__':
     directory = args['dir']
     metadata = args['metadata']
 
-    print ("Arguments")
+    print("Arguments")
     # request data linking genes to pathways, can be seen by entering the link into a browser too
     k = requests.get('http://rest.kegg.jp/link/pathway/ko')
-    print ("Arguments")
     path_ko = extract_info(k)
     dict_list = {}
 
-    print ("Hierarchy")
+    print("Hierarchy")
     # hierarchy level information extracted from the download link
     brite_htext = requests.get('http://www.genome.jp/kegg-bin/download_htext?htext=ko00001&format=htext&filedir=')
-    print ("Hierarchy")
     tree_data = extract_hierarchy(brite_htext)
 
-
-
     input_list = input.split(',')
-
     full_path_list = []
     for object in input_list:
-        print (object)
-        # os.system('tar -C %s -xvf %s' %('temp' ,object))
-        object = object.replace('.tar', '')
-        print (object)
+        print(object)
+        os.system('unzip %s -d %s' %(object, 'temp'))
+        object = object.replace('.zip', '')
+        print(object)
 
         object = object.split('/')
-        print (object)
+        print(object)
 
         full_path_list.append('temp/' + object[-1] + '/kegg_output/ko_abund_table_unnorm.txt')
 
     print(full_path_list)
 
     if len(full_path_list)>1:
-        print ("Functional Profile: More then 1 file was passed so merging files.")
+        print("Functional Profile: More then 1 file was passed so merging files.")
         input = merge_files(full_path_list)
-
 
     if output is None or output == '':
         output_hier = '%s_pathway_hierarchy_table.txt' %(output)
@@ -348,7 +342,6 @@ if __name__ == '__main__':
         output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
         os.system('cp %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
 
-
     with open(input, 'r') as tsvin, open(output_hier,'w', newline='') as hierarchy_out, \
             open(output_des, 'w', newline='') as detailed_out:
         input = csv.reader(tsvin, delimiter='\t')
@@ -356,7 +349,7 @@ if __name__ == '__main__':
         input_detailed = csv.writer(detailed_out, delimiter='\t')
 
         # make adjustments here based on the type of file needed from the in put file header row
-        print ("Functional Profile: Constructing output for the functional profile.")
+        print("Functional Profile: Constructing output for the functional profile.")
         construct_output(input, output, path_ko[0], tree_data, input_detailed)
 
     cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))

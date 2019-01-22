@@ -123,6 +123,7 @@ class General():
         print(rarefaction_str)
 
         merged_artifact = "%s/temp/%s_merged_file.qza" % (self.dir_path, self.time)
+        self.merged_artifact = merged_artifact
         export_dir = "%s/temp/" % self.dir_path
         merged_biom = "%s/temp/feature-table.biom" % (self.dir_path)
         merged_text = "%s/temp/%s_merged_file.txt" % (self.dir_path, self.time)
