@@ -1,4 +1,6 @@
 # PUMA (Pipeline for Unifying Microbiome Analysis)
+Pre-print: https://doi.org/10.1101/482380
+Manual: https://app.box.com/file/358362942079
 
 # Version 1.1 (current)
 + The Manual provided below will provide setup instructions as well as important tutorials for 
@@ -38,7 +40,7 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
         -otutable examples/mrdna_F15/112415KR515F-pr.fasta.otus.fa.OTU.txt \
         -seqs examples/mrdna_F15/sequences.fasta
         
-+ Running the Functional Profile following input of file sets from piphillin:  
++ Running the Functional Profile following input of file sets to piphillin (https://piphillin.secondgenome.com/):  
 
         python functional_profile.py \
         -i examples/piphillin/Keith_20180723210057.tar,examples/piphillin/Keith_20180723214258.tar \
@@ -46,6 +48,8 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
 
 + Or use the GUI (keep terminal open to see system feedback):
         `python RunPuma.py`
+        
+        
 ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
 
 
