@@ -313,15 +313,17 @@ if __name__ == '__main__':
     input_list = input.split(',')
     full_path_list = []
     for object in input_list:
-        print(object)
-        os.system('unzip %s -d %s' %(object, 'temp'))
-        object = object.replace('.zip', '')
+        objectName = object.replace('.zip', '').split('/')[-1]
         print(object)
 
-        object = object.split('/')
+        #object = object.split('/')
         print(object)
-
-        full_path_list.append('temp/' + object[-1] + '/kegg_output/ko_abund_table_unnorm.txt')
+        os.system('unzip %s -d %s' %(object, 'temp/'+objectName))
+        name = "ko_abund_table_unnorm.txt"
+        for root, dirs, files in os.walk('temp/'+objectName):
+            if name in files:
+                full_path_list.append(os.path.join(root, name))
+                break
 
     print(full_path_list)
 

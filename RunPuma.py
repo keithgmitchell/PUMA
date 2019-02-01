@@ -32,7 +32,7 @@ class PUMA(Frame):
         return metadata_dict
 
     def load_file(self, string, dictionary, label, allowed_filetype_indices):
-        all_filetypes = (("Text file.", "*.txt"), ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("QIIME2 Artifact","*.qza"), ("All files", "*.*"), ("Comma seperated values", "*.csv"))
+        all_filetypes = (("Text file.", "*.txt"), ("Tab seperated values", "*.tsv"), ("Fasta file", "*.fasta"), ("QIIME2 Artifact","*.qza"), ("All files", "*.*"), ("Comma seperated values", "*.csv"), ("Zip file", "*.zip"))
         allowed_filetypes = tuple(all_filetypes[i] for i in allowed_filetype_indices)
         fname = filedialog.askopenfilename(filetypes=allowed_filetypes)
         if fname:
@@ -281,7 +281,7 @@ class PUMA(Frame):
             new_dict[name] = Button(self.piphillin_window, text=".tar file from Piphillin",
                                 # command = (lambda: self.load_file(i, self.piphillin_dict, new_dict[name], [0, 4])), width = 20)
                                 command=(lambda name=name:
-                                           self.load_file(i, self.piphillin_dict, new_dict[name], [0, 4])), width=20)
+                                           self.load_file(i, self.piphillin_dict, new_dict[name], [6, 4])), width=20)
             name = "otutable_" + str(i) + "_l"
             new_dict[name] = Label(self.piphillin_window, text="Enter file #%s:" % i)
 
