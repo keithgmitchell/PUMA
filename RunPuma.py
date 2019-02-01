@@ -278,7 +278,7 @@ class PUMA(Frame):
                 label.grid_forget()
         for i in range(1, set_count+1):
             name = "otutable_" + str(i)
-            new_dict[name] = Button(self.piphillin_window, text=".tar file from Piphillin",
+            new_dict[name] = Button(self.piphillin_window, text=".zip file from Piphillin",
                                 # command = (lambda: self.load_file(i, self.piphillin_dict, new_dict[name], [0, 4])), width = 20)
                                 command=(lambda name=name:
                                            self.load_file(i, self.piphillin_dict, new_dict[name], [6, 4])), width=20)
