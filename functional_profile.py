@@ -210,18 +210,23 @@ def construct_output(input, output, path_ko, tree_data, input_detailed):
     # adding the values to the dictionaries in the previous step as we iterate through the input file.
     req = requests.get('http://rest.kegg.jp/list/ko')
     get_gene_desc = extract_gene_description(req)
-
     top = ['Gene(KO)', 'Gene Description']
     top.extend(header_row[3:len(header_row)])
 
     input_detailed.writerow(top)
+    repeat_gene_desc_list = {}
     for row in input:
         try:
-            new_row = [row[0], get_gene_desc[row[0]]]
+            gene_description = get_gene_desc[row[0]]
+            if gene_description in repeat_gene_desc_list:
+                new_row = [repeat_gene_desc_list[row[0]], gene_description]
+            else:
+                new_row = [row[0], gene_description]
+                repeat_gene_desc_list[gene_description] = row[0]
             new_row.extend(row[1:len(row)])
             input_detailed.writerow(new_row)
         except:
-            new_row = [row[0], "Not Found"]
+            new_row = [row[0], "unclassified"]
             new_row.extend(row[1:len(row)])
             input_detailed.writerow(new_row)
 
@@ -318,7 +323,7 @@ if __name__ == '__main__':
 
         #object = object.split('/')
         print(object)
-        os.system('unzip %s -d %s' %(object, 'temp/'+objectName))
+        os.system('unzip -o %s -d %s' %(object, 'temp/'+objectName))
         name = "ko_abund_table_unnorm.txt"
         for root, dirs, files in os.walk('temp/'+objectName):
             if name in files:

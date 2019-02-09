@@ -269,7 +269,8 @@ class PUMA(Frame):
                 str = str + "," + item
 
         print (str)
-        os.system("python functional_profile.py -i %s" % str)
+        metadata_path = self.metadata_dict['metadata']
+        os.system("python functional_profile.py -i %s -o placeholder -metadata %s" % (str, metadata_path))
 
     def initiate_piphillin_fields(self, set_count):
         new_dict = {}
@@ -281,7 +282,7 @@ class PUMA(Frame):
             new_dict[name] = Button(self.piphillin_window, text=".zip file from Piphillin",
                                 # command = (lambda: self.load_file(i, self.piphillin_dict, new_dict[name], [0, 4])), width = 20)
                                 command=(lambda name=name:
-                                           self.load_file(i, self.piphillin_dict, new_dict[name], [6, 4])), width=20)
+                                           self.load_file(name, self.piphillin_dict, new_dict[name], [6, 4])), width=20)
             name = "otutable_" + str(i) + "_l"
             new_dict[name] = Label(self.piphillin_window, text="Enter file #%s:" % i)
 
@@ -303,7 +304,7 @@ class PUMA(Frame):
     def update_rows(self):
 
         self.number_1 = int(self.number_entry.get())
-        self.piphillin_dict = self.get_file_set_dict(int(self.number_entry.get()))
+        self.piphillin_dict = {} #self.get_file_set_dict(int(self.number_entry.get()))
 
         try:
             if self.number_2 is None:
