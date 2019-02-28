@@ -184,7 +184,6 @@ def construct_output(input, output, path_ko, tree_data, input_detailed):
         Input 2: (file) for hierarchy to be written to
                  (STAMP OUTPUT: L1, L2, L3,  Sample 1, Sample 2 ....)
     """
-
     header_row = next(input)
 
     del header_row[0]
@@ -319,8 +318,6 @@ if __name__ == '__main__':
     full_path_list = []
     for object in input_list:
         objectName = object.replace('.zip', '').split('/')[-1]
-        print(object)
-
         #object = object.split('/')
         print(object)
         os.system('unzip -o %s -d %s' %(object, 'temp/'+objectName))
@@ -335,6 +332,8 @@ if __name__ == '__main__':
     if len(full_path_list)>1:
         print("Functional Profile: More then 1 file was passed so merging files.")
         input = merge_files(full_path_list)
+    else:
+        input = full_path_list[0]
 
     if output is None or output == '':
         output_hier = '%s_pathway_hierarchy_table.txt' %(output)
@@ -349,6 +348,7 @@ if __name__ == '__main__':
         output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
         os.system('cp %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
 
+    input_temp = input.split('/')[-1]
     with open(input, 'r') as tsvin, open(output_hier,'w', newline='') as hierarchy_out, \
             open(output_des, 'w', newline='') as detailed_out:
         input = csv.reader(tsvin, delimiter='\t')
@@ -358,10 +358,12 @@ if __name__ == '__main__':
         # make adjustments here based on the type of file needed from the in put file header row
         print("Functional Profile: Constructing output for the functional profile.")
         construct_output(input, output, path_ko[0], tree_data, input_detailed)
+        print("Functional Profile: Done Constructing output for the functional profile.")
 
+    print("Functional Profile: Constructing Cytoscape output for the functional profile.")
     cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
     cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
-
+    print("Functional Profile: Done Constructing Cytoscape output for the functional profile. You may now retrieve your files:)")
 
 
 

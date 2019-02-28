@@ -28,8 +28,6 @@ def handle_files(standard_file, metadata, outfile, end_pos):
     # type = 'functional_hierarchy'
     type = 'community'
 
-
-
     metadata_breakdown = metadata_to_dict(metadata)
     header_row = ['from', 'to', 'eweight'] + metadata_breakdown[1]
     print (standard_file, metadata, outfile, end_pos)
