@@ -14,6 +14,7 @@ import argparse
 import datetime
 import os
 import cytoscape
+from shutil import copyfile
 
 def extract_info(request):
 
@@ -286,6 +287,76 @@ def merge_files(list):
     return output_name
 
 
+
+
+    def run_functional_profile(input, output, directory, metadata):
+        print("Arguments")
+    # request data linking genes to pathways, can be seen by entering the link into a browser too
+        k = requests.get('http://rest.kegg.jp/link/pathway/ko')
+        path_ko = extract_info(k)
+        dict_list = {}
+
+        print("Hierarchy")
+    # hierarchy level information extracted from the download link
+        brite_htext = requests.get('http://www.genome.jp/kegg-bin/download_htext?htext=ko00001&format=htext&filedir=')
+        tree_data = extract_hierarchy(brite_htext)
+
+        input_list = input.split(',')
+        full_path_list = []
+        for object in input_list:
+            objectName = object.replace('.zip', '').split('/')[-1]
+        #object = object.split('/')
+            print(object)
+            with zipfile.ZipFile(object, "r") as zip_ref:
+                zip_ref.extractall("temp/" + objectName)
+            #os.system('unzip -o %s -d %s' %(object, 'temp/'+objectName))
+            name = "ko_abund_table_unnorm.txt"
+            for root, dirs, files in os.walk('temp/'+objectName):
+                if name in files:
+                    full_path_list.append(os.path.join(root, name))
+                    break
+
+        print(full_path_list)
+
+        if len(full_path_list)>1:
+            print("Functional Profile: More then 1 file was passed so merging files.")
+            input = merge_files(full_path_list)
+        else:
+            input = full_path_list[0]
+
+        if output is None or output == '':
+            output_hier = '%s_pathway_hierarchy_table.txt' %(output)
+            output_des = '%s_genedes.txt' % (output)
+
+        else:
+            input_temp = input.split('/')[-1]
+            time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
+            os.mkdir("output/%s_functional_profile"%(time))
+            #os.system("mkdir output/%s_functional_profile" % (time))
+            output_str = "output/%s_functional_profile" % (time)
+            output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
+            output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
+            copyfile(output_str, input_temp.strip('.txt'))
+            #os.system('cp %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
+
+        input_temp = input.split('/')[-1]
+        with open(input, 'r') as tsvin, open(output_hier,'w', newline='') as hierarchy_out, \
+                open(output_des, 'w', newline='') as detailed_out:
+            input = csv.reader(tsvin, delimiter='\t')
+            output = csv.writer(hierarchy_out, delimiter='\t',lineterminator="\n")
+            input_detailed = csv.writer(detailed_out, delimiter='\t')
+
+        # make adjustments here based on the type of file needed from the in put file header row
+            print("Functional Profile: Constructing output for the functional profile.")
+            construct_output(input, output, path_ko[0], tree_data, input_detailed)
+            print("Functional Profile: Done Constructing output for the functional profile.")
+
+        print("Functional Profile: Constructing Cytoscape output for the functional profile.")
+        cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
+        cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
+        print("Functional Profile: Done Constructing Cytoscape output for the functional profile. You may now retrieve your files:)")
+
+
 if __name__ == '__main__':
     # system arguments
     parser = argparse.ArgumentParser(description='Input and Output file name options for t')
@@ -302,71 +373,5 @@ if __name__ == '__main__':
     output = args['o']
     directory = args['dir']
     metadata = args['metadata']
-
-    print("Arguments")
-    # request data linking genes to pathways, can be seen by entering the link into a browser too
-    k = requests.get('http://rest.kegg.jp/link/pathway/ko')
-    path_ko = extract_info(k)
-    dict_list = {}
-
-    print("Hierarchy")
-    # hierarchy level information extracted from the download link
-    brite_htext = requests.get('http://www.genome.jp/kegg-bin/download_htext?htext=ko00001&format=htext&filedir=')
-    tree_data = extract_hierarchy(brite_htext)
-
-    input_list = input.split(',')
-    full_path_list = []
-    for object in input_list:
-        objectName = object.replace('.zip', '').split('/')[-1]
-        #object = object.split('/')
-        print(object)
-        os.system('unzip -o %s -d %s' %(object, 'temp/'+objectName))
-        name = "ko_abund_table_unnorm.txt"
-        for root, dirs, files in os.walk('temp/'+objectName):
-            if name in files:
-                full_path_list.append(os.path.join(root, name))
-                break
-
-    print(full_path_list)
-
-    if len(full_path_list)>1:
-        print("Functional Profile: More then 1 file was passed so merging files.")
-        input = merge_files(full_path_list)
-    else:
-        input = full_path_list[0]
-
-    if output is None or output == '':
-        output_hier = '%s_pathway_hierarchy_table.txt' %(output)
-        output_des = '%s_genedes.txt' % (output)
-
-    else:
-        input_temp = input.split('/')[-1]
-        time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
-        os.system("mkdir output/%s_functional_profile" % (time))
-        output_str = "output/%s_functional_profile" % (time)
-        output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
-        output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
-        os.system('cp %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
-
-    input_temp = input.split('/')[-1]
-    with open(input, 'r') as tsvin, open(output_hier,'w', newline='') as hierarchy_out, \
-            open(output_des, 'w', newline='') as detailed_out:
-        input = csv.reader(tsvin, delimiter='\t')
-        output = csv.writer(hierarchy_out, delimiter='\t')
-        input_detailed = csv.writer(detailed_out, delimiter='\t')
-
-        # make adjustments here based on the type of file needed from the in put file header row
-        print("Functional Profile: Constructing output for the functional profile.")
-        construct_output(input, output, path_ko[0], tree_data, input_detailed)
-        print("Functional Profile: Done Constructing output for the functional profile.")
-
-    print("Functional Profile: Constructing Cytoscape output for the functional profile.")
-    cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
-    cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
-    print("Functional Profile: Done Constructing Cytoscape output for the functional profile. You may now retrieve your files:)")
-
-
-
-
 
 

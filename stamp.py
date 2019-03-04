@@ -32,7 +32,7 @@ def reformat(rarefied, output, otu_dict, classification_count):
     csvin = open(rarefied, 'r')
     tsvout = open(output, 'w')
     csvin = csv.reader(csvin, delimiter='\t')
-    tsvout = csv.writer(tsvout, delimiter='\t')
+    tsvout = csv.writer(tsvout, delimiter='\t',lineterminator="\n")
 
     header = next(csvin)
     header.pop(0)

@@ -10,6 +10,7 @@ from tkinter.messagebox import showerror
 import time
 import os
 import course_wrapper
+import functional_profile
 
 
 
@@ -21,7 +22,7 @@ class PUMA(Frame):
 
         files_dictionary = {"otutable": '', "fwdseq": '', "reverseseq": '', "mergeseq": '', "unique_id": '',
                             "allseqs": '', "taxonomy": '', "rarefactiondepth": 0, "rarefactioniter": 0,
-                            "msa_phylo": False, "outdir": ''}
+                            "msa_phylo": True, "outdir": ''}
 
 
 
@@ -270,7 +271,8 @@ class PUMA(Frame):
 
         print (str)
         metadata_path = self.metadata_dict['metadata']
-        os.system("python functional_profile.py -i %s -o placeholder -metadata %s" % (str, metadata_path))
+        functional_profile.run_functional_profile(str, "", "", metadata_path)
+        #os.system("python functional_profile.py -i %s -o placeholder -metadata %s" % (str, metadata_path))
 
     def initiate_piphillin_fields(self, set_count):
         new_dict = {}

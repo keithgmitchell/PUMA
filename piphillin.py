@@ -10,22 +10,24 @@ def get_seqs(sequences_file, sequence_output, seq_key):
     parsed_sequences = SeqIO.parse(sequences_file, 'fasta')
     for rec in parsed_sequences:
         if rec.description in seq_key:
-            output_file.write('>' + str(rec.description) + '\r\n')
-            output_file.write(str(rec.seq) + '\r\n')
+            output_file.write('>' + str(rec.description) + '\n')
+            output_file.write(str(rec.seq) + '\n')
 
 
 def refactor_asv(input_file, output_file, count):
-    os.system("head -10 %s" % input_file)
+#    os.system("head -10 %s" % input_file)
     merged = open(input_file, 'r')
     rounded = open(output_file, 'w')
 
     merged_csv = csv.reader(merged, delimiter='\t')
-    rounded_csv = csv.writer(rounded, delimiter='\t')
+    rounded_csv = csv.writer(rounded, delimiter='\t', lineterminator="\n")
 
     seq_descriptions = []
     for row in merged_csv:
         if row[0] == "OTU" or row[0] == "#OTU ID":
             rounded_csv.writerow(row)
+        elif row[0][0] == "#":
+            continue
         else:
             row_list = [row[0], ]
             found_nonzero = False
@@ -45,7 +47,7 @@ def get_seq_descriptions(split_otu_table):
     split_table = open(split_otu_table, 'r')
     split_csv = csv.reader(split_table, delimiter=',')
     for row in split_csv:
-        if row[0] == "OTU" or row[0] == "#OTU ID":
+        if row[0] == "OTU" or row[0] == "#OTU ID" or row[0][0]=="#":
             continue
         else:
             seq_descriptions.append(row[0])
