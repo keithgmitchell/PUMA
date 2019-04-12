@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+{% block content %}
+
+    {% if errors %}
+        {% for error in errors %}
+            {% if error %}
+                <div class="alert alert-danger">
+                    <strong> Entry {{forloop.counter}}: {{ error|escape }}</strong>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+<div style="margin:20;padding:20;border:thin solid black;border-radius:8px">
+      <h2>Output List for Download: See folder <code>"puma/output"</code></h2>
+          {% for item in list %}
+            <p>{{item}}</p>
+          {% endfor %}
+</div>
+
+{% endblock %}
+

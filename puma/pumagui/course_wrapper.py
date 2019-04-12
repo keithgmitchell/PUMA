@@ -1,8 +1,8 @@
 import datetime
 import os
 import sys
-from puma.puma import stamp, metadata_verification, piphillin, cytoscape, convert_mrdna_to_anacapa_format, \
-    convert_qiime2_to_anacapa_format
+from . import metadata_verification, cytoscape, convert_mrdna_to_anacapa_format, piphillin, \
+    convert_qiime2_to_anacapa_format, stamp
 from biom import load_table
 import zipfile
 from Bio.Align.Applications import MafftCommandline

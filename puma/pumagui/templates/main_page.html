@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+hr.style6 {
+	background-color: #fff;
+	border-top: 2px dotted #8c8b8b;
+}
+{% block content %}
+
+    <div style="margin:20;padding:20;border:thin solid black;border-radius:8px">
+        <h2>Please choose the name of the Taxonomic ID platform that you are using.</h2>
+        <div>
+            <a href="/anacapa/">
+               <button type="button" class="btn btn-primary">Anacapa</button>
+            </a>
+
+            <a href="/mrdna/">
+               <button type="button" class="btn btn-primary">MrDNA</button>
+            </a>
+
+            <a href="/qiime2/">
+               <button type="button" class="btn btn-primary">QIIME2</button>
+            </a>
+
+        </div>
+    </div>
+
+
+
+
+    <div style="margin:20;padding:20;border:thin solid black;border-radius:8px">
+        <h2>Functional profile hierarcy.</h2>
+        <div>
+            <a href="/piphillin/">
+               <button type="button" class="btn btn-primary">Run results from Piphillin here</button>
+            </a>
+        </div>
+    </div>
+    <div style="margin:20;padding:20;border:thin solid black;border-radius:8px">
+        <h2>Output from previous jobs.</h2>
+        <div>
+            <a href="/output/">
+               <button type="button" class="btn btn-success">Output</button>
+            </a>
+
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}
+
