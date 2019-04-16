@@ -30,7 +30,6 @@ def handle_files(standard_file, metadata, outfile, end_pos):
 
     metadata_breakdown = metadata_to_dict(metadata)
     header_row = ['from', 'to', 'eweight'] + metadata_breakdown[1]
-    print (standard_file, metadata, outfile, end_pos)
     #TODO groupby before writing then add different levels
     for start, level in zip([end_pos], ['species']):
         with open(standard_file) as otu_file, open(outfile, 'w') as cyto_out:

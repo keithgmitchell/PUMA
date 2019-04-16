@@ -13,14 +13,22 @@ import re, shutil, tempfile
 
 
 class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+    HEADER = ''
+    OKBLUE = ''
+    OKGREEN = ''
+    WARNING = ''
+    FAIL = ''
+    ENDC = ''
+    BOLD = ''
+    UNDERLINE = ''
+    # HEADER = '\033[95m'
+    # OKBLUE = '\033[94m'
+    # OKGREEN = '\033[92m'
+    # WARNING = '\033[93m'
+    # FAIL = '\033[91m'
+    # ENDC = '\033[0m'
+    # BOLD = '\033[1m'
+    # UNDERLINE = '\033[4m'
 
 
 def log_file(outdir):
@@ -69,29 +77,19 @@ class General():
             if not os.path.exists(directory):
                 os.mkdir(directory)
 
-
+        self.log_file = directory + 'log.txt'
+        sys.stdout = open(self.log_file, 'w')
         self.output_directory = directory
 
-    def start_log(self):
-        log_path = self.output_directory + 'log.txt'
-
-        print('Starting a log file at %s' % log_path)
-        self.old_stdout = sys.stdout
-        self.log_file = open(log_path, "w")
-        sys.stdout = self.log_file
-
-    def end_log(self):
-        sys.stdout = self.old_stdout
-        self.log_file.close()
 
     def verify_metadata(self, metadata, standard_otu):
         self.metadata_fileout = self.output_directory + "verified_metadata.tsv"
         self.metadata_validation = metadata_verification.verify_metadata(self.standard_otu, self.metadata, self.metadata_fileout)
 
         if self.metadata_validation != True:
-            sys.exit(bcolors.FAIL + self.metadata_validation + bcolors.ENDC)
+            print("ERROR: Metadata Verification." + '\n\t' + self.metadata_validation)
         else:
-            print (bcolors.OKGREEN + "Metadata Successfully Verified." + bcolors.ENDC)
+            print("Metadata: Successfully Verified.")
             pass
 
     def create_biom(self, input):
@@ -108,7 +106,7 @@ class General():
         self.extra_biomtext = "%s/temp/%s_extra_file.txt" % (self.dir_path, self.time)
         self.extra_qza = "%s/temp/%s_extra_qza.qza" % (self.dir_path, self.time)
 
-        print ("Create extra non-biom: in case user does not want rarefaction performed.")
+        print("Create extra non-biom: in case user does not want rarefaction performed.")
         table = load_table(output)
         with open(self.extra_biomtext, 'w') as output_file:
             table.to_json("PUMA", output_file)
@@ -118,12 +116,8 @@ class General():
 
         print("Rarefy and merge: import.")
 
-        # original_dir = "%s/temp/%s_original_dir" % (self.dir_path, self.time)
-
         original_biom_file = input
         table = load_table(original_biom_file)
-        # rarefaction_str = ""
-        # rarefaction_list = []
 
         print("Rarefy and merge: rarefactions.")
         for i in range(int(self.rarefactioniter)):
@@ -131,10 +125,8 @@ class General():
                 output_table = table.subsample(int(self.rarefactiondepth))
             else:
                 output_table.merge(table.subsample(int(self.rarefactiondepth)))
-            # output = "%s/temp/%s_rarefaction%s.qza" % (self.dir_path, self.time, i)
 
         self.merged_artifact = "%s/temp/%s_merged_file.qza" % (self.dir_path, self.time)
-        # export_dir = "%s/temp/" % self.dir_path
         merged_biom = "%s/temp/feature-table.biom" % (self.dir_path)
         self.merged_biom = merged_biom
         merged_text = "%s/temp/%s_merged_file.txt" % (self.dir_path, self.time)
@@ -146,28 +138,26 @@ class General():
             merged_text_file.write(out_tsv)
 
         print("Rarefy and merge: convert to .txt from .biom.")
-
         print("Rarefy and merge: cleaning the text file.")
+
         sed_inplace(merged_text, '#Constructed from biom file', '')
         sed_inplace(merged_text, '#OTU ID\t', 'OTU\t')
         self.merged_text = merged_text
-        # TODO remove the rarefied files
 
     def run_piphillin(self):
         self.piphillin_out = self.output_directory + "piphillin/"
-        print("Run Piphillin: mkdir")
+        print("Piphillin: mkdir")
         os.mkdir(self.piphillin_out)
 
-        #TODO make an integer table for piphillin and this one is ok for stamp
         self.piphillin_dec  = "%s/piphillinotu.csv" % (self.piphillin_out)
         piphillin_seq_out = "%s/piphillinseqs.fasta" % (self.piphillin_out)
 
-        print("Run Piphillin: handling files")
+        print("Piphillin: handling files")
         piphillin.handle_files(self.merged_text, self.piphillin_dec,
                                self.rarefactioniter, self.standard_sequences, piphillin_seq_out)
 
     def run_stamp(self, type):
-        print("Run STAMP: mkdir")
+        print("STAMP: mkdir")
         otu_key = stamp.get_key(self.standard_otu)
         self.stamp_directory = self.output_directory + "stamp_excel/"
         os.mkdir(self.stamp_directory)
@@ -180,7 +170,7 @@ class General():
         elif type == "QIIME2":
             self.taxa_levels = 7
 
-        print("Run STAMP: reformatting")
+        print("STAMP: reformatting")
         stamp.reformat(self.piphillin_dec, self.stamp_taxa, otu_key, self.taxa_levels)
 
     def msa(self):
@@ -191,7 +181,7 @@ class General():
         script_fname = sys.argv[0]
         script_path = os.path.abspath(os.path.dirname(script_fname))
         mafft_exe_path = os.path.join(script_path, "mafft", "mafft-win", "mafft.bat")
-        mafft_cline = MafftCommandline(mafft_exe_path, input=os.path.abspath(self.standard_sequences))
+        mafft_cline = MafftCommandline("mafft", input=os.path.abspath(self.standard_sequences))
         stdout, stderr = mafft_cline()
         with open(self.multiple_sequence_alignment, 'w') as handle1, open(self.multiple_sequence_alignment_2, 'w') as handle2, open(self.qiime_msa, 'w') as handle3:
             handle1.write(stdout)
@@ -201,10 +191,9 @@ class General():
     def phylogeny(self):
         script_fname = sys.argv[0]
         script_path = os.path.abspath(os.path.dirname(script_fname))
-        fasttree_exe = os.path.join(script_path, "fasttree", "FastTree.exe")
 
         self.phylogenetic_tree = os.path.join(self.dir_path, "temp", "%s_phylotree" % (self.time))
-        cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input=os.path.abspath(self.multiple_sequence_alignment_2), out=os.path.abspath(self.phylogenetic_tree))
+        cmd = _Fasttree.FastTreeCommandline('fasttree', input=os.path.abspath(self.multiple_sequence_alignment_2), out=os.path.abspath(self.phylogenetic_tree))
 
         self.qiime_phylo = os.path.join(self.qiime_out, "%s_qiime_phylo.phy" % (self.time))
         cmd()
@@ -236,60 +225,63 @@ class General():
         if self.rarefactiondepth is not None and self.rarefactiondepth != '' and int(self.rarefactiondepth) !=0 and \
                 self.rarefactioniter is not None and self.rarefactioniter != '' and int(self.rarefactioniter) !=0:
 
-            print(bcolors.WARNING + "Course Wrapper: Running Rarefaction and Merge" + bcolors.ENDC)
+            print("Course Wrapper: Running Rarefaction and Merge")
+            sys.stdout.flush()
             self.perform_rarefaction = True
             self.rarefy_and_merge(self.standard_biom)
         else:
-            print(bcolors.WARNING + "Course Wrapper: Skipping Rarefaction and Merge" + bcolors.ENDC)
+            print("Course Wrapper: Skipping Rarefaction and Merge")
             self.perform_rarefaction = False
             self.merged_text = self.extra_biomtext
             self.merged_artifact = self.extra_qza
+            sys.stdout.flush()
 
         # RANACAPA
+        sys.stdout.flush()
         self.ranacapa()
 
         # QIIME OTU
+        sys.stdout.flush()
         self.qiime_otu()
 
         # PIPHILLIN
-        print(bcolors.HEADER + "Piphillin: Producing formatted file sets for Piphillin @Secondgenome (only upload those with a number)." + bcolors.ENDC)
+        print("Piphillin: Producing formatted file sets for Piphillin @Secondgenome (only upload those with a number).")
+        sys.stdout.flush()
         self.run_piphillin()
 
         # STAMP/EXCEL
-        print(bcolors.HEADER + "STAMP/Excel: running script to make files for STAMP/Excel." + bcolors.ENDC)
+        print("STAMP/Excel: running script to make files for STAMP/Excel.")
+        sys.stdout.flush()
         self.run_stamp(type)
 
         # CYTOSCAPE
         self.cytoscape_directory = self.output_directory + "cytoscape/"
         print("Cytoscape: making directory.")
         os.mkdir(self.cytoscape_directory)
-
-        print(bcolors.WARNING + "Cytoscape: running cytoscape script." + bcolors.ENDC)
+        print("Cytoscape: running cytoscape script.")
         outfile = self.cytoscape_directory + self.time + '_species_cytoscape.tsv'
-        #TODO check to make sure 5 is always accurate? or should be self.taxa_levels
+        sys.stdout.flush()
         self.cytoscape = cytoscape.handle_files(self.stamp_taxa, self.metadata, outfile, self.taxa_levels - 1)
 
         # MSA/PHYLO
         if self.run_msa_phylo != False and self.run_msa_phylo != '' and self.run_msa_phylo is not None:
-            print(bcolors.WARNING + "MSA: Running multiple sequence alignment using 'mafft'" + bcolors.ENDC)
+            print("MSA: Running multiple sequence alignment using 'mafft'")
+            sys.stdout.flush()
             self.msa()
 
-            print(bcolors.WARNING + "Phylogenetic Tree: Running phylogenetic tree construction." + bcolors.ENDC)
+            print("Phylogenetic Tree: Running phylogenetic tree construction.")
+            sys.stdout.flush()
             self.phylogeny()
 
 
         print("----------------------------------------------------------------------------------------------------")
-        print(bcolors.OKGREEN + "DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.time + bcolors.ENDC)
+        print("DONE: You may now retrieve your files in the %s prefix folder in the output folder.")
         print("----------------------------------------------------------------------------------------------------")
-        sys.exit()
-
+        sys.stdout.flush()
 
     def __init__(self, general_dict, metadata_dict):
         self.dir_path = os.getcwd()
-        print (general_dict)
         self.create_output_directory(self.type, general_dict["unique_id"], general_dict["outdir"])
-
-        print (metadata_dict)
 
         self.metadata = metadata_dict['metadata']
         self.rarefactioniter = general_dict["rarefactioniter"]

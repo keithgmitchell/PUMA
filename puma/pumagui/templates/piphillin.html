@@ -1,18 +1,41 @@
 {% extends 'base.html' %}
 
-hr.style6 {
-	background-color: #fff;
-	border-top: 2px dotted #8c8b8b;
-}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 {% block content %}
 
-    <div style="margin:20;padding:20;border:thin solid black;border-radius:8px">
-        <h2>Anacapa</h2>
-        {{form.metadata}}
-        {{form.otutable}}
-    </div>
+    {% if errors %}
+        {% for error in errors %}
+            {% if error %}
+                <div class="alert alert-danger">
+                    <strong> Entry {{forloop.counter}}: {{ error|escape }}</strong>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 
-
+<div style="margin:20;padding:20;border:thin solid black;border-radius:8px">
+      <h2>Piphillin</h2>
+        <ul>
+                <li>Piphillin will require to you run file sets due to their size limitations.</li>
+                <li>Piphillin will return <code>.zip</code> files to upload here.</li>
+                <li>Please add the necessary number of entries before beginning your upload.</li>
+        </ul>
+      <a href="/piphillin/{{number|add:'1' }}">
+               <button type="button" class="btn btn-info">Add more zip file forms.</button>
+      </a>
+      <a href="/piphillin/1/">
+               <button type="button" class="btn btn-warning">Reset number of forms</button>
+      </a>
+      <hr>
+      <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+          <hr>
+          <p><strong>ATTENTION:</strong> After clicking "SUBMIT FIELDS" please wait until the page redirects. This may take a bit of time.</p>
+            <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+</div>
 
 {% endblock %}
 

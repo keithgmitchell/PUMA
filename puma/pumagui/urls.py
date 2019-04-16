@@ -26,5 +26,8 @@ urlpatterns = [
     path('anacapa/', views.anacapa, name='Anacapa'),
     path('mrdna/', views.mrdna, name='MrDNA'),
     path('qiime2/', views.qiime2, name='QIIME2'),
+    path('piphillin/<int:num>/', views.piphillin, name='Piphillin'),
     path('output/', views.output_view, name='Output'),
+    path('output_download/<slug:directory>/', views.get_output, name='Output Download'),
+    path('display_log/<slug:directory>/', views.display_log, name='Display Log'),
 ]

@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
         else:
             print("----------------------------------------------------------------------------------------------------")
-            print(bcolors.FAIL + "ANACAPA: Must have fwdseq, mergedseq, and reverseq files provided." + bcolors.ENDC)
+            print("ERROR: Anacapa Must have fwdseq, mergedseq, and reverseq files provided.")
             print("----------------------------------------------------------------------------------------------------")
             sys.exit()
 

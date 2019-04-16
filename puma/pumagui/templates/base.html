@@ -39,7 +39,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!--<link rel="shortcut icon" type="image/png" href="https://lh3.googleusercontent.com/gX0tngi0TVGjykEUpz-UGQg_BVSAb0ryBbizWIQscTRnb1NhaRU0PdfykksgtaxZKUoA-E-34l9lynWno2Tt7ZQTvfHMw8rNdRmxcqLEPh4F1m6hVqf1BeHLxpxGjrioynlPrGIAx6pFoWzcOE2RPPier7YSdM0mQGHz1R7JoH4hWFDGpT_4PIqjZNtRxqUb5BZjCt8Aa7TrzKTk7GDWDzIa6PXHrWNWcQgNAF5T_yKf-ZZbW3JvDf7WDPQQwVAoxMGATzaXCGVWagshOZ6swMZJhwSdjjD_gHePP4whqzIQw1aCt5Iw5slqi1cXNJLRg-U_vipoxQLB-Ftiepo3u5lC13ai4Inyq1chdA1OJVgKhjCOfGPD0Y1Y3kn22rPcOwAOedTtOA-XuH2pNDqgg-pnyVdbujqZLiJ2VLsI6u7f-J7o7o_Jb6s-zliH-t73CMr3b4a0UXKfSbHf1FNMv_TvYbfmBf2Gw3dLhNDvfeZzgvmDTy_24ID5Bu4sxbcSolCUsFMw-_njVUjQ2z8xonAFEcnp4mg9qOomBvlKvmn_vmkpo1VopCq3QMiXDlgRuGUKrmxlCRAgoPYhFhb8v6g9k63frGCZDrLvcJthepmaUp0QwOLJVAhEtgYlMpypjG5Ox8pS6qtatLTVtSNjqf8XyWOWKLAguQU1OJSuyi6cxWTNN144qXu0=s16-no">-->
+<link rel="shortcut icon" type="image/png" href="https://media.licdn.com/dms/image/C4D0BAQFTPmC-FNkDWQ/company-logo_400_400/0?e=1563408000&v=beta&t=-9C4LQuebEHebooUfHrYrXFB8cEi0LGPC5cLG0Mo_5I">
 
 <style>
 * {box-sizing: border-box;}
@@ -157,14 +157,36 @@ footer{
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
 }
+
+.title{
+    width:78%;
+    margin-right:2%;
+    float: left;
+}
+
+.mimg {
+    width:18%;
+    margin-right:2%;
+    float: left;
+}
+.clearfix{
+    clear:both
+}
+
 </style>
 <body>
 
 
     <div class="header" >
-      <a href="/" class="logo">Pipeline for Unifying Microbiome Analysis (PUMA)</a>
-        <div class="header-right">
+        <div class="title">
+            <a href="/" class="logo" style="width:100%">Pipeline for Unifying Microbiome Analysis (PUMA)</a>
         </div>
+        <div class="mimg" align="right">
+            <a href="https://www.mimg.ucla.edu/"><img src="https://media.licdn.com/dms/image/C4D0BAQFTPmC-FNkDWQ/company-logo_400_400/0?e=1563408000&v=beta&t=-9C4LQuebEHebooUfHrYrXFB8cEi0LGPC5cLG0Mo_5I" style="width:100px;height:100px;"></a>
+        </div>
+
+        <div class="clearfix"></div>
+
     </div>
     
     {% block content %}
