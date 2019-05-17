@@ -1,20 +1,18 @@
 # PUMA (Pipeline for Unifying Microbiome Analysis)
 Pre-print: https://doi.org/10.1101/482380
-Manual: https://app.box.com/file/358362942079
-
-# Version 1.1 (current)
 + The Manual provided below will provide setup instructions as well as important tutorials for 
 students/researchers for jumpstarting the analysis process with the various tools shown in the 
 schema above.
+    + Manual: https://app.box.com/file/358362942079
 
-## How to install:
+## How to install: (MacOSx and Linux supported)
 
-1. Follow the steps (steps 1-6 but optional steps are nice to have as well) here https://docs.qiime2.org/2018.11/install/virtual/virtualbox/
-+ Currently tested with the 2018.8 version of the virtual machine. (https://data.qiime2.org/distro/core/2018.8)
-
-2. The VM will also double as an environment to run the QIIME2 program.
-3. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
-4. For the CLI and the GUI run `python PumaCLI.py --help` and `python RunPuma.py` respectively.
+1. Install Conda for your operating system (https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
+2. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
+3. `conda create -n puma_env --file requirements.txt`
+4. `conda activate puma_env`
+5. `pip install -r pip_requirements.txt`
+6. For the CLI and the GUI run `python PumaCLI.py --help` and `python puma/RunPuma.py` respectively.
 
 
 ## How to run:
@@ -64,5 +62,7 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
 + upload standard otu and seqs
 + add rarefaction_depth/iter_ to the file names
 + double check that no rarefaction option still works
++ fix background process
++ finish piphillin view and logging
 
 ### NEAR FUTURE:

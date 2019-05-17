@@ -6,14 +6,15 @@
 #   Functions Contained: extract_info, clean_brite_file, extract_hierarchy, construct_output, list_hierarchy
 ################################################################################################################
 
-
 import csv
 import requests
+import sys
 import argparse
 import datetime
 import os
-from puma import cytoscape
+import cytoscape
 from shutil import copyfile
+import zipfile
 
 def extract_info(request):
 
@@ -286,91 +287,98 @@ def merge_files(list):
     return output_name
 
 
+def run_functional_profile(input, output, metadata):
+    print("Arguments")
 
+    # TODO
+    log_file = ''
+    sys.stdout = open(log_file, 'w')
 
-    def run_functional_profile(input, output, directory, metadata):
-        print("Arguments")
     # request data linking genes to pathways, can be seen by entering the link into a browser too
-        k = requests.get('http://rest.kegg.jp/link/pathway/ko')
-        path_ko = extract_info(k)
-        dict_list = {}
+    k = requests.get('http://rest.kegg.jp/link/pathway/ko')
+    path_ko = extract_info(k)
 
-        print("Hierarchy")
+    print("Hierarchy")
+
     # hierarchy level information extracted from the download link
-        brite_htext = requests.get('http://www.genome.jp/kegg-bin/download_htext?htext=ko00001&format=htext&filedir=')
-        tree_data = extract_hierarchy(brite_htext)
+    brite_htext = requests.get('http://www.genome.jp/kegg-bin/download_htext?htext=ko00001&format=htext&filedir=')
+    tree_data = extract_hierarchy(brite_htext)
 
-        input_list = input.split(',')
-        full_path_list = []
-        for object in input_list:
-            objectName = object.replace('.zip', '').split('/')[-1]
-        #object = object.split('/')
-            print(object)
-            with zipfile.ZipFile(object, "r") as zip_ref:
-                zip_ref.extractall("temp/" + objectName)
-            #os.system('unzip -o %s -d %s' %(object, 'temp/'+objectName))
-            name = "ko_abund_table_unnorm.txt"
-            for root, dirs, files in os.walk('temp/'+objectName):
-                if name in files:
-                    full_path_list.append(os.path.join(root, name))
-                    break
+    input_list = input.split(',')
+    full_path_list = []
+    for object in input_list:
+        objectName = object.replace('.zip', '').split('/')[-1]
+        print(object)
+        with zipfile.ZipFile(object, "r") as zip_ref:
+            zip_ref.extractall("temp/" + objectName)
+        name = "ko_abund_table_unnorm.txt"
+        for root, dirs, files in os.walk('temp/'+objectName):
+            if name in files:
+                full_path_list.append(os.path.join(root, name))
+                break
 
-        print(full_path_list)
+    print(full_path_list)
 
-        if len(full_path_list)>1:
-            print("Functional Profile: More then 1 file was passed so merging files.")
-            input = merge_files(full_path_list)
-        else:
-            input = full_path_list[0]
+    if len(full_path_list)>1:
+        print("Functional Profile: More then 1 file was passed so merging files.")
+        input = merge_files(full_path_list)
+    else:
+        input = full_path_list[0]
 
-        if output is None or output == '':
-            output_hier = '%s_pathway_hierarchy_table.txt' %(output)
-            output_des = '%s_genedes.txt' % (output)
+    if output is None or output == '':
+        output_hier = '%s_pathway_hierarchy_table.txt' %(output)
+        output_des = '%s_genedes.txt' % (output)
 
-        else:
-            input_temp = input.split('/')[-1]
-            time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
-            os.mkdir("output/%s_functional_profile"%(time))
-            #os.system("mkdir output/%s_functional_profile" % (time))
-            output_str = "output/%s_functional_profile" % (time)
-            output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
-            output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
-            copyfile(output_str, input_temp.strip('.txt'))
-            #os.system('cp %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
-
+    else:
         input_temp = input.split('/')[-1]
-        with open(input, 'r') as tsvin, open(output_hier,'w', newline='') as hierarchy_out, \
-                open(output_des, 'w', newline='') as detailed_out:
-            input = csv.reader(tsvin, delimiter='\t')
-            output = csv.writer(hierarchy_out, delimiter='\t',lineterminator="\n")
-            input_detailed = csv.writer(detailed_out, delimiter='\t')
+        time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
+        os.mkdir("output/%s_functional_profile"%(time))
+        #os.system("mkdir output/%s_functional_profile" % (time))
+        output_str = "output/%s_functional_profile" % (time)
+        output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
+        output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
+        print(output_str, input_temp.strip('.txt'))
 
-        # make adjustments here based on the type of file needed from the in put file header row
-            print("Functional Profile: Constructing output for the functional profile.")
-            construct_output(input, output, path_ko[0], tree_data, input_detailed)
-            print("Functional Profile: Done Constructing output for the functional profile.")
+        # TODO copy the metadata over I think??
+        # copyfile(output_str, input_temp.strip('.txt'))
+        #os.system('cp %s %s' %(input, "%s/%s_ipath.txt" %(output_str, input_temp.strip('.txt'))))
 
-        print("Functional Profile: Constructing Cytoscape output for the functional profile.")
-        cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
-        cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
-        print("Functional Profile: Done Constructing Cytoscape output for the functional profile. You may now retrieve your files:)")
+    input_temp = input.split('/')[-1]
+    with open(input, 'r') as tsvin, open(output_hier, 'w', newline='') as hierarchy_out, \
+            open(output_des, 'w', newline='') as detailed_out:
+        input = csv.reader(tsvin, delimiter='\t')
+        output = csv.writer(hierarchy_out, delimiter='\t', lineterminator="\n")
+        input_detailed = csv.writer(detailed_out, delimiter='\t')
+
+    # make adjustments here based on the type of file needed from the in put file header row
+        print("Functional Profile: Constructing output for the functional profile.")
+        construct_output(input, output, path_ko[0], tree_data, input_detailed)
+        print("Functional Profile: Done Constructing output for the functional profile.")
+
+    print("Functional Profile: Constructing Cytoscape output for the functional profile.")
+    cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
+    cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
+    print("Functional Profile: Done Constructing Cytoscape output for the functional profile.\
+            You may now retrieve your files:)")
 
 
 if __name__ == '__main__':
     # system arguments
     parser = argparse.ArgumentParser(description='Input and Output file name options for t')
-    parser.add_argument('-i', help='This is the file from Piphillin (.zip file). If there is more then one input then arguments should be comma seperated.',
+    parser.add_argument('-i', help='This is the file from Piphillin (.zip file). \
+                                    If there is more then one input then arguments should be comma seperated.',
                         required=True)
-    parser.add_argument('-o', help='This is the prefix for what you wish the output files to have. For example: UCLA_109BL-W18_90cutoff',
+    parser.add_argument('-o', help='This is the prefix for what you wish the output files to have. \
+                                    For example: UCLA_109BL-W18_90cutoff',
                         required=True)
-    parser.add_argument('-dir', help='This is the directory you want the output files to go to.',
-                        required=False)
-    parser.add_argument('-metadata', help='This should be the verified metadata from the first portion of running the community profile.',
+    parser.add_argument('-metadata', help='This should be the verified metadata from the first portion \
+                                           of running the community profile.',
                         required=True)
     args = vars(parser.parse_args())
     input = args['i']
     output = args['o']
-    directory = args['dir']
+    # directory = args['dir']
     metadata = args['metadata']
+    run_functional_profile(input, output, metadata)
 
 

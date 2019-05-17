@@ -1,10 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.17/css/jquery.dataTables.css">
+<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.17/js/jquery.dataTables.js"></script>
+
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css">
+
+
+<script>
+
+$(document).ready(function(){ $('#myTable').DataTable(); });
+<!--$(document).ready(function(){ $('#myTable2').DataTable(); });-->
+<!--$(document).ready(function(){ $('#myTable3').DataTable(); });-->
+
+
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+
+
+
+</script>
+
+    {% if errors %}
+        {% for error in errors %}
+            {% if error %}
+                <div class="alert alert-danger">
+                    <strong> Entry {{forloop.counter}}: {{ error|escape }}</strong>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+<div style="margin:20;padding:20;border:thin solid black;border-radius:8px">
+      <h2>Output from Log</h2>
+
+        {% for item in file %}
+             <p>{{item}}</p>
+        {% endfor %}
+
+</div>
+
+{% endblock %}

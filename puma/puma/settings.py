@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pumagui',
     'crispy_forms',
-    'background_task',
 ]
 
 MIDDLEWARE = [

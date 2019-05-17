@@ -11,8 +11,8 @@ from django.shortcuts import redirect
 from .forms import *
 from .templates import *
 from .course_wrapper import *
+from .cytoscape import *
 from django import forms
-from background_task import background
 from shutil import make_archive
 from wsgiref.util import FileWrapper
 import time
@@ -25,7 +25,6 @@ files_dictionary = {"otutable": '', "fwdseq": '', "reverseseq": '', "mergeseq": 
 metadata_dictionary = {"metadata": ''}
 
 
-# @background(schedule=1)
 def call_course_wrapper(type, dict, metadata_dict):
     eval(type)(dict, metadata_dict)
 
@@ -118,12 +117,19 @@ def piphillin(request, num):
     context['number'] = num
     context['form'] = PiphillinForm(number_forms=num)
     if request.method == 'POST':
-        form = PiphillinForm(request.POST, request.FILES)
-        if form.is_valid():
+        # form = PiphillinForm(request.FILES, number_forms=num)
+        # if form.is_valid():
+        master_string = ''
+        for i in range(1, num+1):
+            file = request.FILES['zip_file_%s' % str(i)].file.name
+            if i == num:
+                master_string += file
+            else:
+                master_string += file + ','
+        verified_metadata = request.FILES['verified_metadata']
+        os.system('python puma/pumagui/functional_profile.py -i %s -o testing -metadata %s' % (master_string, verified_metadata))
+        return redirect('/output/')
 
-            return redirect('/output/')
-        else:
-            context['errors'] = form.errors
     else:
         context['form'] = PiphillinForm(number_forms=num)
     return render(request, 'piphillin.html', context)

@@ -275,7 +275,7 @@ class General():
 
 
         print("----------------------------------------------------------------------------------------------------")
-        print("DONE: You may now retrieve your files in the %s prefix folder in the output folder.")
+        print("DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.output_directory)
         print("----------------------------------------------------------------------------------------------------")
         sys.stdout.flush()
 
