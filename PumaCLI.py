@@ -1,10 +1,7 @@
-import install
-install.check_dependencies()
-install.make_directories()
-from course_wrapper import bcolors
+from puma.pumagui import course_wrapper, install
+from puma.pumagui.course_wrapper import bcolors
 import argparse
 import sys
-import course_wrapper
 
 
 def run_wrapper(files, metadata_dict, type):
@@ -76,7 +73,7 @@ if __name__ == "__main__":
 
         else:
             print("----------------------------------------------------------------------------------------------------")
-            print(bcolors.FAIL + "ANACAPA: Must have fwdseq, mergedseq, and reverseq files provided." + bcolors.ENDC)
+            print("ERROR: Anacapa Must have fwdseq, mergedseq, and reverseq files provided.")
             print("----------------------------------------------------------------------------------------------------")
             sys.exit()
 

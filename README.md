@@ -1,20 +1,18 @@
 # PUMA (Pipeline for Unifying Microbiome Analysis)
 Pre-print: https://doi.org/10.1101/482380
-Manual: https://app.box.com/file/358362942079
-
-# Version 1.1 (current)
 + The Manual provided below will provide setup instructions as well as important tutorials for 
 students/researchers for jumpstarting the analysis process with the various tools shown in the 
 schema above.
+    + Manual: https://app.box.com/file/358362942079
 
-## How to install:
+## How to install: (MacOSx and Linux supported)
 
-1. Follow the steps (steps 1-6 but optional steps are nice to have as well) here https://docs.qiime2.org/2018.11/install/virtual/virtualbox/
-+ Currently tested with the 2018.8 version of the virtual machine. (https://data.qiime2.org/distro/core/2018.8)
-
-2. The VM will also double as an environment to run the QIIME2 program.
-3. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
-4. For the CLI and the GUI run `python PumaCLI.py --help` and `python RunPuma.py` respectively.
+1. Install Conda for your operating system (https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
+2. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
+3. `conda create -n puma_env --file requirements.txt`
+4. `conda activate puma_env`
+5. `pip install -r pip_requirements.txt`
+6. For the CLI and the GUI run `python PumaCLI.py --help` and `python puma/RunPuma.py` respectively.
 
 
 ## How to run:
@@ -53,24 +51,18 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
 ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
 
 
-
-
 ## Version 1.2 (In progress)
-+ Introduced Command Line Interface Version for systems with QIIME2/Musket for automizing GUI process for those 
-interested as well as to provide non Virtual Machine version for convenient Linux systems downloads. 
 + Automated Rarefaction Depth Option
 + Capability to select output files (rather then produce all mentioned)
-+ Add full functionality for automating production of MSA/phylogenetic tree.
-+ Better error log/system output filing 
 + Include more tools such as the iTOL tool and any other requested (please create Issue if you have one in mind)
 + Include more file input types from other sequencing services (please create Issue if you have one in mind)
-+ Bioconda package installation for non-VM based environments.
++ Fix the anacapa input functions.
++ Add picrust 2.0
++ Add merge files option that includes the metadata. 
++ upload standard otu and seqs
++ add rarefaction_depth/iter_ to the file names
++ double check that no rarefaction option still works
++ fix background process
++ finish piphillin view and logging
 
 ### NEAR FUTURE:
-+ install dependencies on running the CLI
-+ clean up gui
-+ upload standard otu and seqs
-+ Test piphillin script in STAMP
-+ test cli on hoffman and dependencies
-+ double check with caledna and mrdna for standard format
-+ add rarefaction_depth/iter_ to the file names

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.17/css/jquery.dataTables.css">
+<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.17/js/jquery.dataTables.js"></script>
+
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css">
+
+
+<script>
+
+$(document).ready(function(){ $('#myTable').DataTable(); });
+<!--$(document).ready(function(){ $('#myTable2').DataTable(); });-->
+<!--$(document).ready(function(){ $('#myTable3').DataTable(); });-->
+
+
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+
+
+
+</script>
+
+    {% if errors %}
+        {% for error in errors %}
+            {% if error %}
+                <div class="alert alert-danger">
+                    <strong> Entry {{forloop.counter}}: {{ error|escape }}</strong>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+<div style="margin:20;padding:20;border:thin solid black;border-radius:8px">
+      <h2>Output List for Download</h2>
+    <p>Please verify that the job is done running using the "See Log" button. The last line should say "DONE".</p>
+    <table id="example" class="display responsive nowrap" cellspacing="0" width="50%" align="left">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Download</th>
+                <th>See Log</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in list %}
+            <tr>
+                <td>{{item}}</td>
+                <td>
+                    <a href="/output_download/{{item}}/">
+                        <button type="button" class="btn btn-info">Download .zip file</button>
+                    </a>
+                </td>
+                <td>
+
+                    <a href="/display_log/{{item}}/">
+               <button type="button" class="btn btn-info">See Log</button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
+
