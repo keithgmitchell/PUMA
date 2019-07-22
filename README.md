@@ -1,4 +1,4 @@
-# PUMA (Pipeline for Unifying Microbiome Analysis)
+# PUMA (Pipeline for Unifying Microbiome Analysis) (Version 1.2)
 Pre-print: https://doi.org/10.1101/482380
 + The Manual provided below will provide setup instructions as well as important tutorials for 
 students/researchers for jumpstarting the analysis process with the various tools shown in the 
