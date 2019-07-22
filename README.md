@@ -49,7 +49,8 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
         `python RunPuma.py`
         
         
-![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
+![PUMA GENERAL FLOWCHART Version 1.1](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
+![PUMA GENERAL FLOWCHART Version 1.2](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI_1.2)
 
 
 ## Version 1.3 (In progress)
