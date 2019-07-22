@@ -1,5 +1,4 @@
-#SampleID	BarcodeSequence	LinkerPrimerSequence	BodySite	Year	Month	Day	Subject	ReportedAntibioticUsage	DaysSinceExperimentStart	Description
-#q2:types	categorical	categorical	categorical	numeric	numeric	numeric	categorical	categorical	numeric	categorical
+Sample ID	BarcodeSequence	LinkerPrimerSequence	BodySite	Year	Month	Day	Subject	ReportedAntibioticUsage	DaysSinceExperimentStart	Description
 L1S8	AGCTGACTAGTC	GTGCCAGCMGCCGCGGTAA	gut	2008	10	28	subject-1	Yes	0	subject-1.gut.2008-10-28
 L1S57	ACACACTATGGC	GTGCCAGCMGCCGCGGTAA	gut	2009	1	20	subject-1	No	84	subject-1.gut.2009-1-20
 L1S76	ACTACGTGTGGT	GTGCCAGCMGCCGCGGTAA	gut	2009	2	17	subject-1	No	112	subject-1.gut.2009-2-17

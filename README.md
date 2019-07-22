@@ -14,14 +14,16 @@ schema above.
     - Be sure to select "Yes" by clicking "y" when prompted. 
     - This may take 5-10 mins. 
 5. `conda activate puma_env`
-    - TODO: add screenshot of what this looks like.
+    - You should now see `(puma_env)` at the start of your terminal instead of `(base)`
 6. `pip install -r pip_requirements.txt`
-7. For the CLI and the GUI run `python PumaCLI.py --help` and `python puma/RunPuma.py` respectively.
+7. For the CLI and the GUI run `python PumaCLI.py --help` and `python RunPuma.py` respectively.
 8. A window will pop in your default browser, if it says "This site can not be reached" click refresh. 
 
 ## How to update your PUMA version:
 1. Navigate to the directory where you ran part 2 of the installation process. 
-2. Run `git pull PUMA` TODO: check that this works.
+- For example:`cd /Users/keithmitchell/Desktop/Repositories/PUMA`
+- You should see files such as pip_requirements.txt, RunPuma.py, etc.
+2. Run `git pull`
 
 ## How to run:
 Results from running the PUMA scripts will produce output in the directory ‘output/’, 
@@ -56,8 +58,8 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
         `python RunPuma.py`
         
         
-![PUMA GENERAL FLOWCHART Version 1.1](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
-![PUMA GENERAL FLOWCHART Version 1.2](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI_1.2)
+- Version 1.1: ![PUMA GUI Version 1.1](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
+- Version 1.2: ![PUMA GUI Version 1.2](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI_1.2)
 
 
 ## Version 1.3 (In progress)

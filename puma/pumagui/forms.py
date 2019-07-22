@@ -14,8 +14,8 @@ class AnacapaForm(forms.Form):
     forward_seqs = forms.FileField(required=True)
     reverse_seqs = forms.FileField(required=True)
     merged_seqs = forms.FileField(required=True)
-    rarefaction_depth = forms.IntegerField(required=False)
-    rarefaction_iterations = forms.IntegerField(required=False)
+    rarefaction_depth = forms.IntegerField(required=True, max_value=10)
+    rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
 
 
 class QIIME2Form(forms.Form):
@@ -23,16 +23,16 @@ class QIIME2Form(forms.Form):
     otu_table = forms.FileField(required=True)
     all_seqs = forms.FileField(required=True)
     taxonomy = forms.FileField(required=True)
-    rarefaction_depth = forms.IntegerField(required=False)
-    rarefaction_iterations = forms.IntegerField(required=False)
+    rarefaction_depth = forms.IntegerField(required=True, max_value=10)
+    rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
 
 
 class MrDNAForm(forms.Form):
     metadata = forms.FileField(required=True)
     otu_table = forms.FileField(required=True)
     all_seqs = forms.FileField(required=True)
-    rarefaction_depth = forms.IntegerField(required=False)
-    rarefaction_iterations = forms.IntegerField(required=False)
+    rarefaction_depth = forms.IntegerField(required=True, max_value=10)
+    rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
 
 
 class PiphillinForm(forms.Form):
@@ -42,11 +42,4 @@ class PiphillinForm(forms.Form):
         super(PiphillinForm, self).__init__(*args, **kwargs)
         for i in range(0, number_forms):
             self.fields['zip_file_%s' % (i+1)] = forms.FileField(required=True)
-
-
-
-
-
-
-
 
