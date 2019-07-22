@@ -51,7 +51,7 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
 ![PUMA GENERAL FLOWCHART](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
 
 
-## Version 1.2 (In progress)
+## Version 1.3 (In progress)
 + Automated Rarefaction Depth Option
 + Capability to select output files (rather then produce all mentioned)
 + Include more tools such as the iTOL tool and any other requested (please create Issue if you have one in mind)
