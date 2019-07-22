@@ -11,13 +11,17 @@ schema above.
 2. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
 3. `conda config --append channels conda-forge`; `conda config --append channels bioconda`
 4. `conda create -n puma_env --file requirements.txt`
-    - If you encounter 
     - Be sure to select "Yes" by clicking "y" when prompted. 
-    - This may take 15-20 mins. 
+    - This may take 5-10 mins. 
 5. `conda activate puma_env`
+    - TODO: add screenshot of what this looks like.
 6. `pip install -r pip_requirements.txt`
 7. For the CLI and the GUI run `python PumaCLI.py --help` and `python puma/RunPuma.py` respectively.
+8. A window will pop in your default browser, if it says "This site can not be reached" click refresh. 
 
+## How to update your PUMA version:
+1. Navigate to the directory where you ran part 2 of the installation process. 
+2. Run `git pull PUMA` TODO: check that this works.
 
 ## How to run:
 Results from running the PUMA scripts will produce output in the directory ‘output/’, 
