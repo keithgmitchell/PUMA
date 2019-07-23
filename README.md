@@ -5,6 +5,9 @@ students/researchers for jumpstarting the analysis process with the various tool
 schema above.
     + Manual: https://app.box.com/file/358362942079
 
+![PUMA GUI Version 1.2](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_flowchart.PNG)
+
+
 ## How to install: (MacOSx and Linux supported)
 
 1. Install Conda for your operating system (https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
