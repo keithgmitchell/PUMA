@@ -21,8 +21,8 @@ schema above.
 
 ## How to update your PUMA version:
 1. Navigate to the directory where you ran part 2 of the installation process. 
-- For example:`cd /Users/keithmitchell/Desktop/Repositories/PUMA`
-- You should see files such as pip_requirements.txt, RunPuma.py, etc.
+    - For example:`cd /Users/keithmitchell/Desktop/Repositories/PUMA`
+    - You should see files such as pip_requirements.txt, RunPuma.py, etc.
 2. Run `git pull`
 
 ## How to run:
@@ -56,12 +56,10 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
 
 + Or use the GUI (keep terminal open to see system feedback):
         `python RunPuma.py`
-        
-        
-- Version 1.1: 
-    - ![PUMA GUI Version 1.1](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
-- Version 1.2: 
-    - ![PUMA GUI Version 1.2](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI_1.2.png)
+    - GUI Version 1.1: 
+        - ![PUMA GUI Version 1.1](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI.PNG)
+    - GUI Version 1.2: 
+        - ![PUMA GUI Version 1.2](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_GUI_1.2.png)
 
 
 ## Version 1.3 (In progress)

@@ -288,12 +288,15 @@ def merge_files(list):
 
 
 def run_functional_profile(input, output, metadata):
-    print("Arguments")
 
-    # TODO
-    log_file = ''
+    # Set log file
+    time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
+    output_dir = "output/%s_functional_profile"% time
+    os.mkdir(output_dir)
+    log_file = "output/%s_functional_profile/log.txt" % time
     sys.stdout = open(log_file, 'w')
 
+    print("Arguments")
     # request data linking genes to pathways, can be seen by entering the link into a browser too
     k = requests.get('http://rest.kegg.jp/link/pathway/ko')
     path_ko = extract_info(k)
@@ -319,25 +322,27 @@ def run_functional_profile(input, output, metadata):
 
     print(full_path_list)
 
+    # Check if multiple .zip files are passed, if so merge files
     if len(full_path_list)>1:
         print("Functional Profile: More then 1 file was passed so merging files.")
         input = merge_files(full_path_list)
     else:
         input = full_path_list[0]
 
-    if output is None or output == '':
-        output_hier = '%s_pathway_hierarchy_table.txt' %(output)
-        output_des = '%s_genedes.txt' % (output)
+    # TODO check this if and else
+    # Check if custom output string is passed.
+    # if output is None or output == '':
+    #     output_hier = '%s_pathway_hierarchy_table.txt' %(output)
+    #     output_des = '%s_genedes.txt' % (output)
+    # else:
 
-    else:
-        input_temp = input.split('/')[-1]
-        time = datetime.datetime.now().strftime("%Y_%m_%d_%H-%M")
-        os.mkdir("output/%s_functional_profile"%(time))
-        #os.system("mkdir output/%s_functional_profile" % (time))
-        output_str = "output/%s_functional_profile" % (time)
-        output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
-        output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
-        print(output_str, input_temp.strip('.txt'))
+
+    input_temp = input.split('/')[-1]
+    output_str = "output/%s_functional_profile" % (time)
+    output_hier = '%s/%s_pathway_hierarchy_table.txt' %(output_str, input_temp.strip('.txt'))
+    output_des = '%s/%s_genedes_.txt' % (output_str, input_temp.strip('.txt'))
+    print(output_str, input_temp.strip('.txt'))
+
 
         # TODO copy the metadata over I think??
         # copyfile(output_str, input_temp.strip('.txt'))
@@ -350,7 +355,7 @@ def run_functional_profile(input, output, metadata):
         output = csv.writer(hierarchy_out, delimiter='\t', lineterminator="\n")
         input_detailed = csv.writer(detailed_out, delimiter='\t')
 
-    # make adjustments here based on the type of file needed from the in put file header row
+        # make adjustments here based on the type of file needed from the in put file header row
         print("Functional Profile: Constructing output for the functional profile.")
         construct_output(input, output, path_ko[0], tree_data, input_detailed)
         print("Functional Profile: Done Constructing output for the functional profile.")
@@ -358,8 +363,10 @@ def run_functional_profile(input, output, metadata):
     print("Functional Profile: Constructing Cytoscape output for the functional profile.")
     cytoscape_hier = '%s/%s_cytoscape_hierarchy.txt' % (output_str, input_temp.strip('.txt'))
     cytoscape.handle_files(output_hier, metadata, cytoscape_hier, 2)
-    print("Functional Profile: Done Constructing Cytoscape output for the functional profile.\
-            You may now retrieve your files:)")
+    print("Functional Profile: Done Constructing Cytoscape output for the functional profile.")
+    print("----------------------------------------------------------------------------------------------------")
+    print("DONE: You may now retrieve your files in the %s prefix folder in the output folder." % output_dir)
+    print("----------------------------------------------------------------------------------------------------")
 
 
 if __name__ == '__main__':
@@ -377,7 +384,6 @@ if __name__ == '__main__':
     args = vars(parser.parse_args())
     input = args['i']
     output = args['o']
-    # directory = args['dir']
     metadata = args['metadata']
     run_functional_profile(input, output, metadata)
 
