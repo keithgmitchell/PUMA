@@ -3,7 +3,7 @@ Pre-print: https://doi.org/10.1101/482380
 + The Manual provided below will provide setup instructions as well as important tutorials for 
 students/researchers for jumpstarting the analysis process with the various tools shown in the 
 schema above.
-    + Manual: https://app.box.com/file/358362942079
+    + Manual: https://ucla.app.box.com/s/ybehndj8phvj8eooqpcwxbqaxc3iaif2
 
 ![PUMA GUI Version 1.2](https://github.com/keithgmitchell/PUMA/blob/master/examples/PUMA_flowchart.PNG)
 
