@@ -27,6 +27,7 @@ schema above.
     - For example:`cd /Users/keithmitchell/Desktop/Repositories/PUMA`
     - You should see files such as pip_requirements.txt, RunPuma.py, etc.
 2. Run `git pull`
+3. Run steps 1, 3-8 from "How to Install"
 
 ## How to run:
 Results from running the PUMA scripts will produce output in the directory ‘output/’, 
