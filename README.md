@@ -9,7 +9,7 @@ schema above.
 
 
 ## How to install: (MacOSx and Linux supported)
-- If you are on Windows you can run the program by installing the Linux subsystem as shown here: https://www.onmsft.com/how-to/how-to-install-windows-10s-linux-subsystem-on-your-pc
+- If you are on Windows you can run the program by installing the Linux subsystem as shown here: https://www.onmsft.com/how-to/how-to-install-windows-10s-linux-subsystem-on-your-pc or you can use a VM of your choice. 
 
 1. Install Conda for your operating system (https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
     - for mac download the .pkg file
