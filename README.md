@@ -12,6 +12,7 @@ schema above.
 - If you are on Windows you can run the program by installing the Linux subsystem as shown here: https://www.onmsft.com/how-to/how-to-install-windows-10s-linux-subsystem-on-your-pc
 
 1. Install Conda for your operating system (https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
+    - for mac download the .pkg file
 2. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
 3. `conda config --append channels conda-forge`; `conda config --append channels bioconda`
 4. `cd PUMA`
