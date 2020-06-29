@@ -21,7 +21,7 @@ schema above.
     - This may take 5-10 mins. 
 5. `conda activate puma_env`
     - You should now see `(puma_env)` at the start of your terminal instead of `(base)`
-6. `pip install -r pip_requirements.txt`
+6. `pip install -r pip_requirements.txt; mkdir temp`
 7. For the CLI and the GUI run `python PumaCLI.py --help` and `python RunPuma.py` respectively.
 8. A window will pop in your default browser, if it says "This site can not be reached" click refresh. 
 
