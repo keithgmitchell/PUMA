@@ -14,7 +14,7 @@ class AnacapaForm(forms.Form):
     forward_seqs = forms.FileField(required=True)
     reverse_seqs = forms.FileField(required=True)
     merged_seqs = forms.FileField(required=True)
-    rarefaction_depth = forms.IntegerField(required=True, max_value=10)
+    rarefaction_depth = forms.IntegerField(required=True)
     rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
 
 
@@ -23,7 +23,7 @@ class QIIME2Form(forms.Form):
     otu_table = forms.FileField(required=True)
     all_seqs = forms.FileField(required=True)
     taxonomy = forms.FileField(required=True)
-    rarefaction_depth = forms.IntegerField(required=True, max_value=10)
+    rarefaction_depth = forms.IntegerField(required=True)
     rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
 
 
@@ -31,7 +31,7 @@ class MrDNAForm(forms.Form):
     metadata = forms.FileField(required=True)
     otu_table = forms.FileField(required=True)
     all_seqs = forms.FileField(required=True)
-    rarefaction_depth = forms.IntegerField(required=True, max_value=10)
+    rarefaction_depth = forms.IntegerField(required=True)
     rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
 
 
