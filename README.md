@@ -13,6 +13,7 @@ schema above.
 1. Install Conda for your operating system (https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
 2. Run `git clone https://github.com/keithgmitchell/PUMA.git` by opening terminal in the folder of your choice.
 3. `conda config --append channels conda-forge`; `conda config --append channels bioconda`
+4. `cd PUMA`
 4. `conda create -n puma_env --file requirements.txt`
     - Be sure to select "Yes" by clicking "y" when prompted. 
     - This may take 5-10 mins. 
