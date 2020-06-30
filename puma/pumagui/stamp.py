@@ -31,7 +31,7 @@ def unclassified(fix_list, classification_levels, parent_dict, repeat_dict):
 def reformat(rarefied, output, otu_dict, classification_count):
     csvin = open(rarefied, 'r')
     tsvout = open(output, 'w')
-    csvin = csv.reader(csvin, delimiter='\t')
+    csvin = csv.reader(csvin, delimiter=',')
     tsvout = csv.writer(tsvout, delimiter='\t',lineterminator="\n")
 
     header = next(csvin)

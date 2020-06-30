@@ -20,7 +20,7 @@ def refactor_asv(input_file, output_file, count):
     rounded = open(output_file, 'w')
 
     merged_csv = csv.reader(merged, delimiter='\t')
-    rounded_csv = csv.writer(rounded, delimiter='\t', lineterminator="\n")
+    rounded_csv = csv.writer(rounded, delimiter=',', lineterminator="\n")
 
     seq_descriptions = []
     for row in merged_csv:
