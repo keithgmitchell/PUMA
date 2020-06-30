@@ -33,13 +33,14 @@ if __name__ == "__main__":
     parser.add_argument('-taxonomy', help='Some services have a seperate taxonomy file.', required=False)
     parser.add_argument('-rarefactioniter', help='Some services have a seperate taxonomy file.', required=False)
     parser.add_argument('-rarefactiondepth', help='If this is not provided we will automatically calculate a good '
-                                                  'depth and report it back to you.', required=False)
+                                                  'depth and report it back to you (future update). If none is supplied'
+                                                  'then no rarefaction will be performed.', required=False)
 
     parser.add_argument('-unique_id', help='If you would like to specify any other identifier in the naming of output '
                                            'files please place that here.', required=False)
 
     parser.add_argument('-msa_phylo', help='Include this argument if you want to run MSA using muscle and Phylogenetic'
-                                           ' Tree using FastTree.', required=False)
+                                           ' Tree using Mafft.', required=False)
 
     parser.add_argument('-outdir', help='If you would like to specify where the output goes other then the output '
                                         'diretory in this folder.', required=False)
@@ -57,10 +58,10 @@ if __name__ == "__main__":
     #STANDARD
     files_dictionary["otutable"] = args['otutable']
     metadata_dict["metadata"] = args['metadata']
-    files_dictionary["rarefactioniter"] = args['rarefactioniter']
-    files_dictionary["rarefactiondepth"] = args['rarefactiondepth']
+    files_dictionary["rarefactioniter"] = args['rarefactioniter'] if args['rarefactioniter'] else 0
+    files_dictionary["rarefactiondepth"] = args['rarefactiondepth'] if args['rarefactiondepth'] else 0
     files_dictionary["unique_id"] = args["unique_id"]
-    files_dictionary["msa_phylo"] = args["msa_phylo"]
+    files_dictionary["msa_phylo"] = args["msa_phylo"] if args["msa_phylo"] else False
     files_dictionary["outdir"] = args["outdir"]
 
 

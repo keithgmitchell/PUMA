@@ -107,9 +107,13 @@ class General():
         self.extra_qza = "%s/temp/%s_extra_qza.qza" % (self.dir_path, self.time)
 
         print("Create extra non-biom: in case user does not want rarefaction performed.")
+        # TODO here
         table = load_table(output)
-        with open(self.extra_biomtext, 'w') as output_file:
-            table.to_json("PUMA", output_file)
+        with open(self.extra_biomtext, 'w') as extra_biomtext_out:
+            table.to_tsv("PUMA", extra_biomtext_out)
+
+        # with open(self.extra_biomtext, 'w') as output_file:
+        #     to_table("PUMA", output_file)
         return output
 
     def rarefy_and_merge(self, input):
@@ -232,6 +236,7 @@ class General():
         else:
             print("Course Wrapper: Skipping Rarefaction and Merge")
             self.perform_rarefaction = False
+            self.merged_biom = self.standard_biom
             self.merged_text = self.extra_biomtext
             self.merged_artifact = self.extra_qza
             sys.stdout.flush()
@@ -264,7 +269,7 @@ class General():
         self.cytoscape = cytoscape.handle_files(self.stamp_taxa, self.metadata, outfile, self.taxa_levels - 1)
 
         # MSA/PHYLO
-        if self.run_msa_phylo != False and self.run_msa_phylo != '' and self.run_msa_phylo is not None:
+        if self.run_msa_phylo != 'False' and self.run_msa_phylo != False and self.run_msa_phylo != '' and self.run_msa_phylo is not None:
             print("MSA: Running multiple sequence alignment using 'mafft'")
             sys.stdout.flush()
             self.msa()
@@ -288,7 +293,7 @@ class General():
         self.rarefactiondepth = general_dict["rarefactiondepth"]
         self.run_msa_phylo = general_dict["msa_phylo"]
 
-        #TODO set this object for each tool
+        # set this object for each tool
         self.standard_otu = " "
         self.standard_sequences = " "
 
@@ -321,6 +326,7 @@ class Anacapa(General):
 
         self.type = "anacapa"
         General.__init__(self, dictionary, metadata_dict)
+        print(dictionary)
         self.handle_arguments(dictionary)
         self.standard_otu = self.otu_table
         self.standard_sequences = self.get_all_seqs()
@@ -338,6 +344,7 @@ class MrDNA(General):
         self.otu_table = file_dictionary["otutable"]
         self.fwd_seq = file_dictionary["fwdseq"]
 
+
     def convert_otu_to_anacapa(self):
         convert_mrdna_to_anacapa_format.execute_conversion(self.otu_table, 'temp/anacapa_format_otu_table.txt')
         return "temp/anacapa_format_otu_table.txt"
@@ -346,7 +353,7 @@ class MrDNA(General):
     def __init__(self, dictionary, metadata_dict):
         self.type = "MrDNA"
         General.__init__(self, dictionary, metadata_dict)
-
+        print(dictionary)
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
         self.standard_sequences = self.fwd_seq
@@ -391,6 +398,7 @@ class QIIME2(General):
     def __init__(self, dictionary, metadata_dict):
         self.type = "QIIME2"
         General.__init__(self, dictionary, metadata_dict)
+        print(dictionary)
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
         if not ".qza" in self.fwd_seq:

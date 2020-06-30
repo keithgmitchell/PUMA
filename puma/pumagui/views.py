@@ -51,6 +51,7 @@ def anacapa(request):
             anacapa_dict['reverseseq'] = form.cleaned_data['reverse_seqs'].file.name
             anacapa_dict['rarefactiondepth'] = form.cleaned_data['rarefaction_depth']
             anacapa_dict['rarefactioniter'] = form.cleaned_data['rarefaction_iterations']
+            anacapa_dict['msa_phylo'] = form.cleaned_data['msa_phylo']
             call_course_wrapper('Anacapa', anacapa_dict, anacapa_metadata_dict)
             return redirect('/output/')
         else:
@@ -79,6 +80,7 @@ def mrdna(request):
             mrdna_dict['fwdseq'] = form.cleaned_data['all_seqs'].file.name
             mrdna_dict['rarefactiondepth'] = form.cleaned_data['rarefaction_depth']
             mrdna_dict['rarefactioniter'] = form.cleaned_data['rarefaction_iterations']
+            mrdna_dict['msa_phylo'] = form.cleaned_data['msa_phylo']
             call_course_wrapper('MrDNA', mrdna_dict, mrdna_metadata_dict)
             return redirect('/output/')
         else:
@@ -102,6 +104,7 @@ def qiime2(request):
             qiime2_dict['taxonomy'] = form.cleaned_data['taxonomy'].file.name
             qiime2_dict['rarefactiondepth'] = form.cleaned_data['rarefaction_depth']
             qiime2_dict['rarefactioniter'] = form.cleaned_data['rarefaction_iterations']
+            qiime2_dict['msa_phylo'] = form.cleaned_data['msa_phylo']
             QIIME2(qiime2_dict, qiime2_metadata_dict)
             return redirect('/output/')
 

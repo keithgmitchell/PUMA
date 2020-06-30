@@ -46,9 +46,9 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
     OR 
     
     ```
-    python PumaCLI.py -type MrDNA -metadata examples/mrdna_F15/mrdna_F15_mock_metadata.tsv \
-    -otutable examples/mrdna_F15/112415KR515F-pr.fasta.otus.fa.OTU.txt \
-    -seqs examples/mrdna_F15/sequences.fasta
+    python PumaCLI.py -type MrDNA -metadata examples/mrdna_F15/mrdna_F15_mock_metadata.tsv   
+    -otutable examples/mrdna_F15/112415KR515F-pr.fasta.otus.fa.OTU.txt   
+    -seqs examples/mrdna_F15/sequences.fasta -rarefactioniter 4 -rarefactiondepth 2000
     ```
   
     - The output will look something like this where the top .zip file is the most recent job ran and check the log to make sure the job finished ok:
