@@ -48,7 +48,7 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
     ```
     python PumaCLI.py -type MrDNA -metadata examples/mrdna_F15/mrdna_F15_mock_metadata.tsv   
     -otutable examples/mrdna_F15/112415KR515F-pr.fasta.otus.fa.OTU.txt   
-    -seqs examples/mrdna_F15/sequences.fasta -rarefactioniter 4 -rarefactiondepth 2000
+    -seqs examples/mrdna_F15/sequences.fasta -rarefactioniter 4 -rarefactiondepth 2000 -msa_phylo False
     ```
   
     - The output will look something like this where the top .zip file is the most recent job ran and check the log to make sure the job finished ok:
@@ -58,8 +58,8 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
 
 + Running Anacapa Data: (using files in `examples/anacapa_skirball_S18`) (rarefaction depth and iterations randomly chosen)
     
-    ![](.README_images/anacapa_input.png)
-
+    ![](.README_images/anacapa_input2.png)
+    
     OR
     
     ```
@@ -68,10 +68,11 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
     -mergeseq examples/anacapa_skirball_S18/nochim_merged16S.fasta \
     -reverseseq examples/anacapa_skirball_S18/nochim_reverse16S.fasta \
     -rarefactioniter 3 -rarefactiondepth 3500 -metadata examples/anacapa_skirball_S18/anacapa_skirball_metadata_3_11_18.tsv \
-    -type anacapa -unique_id demo -msa_phylo True
+    -type anacapa -unique_id demo -msa_phylo False
     ```
     - The output will look something like this where the top .zip file is the most recent job ran and check the log to make sure the job finished ok:
-    
+        ![](.README_images/anacapa_outputlist.png)
+        ![](.README_images/anacapa_output.png)
     
 + Running QIIME2 data: (rarefaction depth and iterations randomly chosen)
 

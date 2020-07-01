@@ -16,7 +16,7 @@ class AnacapaForm(forms.Form):
     merged_seqs = forms.FileField(required=True)
     rarefaction_depth = forms.IntegerField(required=True)
     rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
-    msa_phylo = forms.BooleanField(required=True, initial=False, label='Perform MSA')
+    msa_phylo = forms.BooleanField(required=False, initial=False, label='Perform MSA')
 
 
 class QIIME2Form(forms.Form):
@@ -26,7 +26,7 @@ class QIIME2Form(forms.Form):
     taxonomy = forms.FileField(required=True)
     rarefaction_depth = forms.IntegerField(required=True)
     rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
-    msa_phylo = forms.BooleanField(required=True, initial=False, label='Perform MSA')
+    msa_phylo = forms.BooleanField(required=False, initial=False, label='Perform MSA')
 
 class MrDNAForm(forms.Form):
     metadata = forms.FileField(required=True)
@@ -34,7 +34,7 @@ class MrDNAForm(forms.Form):
     all_seqs = forms.FileField(required=True)
     rarefaction_depth = forms.IntegerField(required=True)
     rarefaction_iterations = forms.IntegerField(required=True, max_value=10)
-    msa_phylo = forms.BooleanField(required=True, initial=False, label='Perform MSA')
+    msa_phylo = forms.BooleanField(required=False, initial=False, label='Perform MSA')
 
 
 class PiphillinForm(forms.Form):
