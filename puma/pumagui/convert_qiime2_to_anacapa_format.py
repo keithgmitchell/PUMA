@@ -16,14 +16,14 @@ from biom.table import Table
 
 
 
-def exec_qiime2_anacapa(input_otu_file, input_tax_file, output_file):
+def exec_qiime2_anacapa(input_otu_file, input_tax_file, output_file, time):
     table = load_table(input_otu_file)
-    with open('temp/temp_otu_table.tsv', 'w') as out_text_file: 
+    with open('temp/%s_temp_otu_table.tsv' % time, 'w') as out_text_file:
         out_tsv = table.to_tsv()
         out_text_file.write(out_tsv)
     #os.system("biom convert -i %s -o temp/temp_otu_table.tsv --to-tsv" % input_otu_file)
 
-    with open('temp/temp_otu_table.tsv', 'r') as input_otu_file_reader, open(input_tax_file, 'r') as input_tax_file_reader, open(output_file, 'w') as output_file_writer:
+    with open('temp/%s_temp_otu_table.tsv' % time, 'r') as input_otu_file_reader, open(input_tax_file, 'r') as input_tax_file_reader, open(output_file, 'w') as output_file_writer:
         input_otu_csv_reader = csv.reader(input_otu_file_reader, delimiter='\t',lineterminator="\n")
         input_tax_csv_reader = csv.reader(input_tax_file_reader, delimiter='\t')
         output_csv_writer = csv.writer(output_file_writer, delimiter='\t')

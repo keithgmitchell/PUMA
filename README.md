@@ -67,7 +67,7 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
     -fwdseq examples/anacapa_skirball_S18/nochim_forward16S.fasta \
     -mergeseq examples/anacapa_skirball_S18/nochim_merged16S.fasta \
     -reverseseq examples/anacapa_skirball_S18/nochim_reverse16S.fasta \
-    -rarefactioniter 3 -rarefactiondepth 3500 -metadata examples/anacapa_skirball_S18/anacapa_skirball_metadata_3_11_18.tsv \
+    -rarefactioniter 0 -rarefactiondepth 0 -metadata examples/anacapa_skirball_S18/anacapa_skirball_metadata_3_11_18.tsv \
     -type anacapa -unique_id demo -msa_phylo False
     ```
     - The output will look something like this where the top .zip file is the most recent job ran and check the log to make sure the job finished ok:
@@ -76,8 +76,6 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
     
 + Running QIIME2 data: (rarefaction depth and iterations randomly chosen)
 
-    ![](.README_images/qiime2_input.png)
-    OR
     ```
     python PumaCLI.py -type QIIME2 -metadata examples/qiime2_demo/qiime2_moving_pictures_metadata.tsv \
     -otutable examples/qiime2_demo/table_moving_pictures.qza \

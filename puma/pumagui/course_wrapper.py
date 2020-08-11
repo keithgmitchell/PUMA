@@ -83,6 +83,9 @@ class General():
         sys.stdout = open(self.log_file, 'w')
         self.output_directory = directory
 
+        self.start_time = datetime.datetime.now()
+        print("START TIME: %s" % self.start_time)
+
 
     def verify_metadata(self, metadata, standard_otu):
         self.metadata_fileout = self.output_directory + "verified_metadata.tsv"
@@ -154,7 +157,7 @@ class General():
                 output_table.merge(table.subsample(int(self.rarefactiondepth)))
 
         self.merged_artifact = "%s/temp/%s_merged_file.qza" % (self.dir_path, self.time)
-        merged_biom = "%s/temp/feature-table.biom" % (self.dir_path)
+        merged_biom = "%s/temp/%s_feature-table.biom" % (self.dir_path, self.time)
         self.merged_biom = merged_biom
         merged_text = "%s/temp/%s_merged_file.txt" % (self.dir_path, self.time)
 
@@ -303,7 +306,12 @@ class General():
             sys.stdout.flush()
             self.phylogeny()
 
+        # Clean the temp directory: COMMENT OUT FOR DEBUGGING HELP
+        os.system("rm -rf temp/*")
 
+        self.stop_time = datetime.datetime.now()
+        print("STOP TIME: %s" % self.stop_time)
+        print("TIME IN SECONDS: %s" % (self.stop_time-self.start_time).total_seconds())
         print("----------------------------------------------------------------------------------------------------")
         print("DONE: You may now retrieve your files in the %s prefix folder in the output folder." % self.output_directory)
         print("----------------------------------------------------------------------------------------------------")
@@ -421,7 +429,7 @@ class QIIME2(General):
                 seq_file = os.path.join(root, seq_name)
                 break
         self.standard_sequences = seq_file
-        convert_qiime2_to_anacapa_format.exec_qiime2_anacapa(otu_file, tax_file, "temp/%s_anacapa_format_otu_table.txt" % self.time)
+        convert_qiime2_to_anacapa_format.exec_qiime2_anacapa(otu_file, tax_file, "temp/%s_anacapa_format_otu_table.txt" % self.time, self.time)
         return "temp/%s_anacapa_format_otu_table.txt" % self.time
 
     # def export_qza_sequences(self):
