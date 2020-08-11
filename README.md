@@ -46,8 +46,8 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
     OR 
     
     ```
-    python PumaCLI.py -type MrDNA -metadata examples/mrdna_F15/mrdna_F15_mock_metadata.tsv   
-    -otutable examples/mrdna_F15/112415KR515F-pr.fasta.otus.fa.OTU.txt   
+    python PumaCLI.py -type MrDNA -metadata examples/mrdna_F15/mrdna_F15_mock_metadata.tsv \
+    -otutable examples/mrdna_F15/112415KR515F-pr.fasta.otus.fa.OTU.txt \
     -seqs examples/mrdna_F15/sequences.fasta -rarefactioniter 4 -rarefactiondepth 2000 -msa_phylo False
     ```
   
@@ -77,6 +77,15 @@ Be sure all sample names in the metadata and in the ASV/OTU table are matching a
 + Running QIIME2 data: (rarefaction depth and iterations randomly chosen)
 
     ![](.README_images/qiime2_input.png)
+    OR
+    ```
+    python PumaCLI.py -type QIIME2 -metadata examples/qiime2_demo/qiime2_moving_pictures_metadata.tsv \
+    -otutable examples/qiime2_demo/table_moving_pictures.qza \
+    -taxonomy examples/qiime2_demo/taxonomy_moving_pictures.qza \
+    -seqs examples/qiime2_demo/rep-seqs.qza \ 
+    -rarefactioniter 4 -rarefactiondepth 2000 -msa_phylo False
+    ```
+  
     - QIIME2 Output view for example files:
     
 

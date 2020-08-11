@@ -31,6 +31,8 @@ class bcolors:
     # UNDERLINE = '\033[4m'
 
 
+#TODO the parent class and lower class could have the same time...
+
 def log_file(outdir):
     pass
 
@@ -92,28 +94,49 @@ class General():
             print("Metadata: Successfully Verified.")
             pass
 
-    def create_biom(self, input):
+    def create_biom(self, input): # returns the biom file
 
         print("Create .biom: clean header")
         sed_inplace(input, '16S_seq_number\t', '#OTU ID\t')
         output = "temp/%s_standard_otu.biom" % (self.time)
         print("Create biom: make biom")
-        table = load_table(input)
-        with open(output, 'w') as output_file:
-            table.to_json("PUMA", output_file)
 
-        print("Create biom: done making .biom file")
+
+
         self.extra_biomtext = "%s/temp/%s_extra_file.txt" % (self.dir_path, self.time)
         self.extra_qza = "%s/temp/%s_extra_qza.qza" % (self.dir_path, self.time)
 
         print("Create extra non-biom: in case user does not want rarefaction performed.")
-        # TODO here
-        table = load_table(output)
-        with open(self.extra_biomtext, 'w') as extra_biomtext_out:
-            table.to_tsv("PUMA", extra_biomtext_out)
+        # load the biom as a table
+        table = load_table(input)
+        with open(output, 'w') as output_file, open(self.extra_biomtext, 'w') as merged_text_file:
+            # output the biom table as a json file
+            table.to_json("PUMA", output_file)
+            out_tsv = table.to_tsv()
+            merged_text_file.write(out_tsv)
 
-        # with open(self.extra_biomtext, 'w') as output_file:
-        #     to_table("PUMA", output_file)
+        print("Create biom: done making .biom file")
+
+        # TODO here
+        # table = load_table(output)
+        # with open(self.extra_biomtext, 'w') as extra_biomtext_out:
+        #     table.to_json("PUMA", extra_biomtext_out)
+        #     out_tsv = table.to_tsv()
+        #     extra_biomtext_out.write(out_tsv)
+
+        # print("Rarefy and merge: merge.")
+        # with open(merged_biom, 'w') as merged_biom_file, open(merged_text, 'w') as merged_text_file:
+        #     output_table.to_json("PUMA", merged_biom_file)
+        #     out_tsv = output_table.to_tsv()
+        #     merged_text_file.write(out_tsv)
+        #
+        # print("Rarefy and merge: convert to .txt from .biom.")
+        # print("Rarefy and merge: cleaning the text file.")
+        #
+        # sed_inplace(merged_text, '#Constructed from biom file', '')
+        # sed_inplace(merged_text, '#OTU ID\t', 'OTU\t')
+        # self.merged_text = merged_text
+
         return output
 
     def rarefy_and_merge(self, input):
@@ -123,7 +146,7 @@ class General():
         original_biom_file = input
         table = load_table(original_biom_file)
 
-        print("Rarefy and merge: rarefactions.")
+        print("Rarefy and merge: rarefactions. %s (if 0 none is being performed)" % str(self.rarefactioniter))
         for i in range(int(self.rarefactioniter)):
             if i == 0:
                 output_table = table.subsample(int(self.rarefactiondepth))
@@ -233,6 +256,8 @@ class General():
             sys.stdout.flush()
             self.perform_rarefaction = True
             self.rarefy_and_merge(self.standard_biom)
+
+
         else:
             print("Course Wrapper: Skipping Rarefaction and Merge")
             self.perform_rarefaction = False
@@ -346,8 +371,8 @@ class MrDNA(General):
 
 
     def convert_otu_to_anacapa(self):
-        convert_mrdna_to_anacapa_format.execute_conversion(self.otu_table, 'temp/anacapa_format_otu_table.txt')
-        return "temp/anacapa_format_otu_table.txt"
+        convert_mrdna_to_anacapa_format.execute_conversion(self.otu_table, 'temp/%s_anacapa_format_otu_table.txt' % self.time)
+        return "temp/%s_anacapa_format_otu_table.txt" % self.time
 
 
     def __init__(self, dictionary, metadata_dict):
@@ -374,26 +399,34 @@ class QIIME2(General):
 
     def convert_otu_to_anacapa(self):
         with zipfile.ZipFile(os.path.abspath(self.otu_table), "r") as zip_ref:
-            zip_ref.extractall("temp/otu_table")
+            zip_ref.extractall("temp/%s_otu_table" % self.time)
         with zipfile.ZipFile(os.path.abspath(self.taxonomy), "r") as zip_ref:
-            zip_ref.extractall("temp/taxonomy")
+            zip_ref.extractall("temp/%s_taxonomy" % self.time)
+        with zipfile.ZipFile(os.path.abspath(self.fwd_seq), "r") as zip_ref:
+            zip_ref.extractall("temp/%s_sequences" % self.time)
 
         otu_name = "feature-table.biom"
-        for root, dirs, files in os.walk("temp/otu_table"):
+        for root, dirs, files in os.walk("temp/%s_otu_table" % self.time):
             if otu_name in files:
                 otu_file = os.path.join(root, otu_name)
                 break
         tax_name = "taxonomy.tsv"
-        for root, dirs, files in os.walk("temp/taxonomy"):
+        for root, dirs, files in os.walk("temp/%s_taxonomy" % self.time):
             if tax_name in files:
                 tax_file = os.path.join(root, tax_name)
                 break
-        convert_qiime2_to_anacapa_format.exec_qiime2_anacapa(otu_file, tax_file, "temp/anacapa_format_otu_table.txt")
-        return "temp/anacapa_format_otu_table.txt"
+        seq_name = "dna-sequences.fasta"
+        for root, dirs, files in os.walk("temp/%s_sequences" % self.time):
+            if seq_name in files:
+                seq_file = os.path.join(root, seq_name)
+                break
+        self.standard_sequences = seq_file
+        convert_qiime2_to_anacapa_format.exec_qiime2_anacapa(otu_file, tax_file, "temp/%s_anacapa_format_otu_table.txt" % self.time)
+        return "temp/%s_anacapa_format_otu_table.txt" % self.time
 
-    def export_qza_sequences(self):
-        os.system("qiime tools export %s --output-dir temp/sequences" % self.fwd_seq)
-        return "temp/sequences/dna-sequences.fasta"
+    # def export_qza_sequences(self):
+    #     os.system("qiime tools export %s --output-dir temp/%s_sequences" % (self.fwd_seq, self.time))
+    #     return "temp/sequences/%s_dna-sequences.fasta" % self.time
 
     def __init__(self, dictionary, metadata_dict):
         self.type = "QIIME2"
@@ -401,10 +434,10 @@ class QIIME2(General):
         print(dictionary)
         self.handle_arguments(dictionary)
         self.standard_otu = self.convert_otu_to_anacapa()
-        if not ".qza" in self.fwd_seq:
-            self.standard_sequences = self.fwd_seq
-        else:
-            self.standard_sequences = self.export_qza_sequences()
+        # if not ".qza" in self.fwd_seq:
+        #     self.standard_sequences = self.fwd_seq
+        # else:
+        #     self.standard_sequences = self.export_qza_sequences()
 
         self.course_wrapper(self.type)
 

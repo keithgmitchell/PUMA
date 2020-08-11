@@ -4,6 +4,7 @@ from collections import defaultdict
 
 def unclassified(fix_list, classification_levels, parent_dict, repeat_dict):
     for x in range(0, classification_levels):
+
         thisValue = fix_list[x]
         if thisValue == '' or thisValue == 'NA' or thisValue is None or thisValue == " " or thisValue == 'unclassified':
             for y in range(x, classification_levels):
@@ -17,14 +18,20 @@ def unclassified(fix_list, classification_levels, parent_dict, repeat_dict):
         if fix_list[x] not in parent_dict[x]:
             parent_dict[x][thisValue]=parentValue
         else:
-            if parent_dict[x][thisValue] != parentValue:
-                if thisValue not in repeat_dict:
-                    repeat_dict[thisValue] = thisValue + "__1"
-                    fix_list[x] = thisValue + "__1"
-                else:
-                    value = repeat_dict[thisValue].split("__")[0] + "**" + str(int(repeat_dict[thisValue].split("__")[-1])+1)
-                    repeat_dict[fix_list[x]] = value
-                    fix_list[x] = value
+            try:
+                if parent_dict[x][thisValue] != parentValue:
+                    if thisValue not in repeat_dict:
+                        repeat_dict[thisValue] = thisValue + "__1"
+                        fix_list[x] = thisValue + "__1"
+                    else:
+                        value = repeat_dict[thisValue].split("__")[0] + "__" + str(int(repeat_dict[thisValue].split("__")[-1])+1)
+                        repeat_dict[fix_list[x]] = value
+                        fix_list[x] = value
+            except:
+                print("REPEAT DICT")
+                print(repeat_dict)
+                print("PARENT DICT")
+                print(parent_dict)
     return fix_list
 
 
